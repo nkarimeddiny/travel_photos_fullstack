@@ -23,6 +23,9 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                data.userFriends.forEach(function(aFriend){
                  ctrl.myFriendsList.push(aFriend);
                }); 
+               data.users.forEach(function(aUser){
+                 ctrl.signedUpUsers.push(aUser);
+               }); 
     });
    this.goToLink = function() {
         $state.go("myPosts"); 
