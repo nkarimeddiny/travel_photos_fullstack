@@ -16,13 +16,12 @@ exports.addFriend = function (req, res, next) {
   User.findById(userId, function (err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
-    console.log("user: " + user);
     //get friend's ID:
     User.findOne({name: req.body.friend}, function (err, friend) {
-       console.log("friend: " + friend);
-       user.friends.push({friend: friend._id});
+      console.log("friend: " + friend);
+      console.log("friendId " + friend._id);
+       user.friends.push({friend: friend._id, lastTimeChecked: ""});
        user.save(function(err, updatedUser){
-         console.log(updatedUser);
          res.send(updatedUser);
        });
 
@@ -112,13 +111,17 @@ exports.me = function(req, res, next) {
     if (!user) return res.json(401);
     User.find({}, '-salt -hashedPassword', function (err, users) {
       if(err) return res.send(500, err);
-      //User.populate(user, { path: 'posts' , model: "Post"}, function (err, user) {
-      var userList = [];
-      users.forEach(function(aUser){
-         userList.push(aUser.name);
+      User.populate(user, { path: 'friends.friend' , model: "User"}, function (err, user) {
+        var userList = [];
+        var friendList = [];
+        users.forEach(function(aUser){
+           userList.push(aUser.name);
+        });
+        user.friends.forEach(function(aFriend){
+           friendList.push(aFriend.friend.name);
+        });
+        res.send({"username": user.name, "userId": user._id, userFriends: friendList, "users": userList}).end();
       });
-      res.send({"username": user.name, "userId": user._id, userFriends: user.friends, "users": userList}).end();
-      //});
     });
   });
 };

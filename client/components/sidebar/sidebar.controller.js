@@ -29,7 +29,7 @@ app.controller('FriendsListCtrl', function($scope, $http, friendsListService) {
     });
 
    this.addFriend = function() {
-      console.log(addFriendForm.friend.value, ctrl.thisUserId);
+
       $http.post("http://localhost:9000/api/users/addFriend", {
                 user: ctrl.thisUserId,
                 friend: addFriendForm.friend.value
