@@ -31,12 +31,7 @@ app.factory("postingService", function() {
            $http.get("http://localhost:9000/api/users/myPosts")
              .success( function(data) {
               console.log(data);
-              // var postsList = [];
-              // ctrl.thisUserId = data.userId;
-              // ctrl.thisUserName = data.username;
-              //  data.posts.forEach(function(aPost){
-              //    ctrl.postsList.push(aPost);
-              //  }); 
+              ctrl.userPosts = data;
     });
       }
    }

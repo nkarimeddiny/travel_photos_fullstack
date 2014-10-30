@@ -122,7 +122,7 @@ exports.myPosts = function(req, res, next) {
     if (err) return next(err);
     if (!user) return res.json(401);
       User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
-        res.send({"username": user.name, "userId": user._id, posts: user.posts}).end();
+        res.send(user.posts).end();
       });
   });
 };
