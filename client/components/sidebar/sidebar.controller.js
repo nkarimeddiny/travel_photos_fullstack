@@ -9,7 +9,7 @@ angular.module('travelPhotosApp')
 
 var app = angular.module('travelPhotosApp');
 
-app.controller('FriendsListCtrl', function($scope, $http, friendsListService) {
+app.controller('FriendsListCtrl', function($scope, $state, $http, $location, friendsListService) {
   var ctrl = this;
   ctrl.myFriendsList = [];
   ctrl.signedUpUsers = [];
@@ -18,15 +18,15 @@ app.controller('FriendsListCtrl', function($scope, $http, friendsListService) {
   $http.get("http://localhost:9000/api/users/me")
              .success( function(data) {
               console.log(data);
-                data.users.forEach(function(aUser) {
-                  ctrl.signedUpUsers.push(aUser);
                   ctrl.thisUserId = data.userId;
                   ctrl.thisUserName = data.username;
-                });
                data.userFriends.forEach(function(aFriend){
                  ctrl.myFriendsList.push(aFriend);
                }); 
     });
+   this.goToLink = function() {
+        $state.go("myPosts"); 
+   };          
 
    this.addFriend = function() {
 

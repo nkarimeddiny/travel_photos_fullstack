@@ -11,69 +11,59 @@ router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
+router.get('/myPosts', auth.isAuthenticated(), controller.myPosts);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 router.post('/addFriend', controller.addFriend);
+router.post('/addPost', auth.isAuthenticated(), controller.addPost);
 
 
-router.post('/posts', function(req, res) {
-  models.User.findOne({ 'name': req.body.username }).populate("posts").exec(function (err, user) {
-      res.send(user.posts).end();
-  });
-});
 
-router.post('/addPosts', function(req, res) {
+// router.post('/posts', function(req, res) {
+//   models.User.findOne({ 'name': req.body.username }).populate("posts").exec(function (err, user) {
+//       res.send(user.posts).end();
+//   });
+// });
 
-    models.User.findOne({ 'name': 'Navid' }, function (err, user) {
-        models.Post.create({user: user._id, caption: req.body.caption}, function(err, post) {
-                user.posts.push(post);
-                user.save(function(err, user) {
-                  models.User.populate(user, { path: 'posts' , model: "Post"}, function (err, user) {
-                      res.send(user.posts).end();
-                  });
-                });
 
-        })
-    });
-});
 
-router.post('/updateFriendsOrder', function(req, res) {
-   friendsOrder[req.body.username] = req.body.friends;
-   res.send(200).end();
-});
+// router.post('/updateFriendsOrder', function(req, res) {
+//    friendsOrder[req.body.username] = req.body.friends;
+//    res.send(200).end();
+// });
 
-var friendsOrder = {
-	Navid: [
-	 {name: "Joe", uncheckedPost: true, order: 1},
-     {name: "Jane", uncheckedPost: true, order: 2},
-     {name: "Rob", uncheckedPost: false, order: 3}
-     ]};
+// var friendsOrder = {
+// 	Navid: [
+// 	 {name: "Joe", uncheckedPost: true, order: 1},
+//      {name: "Jane", uncheckedPost: true, order: 2},
+//      {name: "Rob", uncheckedPost: false, order: 3}
+//      ]};
 
-var posts = {
-	Joe : [{ 
-        yearmonthday: 20141001, 
-        month: 10, 
-        day: 1, 
-        caption: "picture of me in Tokyo"
-    }],
-    Jane : [{ 
-        yearmonthday: 20141005, 
-        month: 10, 
-        day: 5, 
-        caption: "picture of me in Seoul"
-    }],
-    Navid : [{ 
-        yearmonthday: 20141010, 
-        month: 10, 
-        day: 10, 
-        caption: "picture of me in London"
-    }],
-    Rob : [{ 
-        yearmonthday: 20141012, 
-        month: 10, 
-        day: 12, 
-        caption: "picture of me in Rio"
-    }]
-};
+// var posts = {
+// 	Joe : [{ 
+//         yearmonthday: 20141001, 
+//         month: 10, 
+//         day: 1, 
+//         caption: "picture of me in Tokyo"
+//     }],
+//     Jane : [{ 
+//         yearmonthday: 20141005, 
+//         month: 10, 
+//         day: 5, 
+//         caption: "picture of me in Seoul"
+//     }],
+//     Navid : [{ 
+//         yearmonthday: 20141010, 
+//         month: 10, 
+//         day: 10, 
+//         caption: "picture of me in London"
+//     }],
+//     Rob : [{ 
+//         yearmonthday: 20141012, 
+//         month: 10, 
+//         day: 12, 
+//         caption: "picture of me in Rio"
+//     }]
+// };
 
 module.exports = router;

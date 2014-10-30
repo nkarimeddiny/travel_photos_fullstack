@@ -8,29 +8,36 @@ angular.module('travelPhotosApp')
 
 app.controller('MyPostsCtrl', function ($scope, $http, postingService) {
     var ctrl = this;
+    ctrl.userPosts = {};
 
-    postingService.retrievePosts("Navid", $http, ctrl);
+    postingService.retrievePosts($http, ctrl);
 
     this.addPost = function() {
-       postingService.addPost("Navid", myPostForm.caption.value, ctrl, $http, $scope);
+       postingService.addPost(myPostForm.caption.value, ctrl, $http);
     }
 
 });
 
 app.factory("postingService", function() {
     return {
-      addPost : function(name, caption, ctrl, $http) {
-          $http.post("http://localhost:3000/addPosts", {username: name, caption: caption})
+      addPost : function(caption, ctrl, $http) {
+          $http.post("http://localhost:9000/api/users/addPost", {username: name, caption: caption})
              .success( function(data) {
                 console.log(data);
                 ctrl.userPosts = data;
           });
       },
-      retrievePosts : function(name, $http, ctrl) {
-          $http.post("http://localhost:3000/posts", {username: name})
+      retrievePosts : function($http, ctrl) {
+           $http.get("http://localhost:9000/api/users/myPosts")
              .success( function(data) {
-                ctrl.userPosts = data;
-          });
+              console.log(data);
+              // var postsList = [];
+              // ctrl.thisUserId = data.userId;
+              // ctrl.thisUserName = data.username;
+              //  data.posts.forEach(function(aPost){
+              //    ctrl.postsList.push(aPost);
+              //  }); 
+    });
       }
    }
 });

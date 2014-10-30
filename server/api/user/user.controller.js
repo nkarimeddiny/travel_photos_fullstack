@@ -1,12 +1,28 @@
 'use strict';
 
 var User = require('./user.model');
+var Post = require('../post/post.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 
 var validationError = function(res, err) {
   return res.json(422, err);
+};
+
+exports.addPost = function(req, res, next) {
+    var userId = req.user._id;
+    User.findById(userId, function (err, user) {
+        Post.create({user: user._id, caption: req.body.caption}, function(err, post) {
+                user.posts.push(post._id);
+                user.save(function(err, user) {
+                  User.populate(user, { path: 'posts' , model: "Post"}, function (err, user) {
+                      res.send(user.posts).end();
+                  });
+                });
+
+        })
+    });
 };
 
 exports.addFriend = function (req, res, next) {
@@ -98,6 +114,20 @@ exports.changePassword = function(req, res, next) {
     }
   });
 };
+exports.myPosts = function(req, res, next) {
+  var userId = req.user._id;
+  User.findOne({
+    _id: userId
+  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+    if (err) return next(err);
+    if (!user) return res.json(401);
+      User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
+        res.send({"username": user.name, "userId": user._id, posts: user.posts}).end();
+      });
+  });
+};
+
+
 
 /**
  * Get my info
