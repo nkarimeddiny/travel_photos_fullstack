@@ -1,0 +1,18 @@
+<div class="col-md-12">
+This is the friendPosts view.
+</div>
+
+
+<div ng-controller = "FriendPostsCtrl as fpCtrl">
+    {{fpCtrl.friendName}}
+	<div id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
+
+	    <div ng-repeat = "post in fpCtrl.userPosts">
+	      <span class="date">{{post.month}}-{{post.day}}</span><br/>
+	   <!--  <img> -->
+	      <span class="caption">{{post.caption}}</span><br/>
+	    </div>
+	   
+	</div> <!-- end friendsPosts -->
+
+</div> <!-- end FriendsPostsCtrl -->

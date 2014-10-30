@@ -1,0 +1,28 @@
+<div class="col-md-12">
+This is the myPosts view.
+</div>
+
+<div ng-controller = "MyPostsCtrl as mpCtrl">
+
+  <div id="myPosts"> <!-- this is displayed when looking at your own posts,
+  and also has the entry form for making new posts -->
+
+
+    <form name="myPostForm" class = "entryform" ng-submit="mpCtrl.addPost()"  novalidate>
+      Post a photo<br/>
+      Image:<br/>
+      Caption:<br/>
+      <textarea name = "caption" rows="4" cols="35" maxlength="140">
+      </textarea><br/>
+      <input type = "submit" value = "submit">
+    </form>
+
+    <div ng-repeat="post in mpCtrl.userPosts">
+      <span class="date">{{post.month}}-{{post.day}}</span>
+    <!-- <img> -->
+      <span class="caption">{{post.caption}}</span><br/>
+    </div>
+
+  </div> <!--  end myPosts -->
+
+  </div> <!--  end mpCtrl -->
