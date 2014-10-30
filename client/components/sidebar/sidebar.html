@@ -1,0 +1,38 @@
+<div id = "friendsColumn" ng-controller="FriendsListCtrl as flCtrl">
+  <div>
+       All Users: {{flCtrl.signedUpUsers}} <br/>
+       My Name: {{flCtrl.thisUserName}} <br/>
+       My Id: {{flCtrl.thisUserId}} <br/>
+       <div ng-show="flCtrl.sampleVar" id ="clickinfo">
+        Click on a friend's username to see their photos.
+       </div>
+       My friends:
+       <div ng-repeat="friend in flCtrl.myFriendsList">
+        {{friend}}
+       </div>
+
+    <form name="addFriendForm" ng-submit="flCtrl.addFriend()" novalidate>
+      Enter a Friend to Follow<br/>
+      <input type="text"  name = "friend" size="30" maxlength="30"><br/>
+      <input type ="submit" id="savePlaceButton" value="submit">
+    </form>
+<!--        <div ui-sortable="flCtrl.sortableOptions" ng-model="friends">
+         <div  ng-repeat="friend in friends" class="friendInList">
+           <div class="friendName friend"> <a ng-href="#/friendPosts/{{friend.name}}" >{{friend.name}}</a></div>
+            <div ng-show="friend.uncheckedPost" class="greendot">green dot</div>
+         </div> <br/>
+       </div> -->
+
+
+    <div id="refreshLink" >
+      <a href="#/myPosts">My Posts</a> 
+    </div>
+
+<!--
+    <div id="credits">
+      <span id="copyrightcredit" class="credits"> &copy; 2014 Navid Karimeddiny</span><br/>
+    </div>
+-->    
+  </div> <!-- end friendsColumn -->
+
+</div> <!-- end friendsListCtl -->

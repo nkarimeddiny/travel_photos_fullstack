@@ -1,4 +1,5 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
+<div ng-include="'components/sidebar/sidebar.html'"></div>
 
 <!-- <header class="hero-unit" id="banner">
   <div class="container">
@@ -45,16 +46,6 @@
     <div class = "map-canvas" id="map-canvas">
     </div>
 
-   All Users: {{main.signedUpUsers}} <br/>
-   My Name: {{main.thisUserName}} <br/>
-   My Id: {{main.thisUserId}} <br/>
-   My Friends: {{main.myFriendsList}}
-
-    <form name="addFriendForm" ng-submit="main.addFriend()" novalidate>
-      Enter a Friend to Follow<br/>
-      <input type="text"  name = "friend" size="30" maxlength="30"><br/>
-      <input type ="submit" id="savePlaceButton" value="submit">
-    </form>
 
     <form name="placeForm" ng-submit="main.addPlace()" novalidate>
       Enter a Place-to-Go<br/>

@@ -12,21 +12,32 @@ var app = angular.module('travelPhotosApp');
 app.controller('FriendsListCtrl', function($scope, $http, friendsListService) {
   var ctrl = this;
   ctrl.myFriendsList = [];
-  ctrl.sampleVar = "hello"
+  ctrl.signedUpUsers = [];
+  ctrl.thisUserId;
 
   $http.get("http://localhost:9000/api/users/me")
              .success( function(data) {
               console.log(data);
-               // data.users.forEach(function(aUser) {
-               //   ctrl.signedUpUsers.push(aUser);
-               //   ctrl.thisUserId = data.userId;
-               //   ctrl.thisUserName = data.username;
-               // });
+                data.users.forEach(function(aUser) {
+                  ctrl.signedUpUsers.push(aUser);
+                  ctrl.thisUserId = data.userId;
+                  ctrl.thisUserName = data.username;
+                });
                data.userFriends.forEach(function(aFriend){
                  ctrl.myFriendsList.push(aFriend);
                }); 
-               console.log(myFriendsList);
     });
+
+   this.addFriend = function() {
+      console.log(addFriendForm.friend.value, ctrl.thisUserId);
+      $http.post("http://localhost:9000/api/users/addFriend", {
+                user: ctrl.thisUserId,
+                friend: addFriendForm.friend.value
+                })
+             .success( function(data) {
+                console.log(data);
+               }); 
+    }; 
   // friendsListService.getFriendsOrder("Navid",$http, ctrl, $scope);
   
   // this.sortableOptions = {
