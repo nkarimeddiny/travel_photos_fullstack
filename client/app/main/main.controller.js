@@ -29,7 +29,7 @@ angular.module('travelPhotosApp')
 
 var app = angular.module('travelPhotosApp');
   
-  app.controller('MainCtrl', function ($scope, googleMapsService, googleGeolocationService) {
+  app.controller('MainCtrl', function ($scope, $http) { //googleMapsService, googleGeolocationService
      
     var ctrl = this;
 
@@ -38,6 +38,34 @@ var app = angular.module('travelPhotosApp');
       'AngularJS',
       'Karma'
     ];
+
+    ctrl.signedUpUsers = [];
+    ctrl.thisUserId;
+    ctrl.myFriendsList = [];
+
+    $http.get("http://localhost:9000/api/users/me")
+             .success( function(data) {
+              console.log(data);
+               data.users.forEach(function(aUser) {
+                 ctrl.signedUpUsers.push(aUser);
+                 ctrl.thisUserId = data.userId;
+                 ctrl.thisUserName = data.username;
+               });
+               data.userFriends.forEach(function(aFriend){
+                 ctrl.myFriendsList.push(aFriend);
+               }); 
+    });
+
+    this.addFriend = function() {
+      console.log(addFriendForm.friend.value, ctrl.thisUserId);
+      $http.post("http://localhost:9000/api/users/addFriend", {
+                user: ctrl.thisUserId,
+                friend: addFriendForm.friend.value
+                })
+             .success( function(data) {
+                console.log(data);
+               }); 
+    };         
     
     this.myPlacesList = [{
       yearmonthday: 20141001,
@@ -49,83 +77,84 @@ var app = angular.module('travelPhotosApp');
       longitude : 135.7683
    }];
 
-    googleMapsService.initialize(ctrl);  
+
+    //googleMapsService.initialize(ctrl);  
 
     this.addPlace = function() {
       //use address to get geolocation, by ajax, then in callback save the data
-      googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService);
+      //googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService);
     }; 
  
   });
 
-  app.factory("googleGeolocationService", function() {
+  // app.factory("googleGeolocationService", function() {
 
-      var geocoder = new google.maps.Geocoder();
+  //     var geocoder = new google.maps.Geocoder();
 
-      return {
+  //     return {
 
-        geolocate : function(address, ctrl, $scope, googleMapsService) {
-          geocoder.geocode({ 'address': address }, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-              ctrl.myPlacesList.push({
-              location: placeForm.place.value,
-              text: placeForm.comment.value, 
-              latitude : results[0].geometry.location.lat(),
-              longitude : results[0].geometry.location.lng()
-              });
+  //       geolocate : function(address, ctrl, $scope, googleMapsService) {
+  //         geocoder.geocode({ 'address': address }, function(results, status) {
+  //         if (status == google.maps.GeocoderStatus.OK) {
+  //             ctrl.myPlacesList.push({
+  //             location: placeForm.place.value,
+  //             text: placeForm.comment.value, 
+  //             latitude : results[0].geometry.location.lat(),
+  //             longitude : results[0].geometry.location.lng()
+  //             });
 
-              $scope.$apply();
+  //             $scope.$apply();
         
-              //add code for saving data here
+  //             //add code for saving data here
          
-              googleMapsService.initialize(ctrl)
-          }
+  //             //googleMapsService.initialize(ctrl)
+  //         }
          
-          else {
-              alert("There's been an error finding the geolocation of that address. Please refresh the page.");
-          }
+  //         else {
+  //             alert("There's been an error finding the geolocation of that address. Please refresh the page.");
+  //         }
 
-         });
-      }
-     }; 
-  });
+  //        });
+  //     }
+  //    }; 
+  // });
 
-  app.factory("googleMapsService", function() {
+  // app.factory("googleMapsService", function() {
 
-      var mapOptions = {
-          center: new google.maps.LatLng(0,0),
-          zoom: 2,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
+  //     var mapOptions = {
+  //         center: new google.maps.LatLng(0,0),
+  //         zoom: 2,
+  //         mapTypeId: google.maps.MapTypeId.ROADMAP
+  //     };
 
-      var map = new google.maps.Map(document.getElementById('map-canvas'),
-          mapOptions);
+  //     var map = new google.maps.Map(document.getElementById('map-canvas'),
+  //         mapOptions);
 
-      return({
+  //     return({
 
-        initialize : function(ctrl) {
+  //       initialize : function(ctrl) {
 
-           for (var i = 0; i < ctrl.myPlacesList.length; i++){
-              var lat = ctrl.myPlacesList[i].latitude;
-              var lng = ctrl.myPlacesList[i].longitude;
-              var myLatling = new google.maps.LatLng(lat,lng);
-              var placeName = ctrl.myPlacesList[i].location;
-              var marker = new google.maps.Marker({
-                  position: myLatling,
-                  map: map,
-                  title: placeName
-              });
+  //          for (var i = 0; i < ctrl.myPlacesList.length; i++){
+  //             var lat = ctrl.myPlacesList[i].latitude;
+  //             var lng = ctrl.myPlacesList[i].longitude;
+  //             var myLatling = new google.maps.LatLng(lat,lng);
+  //             var placeName = ctrl.myPlacesList[i].location;
+  //             var marker = new google.maps.Marker({
+  //                 position: myLatling,
+  //                 map: map,
+  //                 title: placeName
+  //             });
 
-              // var infoWindow = new google.maps.InfoWindow();
+  //             // var infoWindow = new google.maps.InfoWindow();
              
-              // google.maps.event.addListener(marker, 'mousedown',function(){
-              //     infoWindow.setContent(this.title);
-              //     infoWindow.open(this.getMap(), this);
-              // });
-              }
-         }//end intialize()  
-    });
-  });
+  //             // google.maps.event.addListener(marker, 'mousedown',function(){
+  //             //     infoWindow.setContent(this.title);
+  //             //     infoWindow.open(this.getMap(), this);
+  //             // });
+  //             }
+  //        }//end intialize()  
+  //   });
+  // });
 
 
 

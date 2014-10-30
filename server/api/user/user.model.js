@@ -5,6 +5,8 @@ var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
+var User;//, PlaceToGo
+
 var UserSchema = new Schema({
   name: String,
   email: { type: String, lowercase: true },
@@ -16,8 +18,27 @@ var UserSchema = new Schema({
   provider: String,
   salt: String,
   facebook: {},
-  github: {}
+  github: {},
+
+  posts: [{type: Schema.Types.ObjectId, ref: "Post"}],
+  friends: [{
+      friend: {type: Schema.Types.ObjectId, ref: "User"},
+      //compare friend's lastTimePosted to lastTimeChecked
+      lastTimeChecked: { type: Date }
+  }],
+  lastTimePosted: { type: Date }
 });
+
+/* Wait until later to add this
+var placeToGoSchema = new Schema({
+  username:  String,
+  date: { type: Date, default: Date.now },
+  place : String,
+  comment : String //,
+  //longitude : //// ,
+  //latitude : ////
+});
+*/
 
 /**
  * Virtuals

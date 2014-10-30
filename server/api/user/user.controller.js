@@ -9,6 +9,27 @@ var validationError = function(res, err) {
   return res.json(422, err);
 };
 
+exports.addFriend = function (req, res, next) {
+  var userId = req.body.user;
+
+  //get this user's ID:
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
+    console.log("user: " + user);
+    //get friend's ID:
+    User.findOne({name: req.body.friend}, function (err, friend) {
+       console.log("friend: " + friend);
+       user.friends.push({friend: friend._id});
+       user.save(function(err, updatedUser){
+         console.log(updatedUser);
+         res.send(updatedUser);
+       });
+
+    });
+  });
+};
+
 /**
  * Get list of users
  * restriction: 'admin'
@@ -89,7 +110,16 @@ exports.me = function(req, res, next) {
   }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.json(401);
-    res.json(user);
+    User.find({}, '-salt -hashedPassword', function (err, users) {
+      if(err) return res.send(500, err);
+      //User.populate(user, { path: 'posts' , model: "Post"}, function (err, user) {
+      var userList = [];
+      users.forEach(function(aUser){
+         userList.push(aUser.name);
+      });
+      res.send({"username": user.name, "userId": user._id, userFriends: user.friends, "users": userList}).end();
+      //});
+    });
   });
 };
 
