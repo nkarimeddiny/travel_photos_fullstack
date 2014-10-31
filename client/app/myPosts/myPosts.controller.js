@@ -14,7 +14,10 @@ app.controller('MyPostsCtrl', function ($scope, $http, postingService) {
 
     this.addPost = function() {
        postingService.addPost(myPostForm.caption.value, ctrl, $http);
-    }
+    };
+    this.removePost = function(postId) {
+       postingService.removePost($http, ctrl, postId);
+    };
 
 });
 
@@ -29,6 +32,13 @@ app.factory("postingService", function() {
       },
       retrievePosts : function($http, ctrl, optionalFriendName) {
            $http.post("http://localhost:9000/api/users/getPosts", {friendName: optionalFriendName})
+             .success( function(data) {
+              console.log(data);
+              ctrl.userPosts = data;
+    });
+      },
+      removePost : function($http, ctrl, postId) {
+           $http.post("http://localhost:9000/api/users/removePost", {postId: postId})
              .success( function(data) {
               console.log(data);
               ctrl.userPosts = data;

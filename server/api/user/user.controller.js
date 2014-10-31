@@ -25,6 +25,23 @@ exports.addPost = function(req, res, next) {
     });
 };
 
+exports.removePost = function(req, res, next) {
+    var userId = req.user._id;
+    var postId = req.body.postId;
+    User.findById(userId, function (err, user) {
+        user.posts.remove(postId);
+        user.save(function(err, user) {
+        Post.remove({_id : postId}, function(err, post) {
+          User.populate(user, { path: 'posts' , model: "Post"}, 
+             function (err, user) {
+            res.send(user.posts).end();
+          });
+       });
+
+    });
+   });     
+};
+
 exports.updateFriendsOrder = function (req, res, next) {
   //get this user's ID:
   var userId = req.user._id;
