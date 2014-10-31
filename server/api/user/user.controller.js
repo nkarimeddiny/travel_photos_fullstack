@@ -52,27 +52,30 @@ exports.updateFriendsOrder = function (req, res, next) {
     if (!user) return res.json(401);
     User.find({}, '-salt -hashedPassword', function (err, users) {
       if(err) return res.send(500, err);
-       User.populate(user, { path: 'friends.friend' , model: "User"}, function (err, user) {
-          var friendList = [];
-          user.friends.forEach(function(aFriend){
-            aFriend.orderNumber = req.body.friendsOrder[aFriend.friend.name];
-            friendList[aFriend.orderNumber] = aFriend.friend.name;
-          });
-          user.save(function(err, user) {
-            console.log(friendList);
-            res.send({userFriends: friendList.slice(1)}).end();
-          });
-      });
+       populateUserAndFriendList(res, user, null, req.body.friendsOrder);
 
+// //       User.populate(user, { path: 'friends.friend' , model: "User"}, function (err, user) {
+//  //         var friendList = [];
+//  //         user.friends.forEach(function(aFriend){
+//             aFriend.orderNumber = req.body.friendsOrder[aFriend.friend.name];
+//   //          friendList[aFriend.orderNumber] = aFriend.friend.name;
+//    //       });
+//           user.save(function(err, user) {
+//   //          res.send({userFriends: friendList.slice(1)}).end();
+//   //        });
+//          });
   });
 });
 };
 
 
-var populateUserAndFriendList = function(res, updatedUser, users) {
+var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrder) {
       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
          var friendList = [];
          updatedUser.friends.forEach(function(aFriend){
+           if (newFriendsOrder) {
+             aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
+           }
            friendList[aFriend.orderNumber] = aFriend.friend.name;
          });
          if (users) {
@@ -81,6 +84,11 @@ var populateUserAndFriendList = function(res, updatedUser, users) {
              userList.push(aUser.name);
           });
            res.send({"username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
+         }
+         else if (newFriendsOrder) {
+            updatedUser.save(function(err, user){
+             res.send({userFriends: friendList.slice(1)});
+            });
          }
          else {
            res.send({userFriends: friendList.slice(1)});
@@ -99,7 +107,7 @@ exports.addFriend = function (req, res, next) {
        var len = user.friends.length;
        user.friends.push({friend: friend._id, orderNumber: len + 1,lastTimeChecked: ""});
        user.save(function(err, updatedUser){
-         populateUserAndFriendList(res, updatedUser, null);
+         populateUserAndFriendList(res, updatedUser, null, null);
     });
   });
 });
@@ -117,7 +125,7 @@ exports.removeFriend = function (req, res, next) {
         });
         user.friends = newFriendsArr;
         user.save(function(err, updatedUser){
-           populateUserAndFriendList(res, updatedUser, null);
+           populateUserAndFriendList(res, updatedUser, null, null);
         });
       });
    });
@@ -225,7 +233,7 @@ exports.me = function(req, res, next) {
     if (!user) return res.json(401);
     User.find({}, '-salt -hashedPassword', function (err, users) {
       if(err) return res.send(500, err);
-      populateUserAndFriendList(res, user, users);
+      populateUserAndFriendList(res, user, users, null);
     });
   });
 };
