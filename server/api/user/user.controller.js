@@ -68,6 +68,9 @@ exports.updateFriendsOrder = function (req, res, next) {
 });
 };
 
+
+
+
 exports.addFriend = function (req, res, next) {
   var userId = req.user._id;
   User.findById(userId, function (err, user) {
@@ -102,7 +105,13 @@ exports.removeFriend = function (req, res, next) {
         });
         user.friends = newFriendsArr;
         user.save(function(err, updatedUser){
-           res.send(updatedUser);
+       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
+         var friendList = [];
+         user.friends.forEach(function(aFriend){
+           friendList[aFriend.orderNumber] = aFriend.friend.name;
+         });
+         res.send({userFriends: friendList.slice(1)});
+       });
         });
       });
    });
