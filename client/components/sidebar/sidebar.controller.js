@@ -23,6 +23,8 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
       });
       $http.post("http://localhost:9000/api/users/updateFriendsOrder", {friendsOrder : ctrl.friendsOrderObject})
              .success( function(data) {
+                 console.log(data);
+                 console.log(data.userFriends);
                  ctrl.myFriendsList = data.userFriends; 
      });
     } 

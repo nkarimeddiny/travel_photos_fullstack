@@ -27,20 +27,28 @@ exports.addPost = function(req, res, next) {
 
 exports.updateFriendsOrder = function (req, res, next) {
   //get this user's ID:
-  var userId = req.body.user;
-  User.findById(userId, function (err, user) {
+  var userId = req.user._id;
+  User.findOne({
+    _id: userId
+  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
-    if (!user) return res.send(401);
+    if (!user) return res.json(401);
+    User.find({}, '-salt -hashedPassword', function (err, users) {
+      if(err) return res.send(500, err);
        User.populate(user, { path: 'friends.friend' , model: "User"}, function (err, user) {
           var friendList = [];
           user.friends.forEach(function(aFriend){
-            aFriend.orderNumber = req.body.friendsOrder[aFriend.name];
+            aFriend.orderNumber = req.body.friendsOrder[aFriend.friend.name];
             friendList[aFriend.orderNumber] = aFriend.friend.name;
-        });
-        res.send({userFriends: friendList}).end();
+          });
+          user.save(function(err, user) {
+            console.log(friendList);
+            res.send({userFriends: friendList.slice(1)}).end();
+          });
       });
 
   });
+});
 };
 
 exports.addFriend = function (req, res, next) {
@@ -52,8 +60,6 @@ exports.addFriend = function (req, res, next) {
     if (!user) return res.send(401);
     //get friend's ID:
     User.findOne({name: req.body.friend}, function (err, friend) {
-      console.log("friend: " + friend);
-      console.log("friendId " + friend._id);
        var len = user.friends.length;
        user.friends.push({friend: friend._id, orderNumber: len + 1,lastTimeChecked: ""});
        user.save(function(err, updatedUser){
@@ -169,7 +175,7 @@ exports.me = function(req, res, next) {
         user.friends.forEach(function(aFriend){
            friendList[aFriend.orderNumber] = aFriend.friend.name;
         });
-        res.send({"username": user.name, "userId": user._id, userFriends: friendList, "users": userList}).end();
+        res.send({"username": user.name, "userId": user._id, userFriends: friendList.slice(1), "users": userList}).end();
       });
     });
   });
