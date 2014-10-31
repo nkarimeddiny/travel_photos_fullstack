@@ -69,7 +69,7 @@ exports.updateFriendsOrder = function (req, res, next) {
 };
 
 
-var populateUser = function(res, updatedUser, users) {
+var populateUserAndFriendList = function(res, updatedUser, users) {
       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
          var friendList = [];
          updatedUser.friends.forEach(function(aFriend){
@@ -99,7 +99,7 @@ exports.addFriend = function (req, res, next) {
        var len = user.friends.length;
        user.friends.push({friend: friend._id, orderNumber: len + 1,lastTimeChecked: ""});
        user.save(function(err, updatedUser){
-         populateUser(res, updatedUser, null);
+         populateUserAndFriendList(res, updatedUser, null);
     });
   });
 });
@@ -117,7 +117,7 @@ exports.removeFriend = function (req, res, next) {
         });
         user.friends = newFriendsArr;
         user.save(function(err, updatedUser){
-           populateUser(res, updatedUser, null);
+           populateUserAndFriendList(res, updatedUser, null);
         });
       });
    });
@@ -225,7 +225,7 @@ exports.me = function(req, res, next) {
     if (!user) return res.json(401);
     User.find({}, '-salt -hashedPassword', function (err, users) {
       if(err) return res.send(500, err);
-      populateUser(res, user, users);
+      populateUserAndFriendList(res, user, users);
     });
   });
 };
