@@ -13,7 +13,6 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
   var ctrl = this;
   ctrl.myFriendsList = [];
   ctrl.signedUpUsers = [];
-  ctrl.thisUserId;
   ctrl.friendsOrderObject = {};
   ctrl.sortableOptions = {
     'ui-floating': true,
@@ -33,7 +32,6 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
   $http.get("http://localhost:9000/api/users/me")
              .success( function(data) {
               console.log(data);
-                  ctrl.thisUserId = data.userId;
                   ctrl.thisUserName = data.username;
                   ctrl.myFriendsList = data.userFriends; 
                   ctrl.signedUpUsers = data.users
@@ -51,7 +49,6 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
    this.addFriend = function() {
 
       $http.post("http://localhost:9000/api/users/addFriend", {
-                user: ctrl.thisUserId,
                 friend: addFriendForm.friend.value
                 })
              .success( function(data) {

@@ -68,7 +68,7 @@ exports.updateFriendsOrder = function (req, res, next) {
 };
 
 exports.addFriend = function (req, res, next) {
-  var userId = req.body.user;
+  var userId = req.user._id;
 
   //get this user's ID:
   User.findById(userId, function (err, user) {
@@ -197,7 +197,7 @@ exports.me = function(req, res, next) {
         user.friends.forEach(function(aFriend){
            friendList[aFriend.orderNumber] = aFriend.friend.name;
         });
-        res.send({"username": user.name, "userId": user._id, userFriends: friendList.slice(1), "users": userList}).end();
+        res.send({"username": user.name, userFriends: friendList.slice(1), "users": userList}).end();
       });
     });
   });

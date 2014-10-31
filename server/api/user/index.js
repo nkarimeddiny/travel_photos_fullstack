@@ -14,7 +14,7 @@ router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.post('/getPosts', auth.isAuthenticated(), controller.getPosts);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
-router.post('/addFriend', controller.addFriend);
+router.post('/addFriend', auth.isAuthenticated(), controller.addFriend);
 router.post('/addPost', auth.isAuthenticated(), controller.addPost);
 router.post('/updateFriendsOrder', auth.isAuthenticated(), controller.updateFriendsOrder);
 router.post('/removePost', auth.isAuthenticated(), controller.removePost);
