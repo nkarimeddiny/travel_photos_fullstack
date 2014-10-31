@@ -14,6 +14,17 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
   ctrl.myFriendsList = [];
   ctrl.signedUpUsers = [];
   ctrl.thisUserId;
+  ctrl.friendsOrderObject = {};
+  ctrl.sortableOptions = {
+    'ui-floating': true,
+    stop: function( event, ui ) {
+      ctrl.myFriendsList.forEach(function(friend, index){
+          ctrl.friendsOrderObject[friend] = index + 1;
+      });
+      console.log(ctrl.friendsOrderObject);
+       //friendsListService.updateFriendsOrder("Navid", $http, $scope);
+    } 
+  };
 
   $http.get("http://localhost:9000/api/users/me")
              .success( function(data) {

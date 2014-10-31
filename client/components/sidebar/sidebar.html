@@ -6,7 +6,7 @@
       <div ng-show="flCtrl.myFriendsList" id ="clickinfo">
         Click on a friend's username to see their photos.
        </div>
-       <div ui-sortable="flCtrl.sortableOptions" ng-model="friends">
+       <div ui-sortable="flCtrl.sortableOptions" ng-model="flCtrl.myFriendsList">
          <div ng-repeat="friend in flCtrl.myFriendsList" class="friendInList">
            <div class="friendName friend"> <a ng-href="#/friendPosts/{{friend.name}}" >{{friend}}</a></div>
             <div ng-show="friend.uncheckedPost" class="greendot">green dot</div>
