@@ -62,6 +62,7 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                 friend: addFriendForm.friend.value
                 })
              .success( function(data) {
+                console.log(data.userFriends);
                 ctrl.myFriendsList = data.userFriends; 
                }); 
     }; 

@@ -66,8 +66,15 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            if (newFriendsOrder) {
              aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
            }
+           console.log("friend name: " + aFriend.friend.name);
+           console.log("lastTimePosted: " + aFriend.friend.lastTimePosted);
+           console.log("lastTimeChecked: " + aFriend.lastTimeChecked);
+           var uncheckedPost = false;
+           if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
+             uncheckedPost = true;
+           }
            friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
-                                             lastTimeChecked: aFriend.lastTimeChecked};
+                                             uncheckedPost: uncheckedPost};
          });
          if (users) {
            var userList = [];
