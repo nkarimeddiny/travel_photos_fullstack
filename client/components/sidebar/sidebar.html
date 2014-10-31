@@ -7,8 +7,8 @@
        </div>
        <div ui-sortable="flCtrl.sortableOptions" ng-model="flCtrl.myFriendsList">
          <div ng-repeat="friend in flCtrl.myFriendsList" class="friendInList">
-           <div class="friendName friend"> <a ng-click="flCtrl.goToLink(friend)">{{friend}}</a></div>
-            <button ng-click="flCtrl.removeFriend(friend)">Remove friend</button>
+           <div class="friendName friend"> <a ng-click="flCtrl.goToLink(friend.name)">{{friend.name}}</a></div>
+            <button ng-click="flCtrl.removeFriend(friend.name)">Remove friend</button>
             <div ng-show="friend.uncheckedPost" class="greendot">green dot</div>
          </div> <br/>
        </div>

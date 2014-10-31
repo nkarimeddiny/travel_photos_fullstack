@@ -66,7 +66,8 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            if (newFriendsOrder) {
              aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
            }
-           friendList[aFriend.orderNumber] = aFriend.friend.name;
+           friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
+                                             lastTimeChecked: aFriend.lastTimeChecked};
          });
          if (users) {
            var userList = [];
