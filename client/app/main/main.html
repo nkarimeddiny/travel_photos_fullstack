@@ -1,5 +1,5 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-<div ng-include="'components/sidebar/sidebar.html'"></div>
+
 
 <!-- <header class="hero-unit" id="banner">
   <div class="container">
@@ -38,14 +38,18 @@
   </div>
 </footer> -->
 
+<div class="container-fluid">
+
+<div ng-include="'components/sidebar/sidebar.html'"></div>
 
 <div ng-controller = "MainCtrl as main"> <!-- MainCtrl is for Places-to-go -->
 
   <div id="placesToGo"> <!-- this is displayed when first logging on,
     but is hidden when looking at your own posts or a friend's posts-->
-    <div class = "map-canvas" id="map-canvas">
+    <div class="col-md-9 col-lg-9" id="map-container">
+      <div class = "map-canvas" id="map-canvas">
+      </div>
     </div>
-
 
     <form name="placeForm" ng-submit="main.addPlace()" novalidate>
       Enter a Place-to-Go<br/>
@@ -76,3 +80,5 @@
   </div> <!-- end placesToGo -->
 
   <div> <!--  end MainCtrl (PlacesToGo) -->
+
+  </div> <!-- end container -->

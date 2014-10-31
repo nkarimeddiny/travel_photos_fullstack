@@ -21,23 +21,9 @@ body {
   padding-bottom: 20px;
 }
 
-.container {
-  width: 1300px;
-}
-
-#friendsColumn {
-  width: 200px;
-  float: left;
-}
-
-#templateView {
-  width: 1000px;
-  margin-left: 20px;
-  float: left; 
-}
-
 #map-canvas { 
-  height: 500px; 
+  max-width: 1050px;
+  height: 500px;
   margin-bottom: 10px;
 }
 
