@@ -69,6 +69,24 @@ exports.updateFriendsOrder = function (req, res, next) {
 };
 
 
+var populateUser = function(res, updatedUser, users) {
+      User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
+         var friendList = [];
+         updatedUser.friends.forEach(function(aFriend){
+           friendList[aFriend.orderNumber] = aFriend.friend.name;
+         });
+         if (users) {
+           var userList = [];
+           users.forEach(function(aUser){
+             userList.push(aUser.name);
+          });
+           res.send({"username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
+         }
+         else {
+           res.send({userFriends: friendList.slice(1)});
+          }
+       });
+};
 
 
 exports.addFriend = function (req, res, next) {
@@ -81,13 +99,7 @@ exports.addFriend = function (req, res, next) {
        var len = user.friends.length;
        user.friends.push({friend: friend._id, orderNumber: len + 1,lastTimeChecked: ""});
        user.save(function(err, updatedUser){
-       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
-         var friendList = [];
-         user.friends.forEach(function(aFriend){
-           friendList[aFriend.orderNumber] = aFriend.friend.name;
-         });
-         res.send({userFriends: friendList.slice(1)});
-       });
+         populateUser(res, updatedUser, null);
     });
   });
 });
@@ -105,13 +117,7 @@ exports.removeFriend = function (req, res, next) {
         });
         user.friends = newFriendsArr;
         user.save(function(err, updatedUser){
-       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
-         var friendList = [];
-         user.friends.forEach(function(aFriend){
-           friendList[aFriend.orderNumber] = aFriend.friend.name;
-         });
-         res.send({userFriends: friendList.slice(1)});
-       });
+           populateUser(res, updatedUser, null);
         });
       });
    });
@@ -219,17 +225,7 @@ exports.me = function(req, res, next) {
     if (!user) return res.json(401);
     User.find({}, '-salt -hashedPassword', function (err, users) {
       if(err) return res.send(500, err);
-      User.populate(user, { path: 'friends.friend' , model: "User"}, function (err, user) {
-        var userList = [];
-        var friendList = [];
-        users.forEach(function(aUser){
-           userList.push(aUser.name);
-        });
-        user.friends.forEach(function(aFriend){
-           friendList[aFriend.orderNumber] = aFriend.friend.name;
-        });
-        res.send({"username": user.name, userFriends: friendList.slice(1), "users": userList}).end();
-      });
+      populateUser(res, user, users);
     });
   });
 };
