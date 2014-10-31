@@ -1,11 +1,15 @@
 'use strict';
 
 angular.module('travelPhotosApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth) {
+  .controller('NavbarCtrl', function ($scope, $location, Auth, friendsListService, $state) {
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
     }];
+
+    this.goToLink = function() {
+        $state.go("myPosts");
+    }
 
     console.log(Auth);
     $scope.isCollapsed = true;

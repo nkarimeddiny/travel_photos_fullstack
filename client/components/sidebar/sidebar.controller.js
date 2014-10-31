@@ -36,15 +36,7 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                   ctrl.myFriendsList = data.userFriends; 
                   ctrl.signedUpUsers = data.users
     });
-   this.goToLink = function(param) {
-      if (param === "myPosts") {
-        $state.go("myPosts"); 
-      }
-      else {
-        console.log("param: " + param)
-        $state.go("friendPosts", {friendName: param}); 
-      }
-   };
+
 
     this.removeFriend = function(friendName) {
 
@@ -65,7 +57,10 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                 console.log(data.userFriends);
                 ctrl.myFriendsList = data.userFriends; 
                }); 
-    }; 
+    };
+    this.goToLink = function(param) {
+          $state.go("friendPosts", {friendName: param}); 
+    };
    });
 
 app.factory("friendsListService", function() {
@@ -81,4 +76,4 @@ app.factory("friendsListService", function() {
              });
           }
       }
-});
+    });
