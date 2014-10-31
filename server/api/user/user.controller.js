@@ -15,6 +15,7 @@ exports.addPost = function(req, res, next) {
     User.findById(userId, function (err, user) {
         Post.create({user: user._id, caption: req.body.caption}, function(err, post) {
                 user.posts.push(post._id);
+                user.lastTimePosted = Date.now();
                 user.save(function(err, user) {
                   User.populate(user, { path: 'posts' , model: "Post"}, function (err, user) {
                       res.send(user.posts).end();
@@ -53,17 +54,6 @@ exports.updateFriendsOrder = function (req, res, next) {
     User.find({}, '-salt -hashedPassword', function (err, users) {
       if(err) return res.send(500, err);
        populateUserAndFriendList(res, user, null, req.body.friendsOrder);
-
-// //       User.populate(user, { path: 'friends.friend' , model: "User"}, function (err, user) {
-//  //         var friendList = [];
-//  //         user.friends.forEach(function(aFriend){
-//             aFriend.orderNumber = req.body.friendsOrder[aFriend.friend.name];
-//   //          friendList[aFriend.orderNumber] = aFriend.friend.name;
-//    //       });
-//           user.save(function(err, user) {
-//   //          res.send({userFriends: friendList.slice(1)}).end();
-//   //        });
-//          });
   });
 });
 };

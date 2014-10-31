@@ -65,17 +65,6 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                 ctrl.myFriendsList = data.userFriends; 
                }); 
     }; 
-  // friendsListService.getFriendsOrder("Navid",$http, ctrl, $scope);
-  
-  // this.sortableOptions = {
-  //   'ui-floating': true,
-  //   stop: function( event, ui ) {
-  //      friendsListService.updateFriendsOrder("Navid", $http, $scope);
-  //   } 
-  // };
-
-
-
    });
 
 app.factory("friendsListService", function() {
