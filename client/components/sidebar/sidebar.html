@@ -2,14 +2,16 @@
   <div>
 
        My Name: {{flCtrl.thisUserName}} <br/>
-      <div ng-show="flCtrl.myFriendsList" id ="clickinfo">
+      <div ng-show="flCtrl.myFriendsList.length" id ="clickinfo">
         Click on a friend's username to see their photos.
        </div>
        <div ui-sortable="flCtrl.sortableOptions" ng-model="flCtrl.myFriendsList">
          <div ng-repeat="friend in flCtrl.myFriendsList" class="friendInList">
-           <div class="friendName friend"> <a ng-click="flCtrl.goToLink(friend.name)">{{friend.name}}</a></div>
-            <button ng-click="flCtrl.removeFriend(friend.name)">Remove friend</button>
-            <div ng-show="friend.uncheckedPost" class="greendot">green dot</div>
+           <div class="friendName"> 
+            <a class="h4" ng-click="flCtrl.goToLink(friend.name)">{{friend.name}}</a>
+            <button class="btn btn-xs" ng-click="flCtrl.removeFriend(friend.name)">X</button>
+           </div>
+           <div ng-show="friend.uncheckedPost" class="greendot">green dot</div>
          </div> <br/>
        </div>
 
@@ -17,7 +19,7 @@
     <form name="addFriendForm" ng-submit="flCtrl.addFriend()" novalidate>
       Enter a Friend to Follow<br/>
       <input type="text"  name = "friend" size="30" maxlength="30"><br/>
-      <input type ="submit" id="savePlaceButton" value="submit">
+      <input class="btn btn-primary" type ="submit" id="savePlaceButton" value="Submit">
     </form>
 <!--        <div ui-sortable="flCtrl.sortableOptions" ng-model="friends">
          <div  ng-repeat="friend in friends" class="friendInList">
