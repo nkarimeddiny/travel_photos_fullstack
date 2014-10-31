@@ -44,7 +44,17 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
         console.log("param: " + param)
         $state.go("friendPosts", {friendName: param}); 
       }
-   };          
+   };
+
+    this.removeFriend = function(friendName) {
+
+      $http.post("http://localhost:9000/api/users/removeFriend", {
+                friendName: friendName
+                })
+             .success( function(data) {
+                ctrl.myFriendsList = data.userFriends; 
+               }); 
+    };           
 
    this.addFriend = function() {
 
@@ -52,7 +62,7 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                 friend: addFriendForm.friend.value
                 })
              .success( function(data) {
-                console.log(data);
+                ctrl.myFriendsList = data.userFriends; 
                }); 
     }; 
   // friendsListService.getFriendsOrder("Navid",$http, ctrl, $scope);

@@ -59,6 +59,7 @@ exports.updateFriendsOrder = function (req, res, next) {
             friendList[aFriend.orderNumber] = aFriend.friend.name;
           });
           user.save(function(err, user) {
+            console.log(friendList);
             res.send({userFriends: friendList.slice(1)}).end();
           });
       });
@@ -69,8 +70,6 @@ exports.updateFriendsOrder = function (req, res, next) {
 
 exports.addFriend = function (req, res, next) {
   var userId = req.user._id;
-
-  //get this user's ID:
   User.findById(userId, function (err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
@@ -79,11 +78,34 @@ exports.addFriend = function (req, res, next) {
        var len = user.friends.length;
        user.friends.push({friend: friend._id, orderNumber: len + 1,lastTimeChecked: ""});
        user.save(function(err, updatedUser){
-         res.send(updatedUser);
+       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
+         var friendList = [];
+         user.friends.forEach(function(aFriend){
+           friendList[aFriend.orderNumber] = aFriend.friend.name;
+         });
+         res.send({userFriends: friendList.slice(1)});
        });
-
     });
   });
+});
+}
+
+exports.removeFriend = function (req, res, next) {
+  var userId = req.user._id;
+  var friendName = req.body.friendName;
+   User.findOne({name: friendName}, function (err, friend) {
+      User.findById(userId, function (err, user) {
+        if (err) return next(err);
+        if (!user) return res.send(401);
+        var newFriendsArr = user.friends.filter(function(aFriend){
+            return String(aFriend.friend) !== String(friend._id);
+        });
+        user.friends = newFriendsArr;
+        user.save(function(err, updatedUser){
+           res.send(updatedUser);
+        });
+      });
+   });
 };
 
 /**
