@@ -199,12 +199,12 @@ exports.changePassword = function(req, res, next) {
   });
 };
 exports.getPosts = function(req, res, next) {
+  var myId = req.user._id;
   if (req.body.friendName){
     var searchCriteria = {name: req.body.friendName};
   }
   else {
-    var userId = req.user._id;
-    var searchCriteria = {_id: userId};
+    var searchCriteria = {_id: myId};
   }
 
   User.findOne(searchCriteria //{_id: userId}
@@ -212,7 +212,25 @@ exports.getPosts = function(req, res, next) {
     if (err) return next(err);
     if (!user) return res.json(401);
       User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
-        res.send(user.posts).end();
+        //if checking a friend's posts, need to retrieve my own model, iterate through
+        //friends, find the friend by id, and update lastTimeChecked
+        if (req.body.friendName) {
+            User.findById(myId, function (err, me) {
+                if (err) return next(err);
+                if (!user) return res.send(401);
+                me.friends.forEach(function(aFriend){
+                  if (String(aFriend.friend) === String(user._id)){
+                    aFriend.lastTimeChecked = Date.now();
+                  }
+                });
+                me.save(function(err, updatedUser){
+                    res.send(user.posts).end();
+                });
+            });
+        }
+        else{
+          res.send(user.posts).end();
+        }
       });
   });
 };
