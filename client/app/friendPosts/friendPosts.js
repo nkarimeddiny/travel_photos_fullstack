@@ -4,7 +4,7 @@ angular.module('travelPhotosApp')
   .config(function ($stateProvider) {
     $stateProvider
       .state('friendPosts', {
-        url: '/friendPosts',
+        url: '/friendPosts/:friendName',
         templateUrl: 'app/friendPosts/friendPosts.html',
         controller: 'FriendpostsCtrl'
       });

@@ -8,7 +8,7 @@
        </div>
        <div ui-sortable="flCtrl.sortableOptions" ng-model="flCtrl.myFriendsList">
          <div ng-repeat="friend in flCtrl.myFriendsList" class="friendInList">
-           <div class="friendName friend"> <a ng-href="#/friendPosts/{{friend.name}}" >{{friend}}</a></div>
+           <div class="friendName friend"> <a ng-click="flCtrl.goToLink(friend)">{{friend}}</a></div>
             <div ng-show="friend.uncheckedPost" class="greendot">green dot</div>
          </div> <br/>
        </div>
@@ -28,7 +28,7 @@
 
 
     <div id="refreshLink" >
-      <a ng-click="flCtrl.goToLink(flCtrl.thisUserId)">My Posts</a> 
+      <a ng-click="flCtrl.goToLink('myPosts')">My Posts</a> 
     </div>
 
 <!--

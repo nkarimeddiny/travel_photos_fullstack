@@ -27,8 +27,8 @@ app.factory("postingService", function() {
                 ctrl.userPosts = data;
           });
       },
-      retrievePosts : function($http, ctrl) {
-           $http.get("http://localhost:9000/api/users/myPosts")
+      retrievePosts : function($http, ctrl, optionalFriendName) {
+           $http.post("http://localhost:9000/api/users/getPosts", {friendName: optionalFriendName})
              .success( function(data) {
               console.log(data);
               ctrl.userPosts = data;

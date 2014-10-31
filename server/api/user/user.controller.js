@@ -42,7 +42,6 @@ exports.updateFriendsOrder = function (req, res, next) {
             friendList[aFriend.orderNumber] = aFriend.friend.name;
           });
           user.save(function(err, user) {
-            console.log(friendList);
             res.send({userFriends: friendList.slice(1)}).end();
           });
       });
@@ -139,11 +138,17 @@ exports.changePassword = function(req, res, next) {
     }
   });
 };
-exports.myPosts = function(req, res, next) {
-  var userId = req.user._id;
-  User.findOne({
-    _id: userId
-  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+exports.getPosts = function(req, res, next) {
+  if (req.body.friendName){
+    var searchCriteria = {name: req.body.friendName};
+  }
+  else {
+    var userId = req.user._id;
+    var searchCriteria = {_id: userId};
+  }
+
+  User.findOne(searchCriteria //{_id: userId}
+  , '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.json(401);
       User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {

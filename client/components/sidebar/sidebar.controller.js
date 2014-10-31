@@ -38,8 +38,14 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                   ctrl.myFriendsList = data.userFriends; 
                   ctrl.signedUpUsers = data.users
     });
-   this.goToLink = function() {
+   this.goToLink = function(param) {
+      if (param === "myPosts") {
         $state.go("myPosts"); 
+      }
+      else {
+        console.log("param: " + param)
+        $state.go("friendPosts", {friendName: param}); 
+      }
    };          
 
    this.addFriend = function() {

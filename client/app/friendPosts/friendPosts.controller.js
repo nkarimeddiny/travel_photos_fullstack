@@ -7,10 +7,8 @@ angular.module('travelPhotosApp')
 
 var app = angular.module('travelPhotosApp');
 
-app.controller('FriendPostsCtrl', function ($scope, $routeParams, postingService, $http) {
+app.controller('FriendPostsCtrl', function ($stateParams, $scope, postingService, $http) {
     var ctrl = this;
-    this.friendName = $routeParams.orderId;
-    console.log(app);
-    postingService.retrievePosts(this.friendName, $http, ctrl);
+    postingService.retrievePosts($http, ctrl, $stateParams.friendName);
     
 }); 
