@@ -17,9 +17,8 @@
 
 
     <form name="addFriendForm" ng-submit="flCtrl.addFriend()" novalidate>
-      Enter a Friend to Follow<br/>
-      <input type="text"  name = "friend" size="30" maxlength="30"><br/>
-      <input class="btn btn-primary" type ="submit" id="savePlaceButton" value="Submit">
+      <label for="friendSearch" >Choose a Friend to Follow</label>
+      <input id="friendSearch" type="text"  name = "friend" size="30" maxlength="30"><br/>
     </form>
 <!--        <div ui-sortable="flCtrl.sortableOptions" ng-model="friends">
          <div  ng-repeat="friend in friends" class="friendInList">
