@@ -36,7 +36,8 @@ exports.addFriend = function (req, res, next) {
     User.findOne({name: req.body.friend}, function (err, friend) {
       console.log("friend: " + friend);
       console.log("friendId " + friend._id);
-       user.friends.push({friend: friend._id, lastTimeChecked: ""});
+       var len = user.friends.length;
+       user.friends.push({friend: friend._id, orderNumber: len + 1,lastTimeChecked: ""});
        user.save(function(err, updatedUser){
          res.send(updatedUser);
        });

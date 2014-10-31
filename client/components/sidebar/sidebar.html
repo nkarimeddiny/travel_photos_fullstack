@@ -3,13 +3,16 @@
        All Users: {{flCtrl.signedUpUsers}} <br/>
        My Name: {{flCtrl.thisUserName}} <br/>
        My Id: {{flCtrl.thisUserId}} <br/>
-       <div ng-show="flCtrl.sampleVar" id ="clickinfo">
+      <div ng-show="flCtrl.myFriendsList" id ="clickinfo">
         Click on a friend's username to see their photos.
        </div>
-       My friends:
-       <div ng-repeat="friend in flCtrl.myFriendsList">
-        {{friend}}
+       <div ui-sortable="flCtrl.sortableOptions" ng-model="friends">
+         <div ng-repeat="friend in flCtrl.myFriendsList" class="friendInList">
+           <div class="friendName friend"> <a ng-href="#/friendPosts/{{friend.name}}" >{{friend}}</a></div>
+            <div ng-show="friend.uncheckedPost" class="greendot">green dot</div>
+         </div> <br/>
        </div>
+
 
     <form name="addFriendForm" ng-submit="flCtrl.addFriend()" novalidate>
       Enter a Friend to Follow<br/>
