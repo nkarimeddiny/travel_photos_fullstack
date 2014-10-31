@@ -25,6 +25,24 @@ exports.addPost = function(req, res, next) {
     });
 };
 
+exports.updateFriendsOrder = function (req, res, next) {
+  //get this user's ID:
+  var userId = req.body.user;
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
+       User.populate(user, { path: 'friends.friend' , model: "User"}, function (err, user) {
+          var friendList = [];
+          user.friends.forEach(function(aFriend){
+            aFriend.orderNumber = req.body.friendsOrder[aFriend.name];
+            friendList[aFriend.orderNumber] = aFriend.friend.name;
+        });
+        res.send({userFriends: friendList}).end();
+      });
+
+  });
+};
+
 exports.addFriend = function (req, res, next) {
   var userId = req.body.user;
 
@@ -149,7 +167,7 @@ exports.me = function(req, res, next) {
            userList.push(aUser.name);
         });
         user.friends.forEach(function(aFriend){
-           friendList.push(aFriend.friend.name);
+           friendList[aFriend.orderNumber] = aFriend.friend.name;
         });
         res.send({"username": user.name, "userId": user._id, userFriends: friendList, "users": userList}).end();
       });

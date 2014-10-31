@@ -21,8 +21,10 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
       ctrl.myFriendsList.forEach(function(friend, index){
           ctrl.friendsOrderObject[friend] = index + 1;
       });
-      console.log(ctrl.friendsOrderObject);
-       //friendsListService.updateFriendsOrder("Navid", $http, $scope);
+      $http.post("http://localhost:9000/api/users/updateFriendsOrder", {friendsOrder : ctrl.friendsOrderObject})
+             .success( function(data) {
+                 ctrl.myFriendsList = data.userFriends; 
+     });
     } 
   };
 

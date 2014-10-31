@@ -16,6 +16,7 @@ router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 router.post('/addFriend', controller.addFriend);
 router.post('/addPost', auth.isAuthenticated(), controller.addPost);
+router.post('/updateFriendsOrder', auth.isAuthenticated(), controller.updateFriendsOrder);
 
 
 
