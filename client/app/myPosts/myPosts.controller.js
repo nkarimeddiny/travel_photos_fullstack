@@ -1,12 +1,10 @@
 'use strict';
 
 angular.module('travelPhotosApp')
-  .controller('MypostsCtrl', function ($scope) {
+  .controller('MypostsCtrl', function ($scope, $http, postingService) {
+    
     $scope.message = 'Hello';
-  });
-  var app = angular.module('travelPhotosApp');
 
-app.controller('MyPostsCtrl', function ($scope, $http, postingService) {
     var ctrl = this;
     ctrl.userPosts = {};
 
