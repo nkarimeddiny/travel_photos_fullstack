@@ -29,20 +29,7 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
        ctrl.addFriend($(event.target).text(), ctrl, $http);
     });
 
-    $http.get("http://localhost:9000/api/users/me")
-             .success( function(data) {
-              console.log(data);
-                  ctrl.thisUserName = data.username;
-                  ctrl.myFriendsList = data.userFriends; 
-                  ctrl.signedUpUsers = data.users
-
-                  friendSearch.autocomplete({
-                   minLength: 3,
-                   source: ctrl.signedUpUsers,
-                   position: { my: "left top", at: "left bottom" },
-                   appendTo: ".ui-widget"
-                 });
-             });
+    friendsListService.initializeSidebar(friendSearch, ctrl, $http);
 
     this.removeFriend = function(friendName) {
        friendsListService.removeFriend(friendName, ctrl, $http);
@@ -85,6 +72,22 @@ app.factory("friendsListService", function() {
                  console.log(data.userFriends);
                  ctrl.myFriendsList = data.userFriends; 
         });
-      }    
+      },
+      initializeSidebar: function(friendSearch, ctrl, $http) {
+           $http.get("http://localhost:9000/api/users/me")
+             .success( function(data) {
+              console.log(data);
+                  ctrl.thisUserName = data.username;
+                  ctrl.myFriendsList = data.userFriends; 
+                  ctrl.signedUpUsers = data.users
+
+                  friendSearch.autocomplete({
+                   minLength: 3,
+                   source: ctrl.signedUpUsers,
+                   position: { my: "left top", at: "left bottom" },
+                   appendTo: ".ui-widget"
+                 });
+             });
       }
-    });
+    }
+  });
