@@ -16,10 +16,10 @@
        </div>
 
 
-    <form name="addFriendForm" ng-submit="flCtrl.addFriend()" novalidate>
-      <label for="friendSearch" >Choose a Friend to Follow</label>
-      <input id="friendSearch" type="text"  name = "friend" size="30" maxlength="30"><br/>
-    </form>
+        <label for="friendSearch" >Choose a Friend to Follow</label>
+        <div class = "ui-widget">
+          <input id="friendSearch" type="text" name="friend" size="30" maxlength="30"><br/>
+      </div>
 <!--        <div ui-sortable="flCtrl.sortableOptions" ng-model="friends">
          <div  ng-repeat="friend in friends" class="friendInList">
            <div class="friendName friend"> <a ng-href="#/friendPosts/{{friend.name}}" >{{friend.name}}</a></div>

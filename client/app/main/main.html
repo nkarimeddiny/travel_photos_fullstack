@@ -49,7 +49,14 @@
     <div class="col-md-9 col-lg-9" id="map-container">
       <div class = "map-canvas" id="map-canvas">
       </div>
-
+      
+    <div>
+      <h2>My Places-to-Go</h2>  
+      <div ng-repeat="place in main.myPlacesList">
+      <span>{{place.month}}-{{place.day}}</span>
+      <span class="place">{{place.location}}</span><br/>
+      <span>{{place.text}}</span><br/>
+    </div>
 
     <form name="placeForm" ng-submit="main.addPlace()" novalidate>
       Enter a Place-to-Go<br/>
@@ -63,13 +70,7 @@
       <input id="savePlaceButton" class="btn btn-primary" type ="submit" id="savePlaceButton" value="Submit">
     </form>
 
-    <div>
-      <h2>My Places-to-Go</h2>  
-      <div ng-repeat="place in main.myPlacesList">
-      <span>{{place.month}}-{{place.day}}</span>
-      <span class="place">{{place.location}}</span><br/>
-      <span>{{place.text}}</span><br/>
-    </div>
+
   </div> <!-- end map container -->
 
 <!-- unnecessary, because google maps script can just directly iterate through locations data in main.js

@@ -14,6 +14,7 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
   ctrl.myFriendsList = [];
   ctrl.signedUpUsers = [];
   ctrl.friendsOrderObject = {};
+
   ctrl.sortableOptions = {
     'ui-floating': true,
     stop: function( event, ui ) {
@@ -28,6 +29,18 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
      });
     } 
   };
+  
+  var friendSearch = $("#friendSearch");
+
+  $(".ui-widget").on("click", ".ui-menu-item", function(event){
+      ctrl.addFriend($(event.target).text());
+  });
+
+  friendSearch.keydown(function(event) {
+     if (event.keyCode === 13) {
+       event.preventDefault();
+     }
+  });
 
   $http.get("http://localhost:9000/api/users/me")
              .success( function(data) {
@@ -35,12 +48,19 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                   ctrl.thisUserName = data.username;
                   ctrl.myFriendsList = data.userFriends; 
                   ctrl.signedUpUsers = data.users
-    });
+
+                  friendSearch.autocomplete({
+                   minLength: 3,
+                   source: ctrl.signedUpUsers,
+                   position: { my: "left top", at: "left bottom" },
+                   appendTo: ".ui-widget"
+                 });
+             });
 
 
-    this.removeFriend = function(friendName) {
+  this.removeFriend = function(friendName) {
 
-      $http.post("http://localhost:9000/api/users/removeFriend", {
+  $http.post("http://localhost:9000/api/users/removeFriend", {
                 friendName: friendName
                 })
              .success( function(data) {
