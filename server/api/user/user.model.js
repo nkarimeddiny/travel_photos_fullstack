@@ -19,7 +19,7 @@ var UserSchema = new Schema({
   salt: String,
   facebook: {},
   github: {},
-
+  places: [{type: Schema.Types.ObjectId, ref: "Place"}],
   posts: [{type: Schema.Types.ObjectId, ref: "Post"}],
   friends: [{
       friend: {type: Schema.Types.ObjectId, ref: "User"},

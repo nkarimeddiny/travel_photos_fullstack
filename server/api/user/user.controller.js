@@ -2,6 +2,7 @@
 
 var User = require('./user.model');
 var Post = require('../post/post.model');
+var Place = require('../place/place.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
@@ -19,6 +20,26 @@ exports.addPost = function(req, res, next) {
                 user.save(function(err, user) {
                   User.populate(user, { path: 'posts' , model: "Post"}, function (err, user) {
                       res.send(user.posts).end();
+                  });
+                });
+
+        })
+    });
+};
+
+exports.addPlace = function(req, res, next) {
+    var userId = req.user._id;
+    User.findById(userId, function (err, user) {
+        Place.create({user: user._id, 
+                      location: req.body.location,
+                      text: req.body.text,
+                      latitude: req.body.latitude,
+                      longitude: req.body.longitude
+                     }, function(err, place) {
+                user.places.push(place._id);
+                user.save(function(err, user) {
+                  User.populate(user, { path: 'places' , model: "Place"}, function (err, user) {
+                      res.send(user.places).end();
                   });
                 });
 

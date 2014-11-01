@@ -63,7 +63,7 @@ var app = angular.module('travelPhotosApp');
       }
       if (!ctrl.placeInputError && !ctrl.addressInputError) {
         //use address to get geolocation, by ajax, then in callback save the data
-        googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService);
+        googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService, $http);
       }
     }; 
  
@@ -75,22 +75,23 @@ var app = angular.module('travelPhotosApp');
 
       return {
 
-        geolocate : function(address, ctrl, $scope, googleMapsService) {
+        geolocate : function(address, ctrl, $scope, googleMapsService, $http) {
           geocoder.geocode({ 'address': address }, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
-              ctrl.myPlacesList.push({
-              date : Date.now(),
-              location: placeForm.place.value,
-              text: placeForm.comment.value, 
-              latitude : results[0].geometry.location.lat(),
-              longitude : results[0].geometry.location.lng()
-              });
+              var place = {
+                location: placeForm.place.value,
+                text: placeForm.comment.value, 
+                latitude : results[0].geometry.location.lat(),
+                longitude : results[0].geometry.location.lng()
+              };
 
               $scope.$apply();
         
-              //add code for saving data here
-         
-              googleMapsService.initialize(ctrl)
+              $http.post("http://localhost:9000/api/users/addPlace", place) 
+                  .success(function(data) {
+                      ctrl.myPlacesList = data;
+                      googleMapsService.initialize(ctrl)
+                  });
           }
          
           else {
