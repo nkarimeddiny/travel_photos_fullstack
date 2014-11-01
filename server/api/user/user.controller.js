@@ -64,32 +64,15 @@ exports.removePost = function(req, res, next) {
    });     
 };
 
-exports.updateFriendsOrder = function (req, res, next) {
-  //get this user's ID:
-  var userId = req.user._id;
-  User.findOne({
-    _id: userId
-  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
-    if (err) return next(err);
-    if (!user) return res.json(401);
-    User.find({}, '-salt -hashedPassword', function (err, users) {
-      if(err) return res.send(500, err);
-       populateUserAndFriendList(res, user, null, req.body.friendsOrder);
-  });
-});
-};
-
 
 var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrder) {
       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
          var friendList = [];
          updatedUser.friends.forEach(function(aFriend){
            if (newFriendsOrder) {
+             console.log(newFriendsOrder[aFriend.friend.name]);
              aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
            }
-           console.log("friend name: " + aFriend.friend.name);
-           console.log("lastTimePosted: " + aFriend.friend.lastTimePosted);
-           console.log("lastTimeChecked: " + aFriend.lastTimeChecked);
            var uncheckedPost = false;
            if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
              uncheckedPost = true;
@@ -97,6 +80,7 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
                                              uncheckedPost: uncheckedPost};
          });
+         console.log("friendList: " + friendList)
          if (users) {
            var userList = [];
            users.forEach(function(aUser){
@@ -105,14 +89,28 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            res.send({"username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
          }
          else if (newFriendsOrder) {
+           console.log("line 92");
             updatedUser.save(function(err, user){
-             res.send({userFriends: friendList.slice(1)});
+               res.send({userFriends: friendList.slice(1)});
             });
          }
          else {
            res.send({userFriends: friendList.slice(1)});
           }
        });
+};
+
+exports.updateFriendsOrder = function (req, res, next) {
+  //get this user's ID:
+  var userId = req.user._id;
+  User.findOne({
+    _id: userId
+  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+    if (err) return next(err);
+    if (!user) return res.json(401);
+       console.log("line 111: ", req.body.friendsOrder);
+       populateUserAndFriendList(res, user, null, req.body.friendsOrder);
+});
 };
 
 
