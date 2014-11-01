@@ -35,6 +35,16 @@ body {
   margin-bottom: 5px;
 }
 
+.greendot {
+  float: left;
+  margin-top: 8px;
+  margin-right: 4px;
+  background-color: green;
+  height: 5px;
+  width: 5px;
+  border-radius: 5px;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
