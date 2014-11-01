@@ -1,14 +1,9 @@
 'use strict';
 
-angular.module('travelPhotosApp')
-  .controller('FriendslistCtrl', function ($scope, $state, $http, $location, friendsListService) {
-    $scope.message = 'Hello';
-//  });
+var app = angular.module('travelPhotosApp');
 
-//var app = angular.module('travelPhotosApp');
-
-//app.controller('FriendsListCtrl', function($scope, $state, $http, $location, friendsListService) {
-
+app.controller('FriendslistCtrl', function ($scope, $state, $http, $location, friendsListService) {
+   $scope.message = 'Hello';
    var ctrl = this;
    ctrl.myFriendsList = [];
    ctrl.signedUpUsers = [];
