@@ -40,22 +40,31 @@ var app = angular.module('travelPhotosApp');
     ];
 
     
-    this.myPlacesList = [{
-      yearmonthday: 20141001,
-      month: 10, 
-      day: 1,
-      location: "Kyoto",
-      text: "my friend's pictures were amazing", 
-      latitude : 35.0117, 
-      longitude : 135.7683
-   }];
+    this.myPlacesList = [];
 
 
     googleMapsService.initialize(ctrl);  
 
+    ctrl.placeInputError = false;
+    ctrl.addressInputError = false;
+
     this.addPlace = function() {
-      //use address to get geolocation, by ajax, then in callback save the data
-      //googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService);
+      if (!placeForm.place.value) {
+         ctrl.placeInputError = true;
+      }
+      else {
+         ctrl.placeInputError = false;
+      }
+      if (!placeForm.address.value) {
+         ctrl.addressInputError = true;
+      }
+      else {
+         ctrl.addressInputError = false;
+      }
+      if (!ctrl.placeInputError && !ctrl.addressInputError) {
+        //use address to get geolocation, by ajax, then in callback save the data
+        googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService);
+      }
     }; 
  
   });
@@ -70,6 +79,7 @@ var app = angular.module('travelPhotosApp');
           geocoder.geocode({ 'address': address }, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
               ctrl.myPlacesList.push({
+              date : Date.now(),
               location: placeForm.place.value,
               text: placeForm.comment.value, 
               latitude : results[0].geometry.location.lat(),
@@ -80,7 +90,7 @@ var app = angular.module('travelPhotosApp');
         
               //add code for saving data here
          
-              //googleMapsService.initialize(ctrl)
+              googleMapsService.initialize(ctrl)
           }
          
           else {

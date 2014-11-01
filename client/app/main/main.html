@@ -53,20 +53,20 @@
     <div>
       <h2>My Places-to-Go</h2>  
       <div ng-repeat="place in main.myPlacesList">
-      <span>{{place.month}}-{{place.day}}</span>
-      <span class="place">{{place.location}}</span><br/>
+      <span>{{place.date | date}}</span> <br/>
+      <span class="place">{{place.location}}</span> <br/>
       <span>{{place.text}}</span><br/>
     </div>
 
     <form name="placeForm" ng-submit="main.addPlace()" novalidate>
-      Enter a Place-to-Go<br/>
-      Place (country, city, specific museum, national park, etc.):<br/>
-      <input type="text"  name = "place" size="30" maxlength="30"><br/>
-      Geographic location (country, city and country, or more specific):<br/>
-      <input type="text" name = "address" size="50" maxlength="50"><br/>
-      Comment:<br/>
-      <textarea name = "comment" rows="4" cols="35" maxlength="140">
-      </textarea><br/>
+      <label for="placeInput">Enter a Place-to-Go (country, city, specific museum, national park, etc.)</label><br/>
+      <span class="text-warning" ng-show="main.placeInputError">Please enter a place<br/></span>
+      <input id="placeInput" type="text" name = "place" size="50" maxlength="30" ><br/>
+      <label for="locationInput">Geographic location (country, city and country, or more specific)</label><br/>
+      <span class="text-warning" ng-show="main.addressInputError">Please enter a location<br/></span>
+      <input id="locationInput" type="text" name = "address" size="50" maxlength="50"><br/>
+      <label for="commentInput">Comment:</label><br/>
+      <input id="commentInput" name = "comment" size="50"><br/><br/>
       <input id="savePlaceButton" class="btn btn-primary" type ="submit" id="savePlaceButton" value="Submit">
     </form>
 
