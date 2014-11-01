@@ -11,7 +11,7 @@ This is the friendPosts view.
 	<div id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
 
 	    <div ng-repeat = "post in fpCtrl.userPosts">
-	      <span class="date">{{post.month}}-{{post.day}}</span><br/>
+	      <span class="date">{{post.date | date}}</span><br/>
 	   <!--  <img> -->
 	      <span class="caption">{{post.caption}}</span><br/>
 	    </div>

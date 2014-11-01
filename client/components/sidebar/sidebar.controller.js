@@ -36,12 +36,6 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
       ctrl.addFriend($(event.target).text());
   });
 
-  friendSearch.keydown(function(event) {
-     if (event.keyCode === 13) {
-       event.preventDefault();
-     }
-  });
-
   $http.get("http://localhost:9000/api/users/me")
              .success( function(data) {
               console.log(data);
@@ -68,10 +62,10 @@ app.controller('FriendsListCtrl', function($scope, $state, $http, $location, fri
                }); 
     };           
 
-   this.addFriend = function() {
+   this.addFriend = function(friend) {
 
       $http.post("http://localhost:9000/api/users/addFriend", {
-                friend: addFriendForm.friend.value
+                friend: friend
                 })
              .success( function(data) {
                 console.log(data.userFriends);

@@ -18,7 +18,7 @@
     </form>
 
     <div ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
-      <span class="date">{{post.month}}-{{post.day}}</span>
+      <span class="date">{{post.date | date}}</span>
     <!-- <img> -->
       <span class="caption">{{post.caption}}</span>
       <button class="btn btn-xs" ng-click="mpCtrl.removePost(postId)">X</button>
