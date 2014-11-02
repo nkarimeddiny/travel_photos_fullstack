@@ -18,7 +18,7 @@
             <a ng-href="/">Home</a>
         </li>
         <li>
-            <a ng-click="nav.goToLink()">My Posts</a>
+            <a ui-sref="myPosts">My Posts</a>
         </li>
         <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin">Admin</a></li>
       </ul>

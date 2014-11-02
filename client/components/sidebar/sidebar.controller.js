@@ -30,10 +30,6 @@ app.controller('FriendslistCtrl', function ($scope, $state, $http, $location, fr
 
     this.addFriend = friendsListService.addFriend;
 
-    this.goToLink = function(param) {
-          $state.go("friendPosts", {friendName: param}); 
-    };
-
 });
 
 app.factory("friendsListService", function() {

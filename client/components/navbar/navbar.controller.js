@@ -7,10 +7,6 @@ angular.module('travelPhotosApp')
       'link': '/'
     }];
 
-    this.goToLink = function() {
-        $state.go("myPosts");
-    }
-
     console.log(Auth);
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn;
