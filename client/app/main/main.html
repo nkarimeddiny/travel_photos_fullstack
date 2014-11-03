@@ -38,7 +38,11 @@
   </div>
 </footer> -->
 
+<div ng-include="'components/navbar/navbar.html'"></div>
 
+<div class="container-fluid">
+
+<div ng-include="'components/sidebar/sidebar.html'"></div>
 
 <div ng-controller = "MainCtrl as main"> <!-- MainCtrl is for Places-to-go -->
 
@@ -80,5 +84,7 @@
   </div> <!-- end placesToGo -->
 
   <div> <!--  end MainCtrl (PlacesToGo) -->
+
+</div> <!-- end container -->  
 
  
