@@ -13,7 +13,7 @@ var validationError = function(res, err) {
 
 exports.addPost = function(req, res, next) {
     var userId = req.user._id;
-    User.findById(userId, function (err, user) {
+    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
         Post.create({user: user._id, caption: req.body.caption}, function(err, post) {
                 user.posts.push(post._id);
                 user.lastTimePosted = Date.now();
@@ -29,7 +29,7 @@ exports.addPost = function(req, res, next) {
 
 exports.addPlace = function(req, res, next) {
     var userId = req.user._id;
-    User.findById(userId, function (err, user) {
+    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
         Place.create({user: user._id, 
                       location: req.body.location,
                       text: req.body.text,
@@ -50,7 +50,7 @@ exports.addPlace = function(req, res, next) {
 exports.removePost = function(req, res, next) {
     var userId = req.user._id;
     var postId = req.body.postId;
-    User.findById(userId, function (err, user) {
+    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
         user.posts.remove(postId);
         user.save(function(err, user) {
         Post.remove({_id : postId}, function(err, post) {
@@ -120,11 +120,11 @@ exports.updateFriendsOrder = function (req, res, next) {
 
 exports.addFriend = function (req, res, next) {
   var userId = req.user._id;
-  User.findById(userId, function (err, user) {
+  User.findById(userId, '-salt -hashedPassword', function (err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
     //get friend's ID:
-    User.findOne({name: req.body.friend}, function (err, friend) {
+    User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
        var len = user.friends.length;
        user.friends.push({friend: friend._id, orderNumber: len + 1,lastTimeChecked: ""});
        user.save(function(err, updatedUser){
@@ -137,8 +137,8 @@ exports.addFriend = function (req, res, next) {
 exports.removeFriend = function (req, res, next) {
   var userId = req.user._id;
   var friendName = req.body.friendName;
-   User.findOne({name: friendName}, function (err, friend) {
-      User.findById(userId, function (err, user) {
+   User.findOne({name: friendName},  '-salt -hashedPassword', function (err, friend) {
+      User.findById(userId,  '-salt -hashedPassword', function (err, user) {
         if (err) return next(err);
         if (!user) return res.send(401);
         var newFriendsArr = user.friends.filter(function(aFriend){
@@ -183,7 +183,7 @@ exports.create = function (req, res, next) {
 exports.show = function (req, res, next) {
   var userId = req.params.id;
 
-  User.findById(userId, function (err, user) {
+  User.findById(userId,  '-salt -hashedPassword', function (err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
     res.json(user.profile);
@@ -195,7 +195,7 @@ exports.show = function (req, res, next) {
  * restriction: 'admin'
  */
 exports.destroy = function(req, res) {
-  User.findByIdAndRemove(req.params.id, function(err, user) {
+  User.findByIdAndRemove(req.params.id,  '-salt -hashedPassword', function(err, user) {
     if(err) return res.send(500, err);
     return res.send(204);
   });
@@ -209,7 +209,7 @@ exports.changePassword = function(req, res, next) {
   var oldPass = String(req.body.oldPassword);
   var newPass = String(req.body.newPassword);
 
-  User.findById(userId, function (err, user) {
+  User.findById(userId,  '-salt -hashedPassword', function (err, user) {
     if(user.authenticate(oldPass)) {
       user.password = newPass;
       user.save(function(err) {
@@ -238,7 +238,7 @@ exports.getPosts = function(req, res, next) {
         //if checking a friend's posts, need to retrieve my own model, iterate through
         //friends, find the friend by id, and update lastTimeChecked
         if (req.body.friendName) {
-            User.findById(myId, function (err, me) {
+            User.findById(myId,  '-salt -hashedPassword', function (err, me) {
                 if (err) return next(err);
                 if (!user) return res.send(401);
                 me.friends.forEach(function(aFriend){
