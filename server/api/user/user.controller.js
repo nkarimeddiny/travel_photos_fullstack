@@ -56,7 +56,12 @@ exports.removePost = function(req, res, next) {
         Post.remove({_id : postId}, function(err, post) {
           User.populate(user, { path: 'posts' , model: "Post"}, 
              function (err, user) {
-               user.lastTimePosted = user.posts[user.posts.length - 1].date;
+               if (user.posts.length > 0) {
+                 user.lastTimePosted = user.posts[user.posts.length - 1].date;
+               }
+               else {
+                 user.lastTimePosted = null;
+               }
                user.save(function(updatedUser) {
                  res.send(user.posts).end();
                });
