@@ -35,7 +35,7 @@ app.controller('FriendslistCtrl', function ($scope, $state, $http, $location, fr
 app.factory("friendsListService", function() {
     return {
       addFriend : function(friend, ctrl, $http) {
-          $http.post("http://localhost:9000/api/users/addFriend", {
+          $http.post("api/users/addFriend", {
                 friend: friend
                 })
              .success( function(data) {
@@ -44,7 +44,7 @@ app.factory("friendsListService", function() {
                }); 
           },
       removeFriend : function(friendName, ctrl, $http) {
-          $http.post("http://localhost:9000/api/users/removeFriend", {
+          $http.post("api/users/removeFriend", {
                 friendName: friendName
                 })
              .success( function(data) {
@@ -55,7 +55,7 @@ app.factory("friendsListService", function() {
           ctrl.myFriendsList.forEach(function(friend, index){
              ctrl.friendsOrderObject[friend.name] = index + 1;
           });
-         $http.post("http://localhost:9000/api/users/updateFriendsOrder", {friendsOrder : ctrl.friendsOrderObject})
+         $http.post("api/users/updateFriendsOrder", {friendsOrder : ctrl.friendsOrderObject})
              .success( function(data) {
                  console.log(data);
                  console.log(data.userFriends);
@@ -63,7 +63,7 @@ app.factory("friendsListService", function() {
         });
       },
       initializeSidebar: function(friendSearch, ctrl, $http) {
-           $http.get("http://localhost:9000/api/users/sideBarInfo")
+           $http.get("api/users/sideBarInfo")
              .success( function(data) {
               console.log(data);
                   ctrl.thisUserName = data.username;
