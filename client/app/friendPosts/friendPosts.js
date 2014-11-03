@@ -5,7 +5,7 @@ angular.module('travelPhotosApp')
     $stateProvider
       .state('friendPosts', {
         url: '/friendPosts/:friendName',
-        templateUrl: 'app/friendPosts/friendPosts.html',
-        controller: 'FriendpostsCtrl'
+        templateUrl :  'app/friendPosts/friendPosts.html',
+        controller : 'FriendpostsCtrl'
       });
   });

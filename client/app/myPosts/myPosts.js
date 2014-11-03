@@ -5,7 +5,7 @@ angular.module('travelPhotosApp')
     $stateProvider
       .state('myPosts', {
         url: '/myPosts',
-        templateUrl: 'app/myPosts/myPosts.html',
-        controller: 'MypostsCtrl'
+        templateUrl :  'app/myPosts/myPosts.html',
+        controller : 'MypostsCtrl'
       });
   });

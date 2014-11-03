@@ -46,6 +46,7 @@
 
 <div ng-controller = "MainCtrl as main"> <!-- MainCtrl is for Places-to-go -->
 
+<div ui-view="hello"></div>
   <div id="placesToGo"> <!-- this is displayed when first logging on,
     but is hidden when looking at your own posts or a friend's posts-->
     <div class="col-md-9 col-lg-9" id="map-container">
@@ -73,7 +74,7 @@
     </form>
 
 
-  </div> <!-- end map container -->
+  </div>  --><!-- end map container
 
 <!-- unnecessary, because google maps script can just directly iterate through locations data in main.js
     <div id="myLocationsList">
@@ -85,6 +86,8 @@
 
   <div> <!--  end MainCtrl (PlacesToGo) -->
 
-</div> <!-- end container -->  
+</div> <!-- end container --> 
+
+
 
  

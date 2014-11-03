@@ -2,6 +2,7 @@
 
 angular.module('travelPhotosApp')
   .factory("postingService", function() {
+
     return {
       addPost : function(caption, ctrl, $http) {
           $http.post("http://localhost:9000/api/users/addPost", {username: name, caption: caption})

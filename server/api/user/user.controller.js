@@ -56,7 +56,10 @@ exports.removePost = function(req, res, next) {
         Post.remove({_id : postId}, function(err, post) {
           User.populate(user, { path: 'posts' , model: "Post"}, 
              function (err, user) {
-            res.send(user.posts).end();
+               user.lastTimePosted = user.posts[user.posts.length - 1].date;
+               user.save(function(updatedUser) {
+                 res.send(user.posts).end();
+               });
           });
        });
 
@@ -72,7 +75,7 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            if (newFriendsOrder) {
              aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
            }
-           var uncheckedPost = false;
+           var uncheckedPost = false;  
            if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
              uncheckedPost = true;
            }
