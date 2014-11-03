@@ -3,7 +3,7 @@
 
 var app = angular.module('travelPhotosApp');
   
-  app.controller('MainCtrl', function ($scope, $http, googleMapsService, googleGeolocationService) {
+  app.controller('MainCtrl', function ($scope, $http, googleMapsService, googleGeolocationService, postingService) {
      
     var ctrl = this;
 
@@ -36,7 +36,7 @@ var app = angular.module('travelPhotosApp');
       }
       if (!ctrl.placeInputError && !ctrl.addressInputError) {
         //use address to get geolocation, by ajax, then in callback save the data
-        googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService, $http);
+        googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService, $http, postingService);
       }
     }; 
  
@@ -48,7 +48,7 @@ var app = angular.module('travelPhotosApp');
 
       return {
 
-        geolocate : function(address, ctrl, $scope, googleMapsService, $http) {
+        geolocate : function(address, ctrl, $scope, googleMapsService, $http, postingService) {
           geocoder.geocode({ 'address': address }, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
               var place = {
@@ -60,11 +60,12 @@ var app = angular.module('travelPhotosApp');
 
               $scope.$apply();
         
-              $http.post("http://localhost:9000/api/users/addPlace", place) 
-                  .success(function(data) {
-                      ctrl.myPlacesList = data;
-                      googleMapsService.initialize(ctrl)
-                  });
+              postingService.addPlace(place, $http, ctrl, googleMapsService)
+              // $http.post("http://localhost:9000/api/users/addPlace", place) 
+              //     .success(function(data) {
+              //         ctrl.myPlacesList = data;
+              //         googleMapsService.initialize(ctrl)
+              //     });
           }
          
           else {
