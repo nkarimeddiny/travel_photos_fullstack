@@ -70,7 +70,6 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
          var friendList = [];
          updatedUser.friends.forEach(function(aFriend){
            if (newFriendsOrder) {
-             console.log(newFriendsOrder[aFriend.friend.name]);
              aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
            }
            var uncheckedPost = false;
@@ -80,7 +79,6 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
                                              uncheckedPost: uncheckedPost};
          });
-         console.log("friendList: " + friendList)
          if (users) {
            var userList = [];
            users.forEach(function(aUser){
@@ -89,7 +87,6 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            res.send({"username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
          }
          else if (newFriendsOrder) {
-           console.log("line 92");
             updatedUser.save(function(err, user){
                res.send({userFriends: friendList.slice(1)});
             });
@@ -108,7 +105,6 @@ exports.updateFriendsOrder = function (req, res, next) {
   }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.json(401);
-       console.log("line 111: ", req.body.friendsOrder);
        populateUserAndFriendList(res, user, null, req.body.friendsOrder);
 });
 };
@@ -259,7 +255,21 @@ exports.getPosts = function(req, res, next) {
 /**
  * Get my info
  */
+/**
+ * Get my info
+ */
 exports.me = function(req, res, next) {
+  var userId = req.user._id;
+  User.findOne({
+    _id: userId
+  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+    if (err) return next(err);
+    if (!user) return res.json(401);
+    res.json(user);
+  });
+};
+
+exports.sideBarInfo = function(req, res, next) {
   var userId = req.user._id;
   User.findOne({
     _id: userId

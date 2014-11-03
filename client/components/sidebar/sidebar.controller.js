@@ -63,7 +63,7 @@ app.factory("friendsListService", function() {
         });
       },
       initializeSidebar: function(friendSearch, ctrl, $http) {
-           $http.get("http://localhost:9000/api/users/me")
+           $http.get("http://localhost:9000/api/users/sideBarInfo")
              .success( function(data) {
               console.log(data);
                   ctrl.thisUserName = data.username;

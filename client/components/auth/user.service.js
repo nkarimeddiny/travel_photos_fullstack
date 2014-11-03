@@ -2,7 +2,8 @@
 
 angular.module('travelPhotosApp')
   .factory('User', function ($resource) {
-    return $resource('/api/users/:id/:controller', {
+    //    return $resource('/api/users/:id/:controller', {
+    return $resource('/api/users/:id', {
       id: '@_id'
     },
     {
