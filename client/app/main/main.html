@@ -59,6 +59,7 @@
       <span>{{place.date | date}}</span> <br/>
       <span class="place">{{place.location}}</span> <br/>
       <span>{{place.text}}</span><br/>
+      <button class="btn btn-xs" ng-click="main.removePlace(place._id)">X</button>
     </div>
 
     <form name="placeForm" ng-submit="main.addPlace()" novalidate>

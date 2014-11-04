@@ -30,6 +30,13 @@ angular.module('travelPhotosApp')
                       ctrl.myPlacesList = data;
                       googleMapsService.initialize(ctrl);
               });
+       },
+        removePlace : function(placeId, $http, ctrl) {
+              $http.post("api/users/removePlace", {placeId : placeId}) 
+                  .success(function(data) {
+                      console.log(data);
+                      ctrl.myPlacesList = data;
+              });
        }
       };
 });

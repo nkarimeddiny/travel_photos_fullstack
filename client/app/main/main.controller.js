@@ -21,6 +21,10 @@ var app = angular.module('travelPhotosApp');
     ctrl.placeInputError = false;
     ctrl.addressInputError = false;
 
+    this.removePlace = function(placeId) {
+      postingService.removePlace(placeId, $http, ctrl);
+    }
+
     this.addPlace = function() {
       if (!placeForm.place.value) {
          ctrl.placeInputError = true;
