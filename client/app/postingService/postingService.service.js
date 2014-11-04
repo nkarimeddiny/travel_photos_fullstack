@@ -3,8 +3,8 @@
 angular.module('travelPhotosApp')
   .factory("postingService", function() {
       return {
-        addPost : function(caption, ctrl, $http) {
-            $http.post("/api/users/addPost", {username: name, caption: caption})
+        addPost : function(imageLink, caption, ctrl, $http) {
+            $http.post("/api/users/addPost", {username: name, imageLink: imageLink, caption: caption})
                .success( function(data) {
                   console.log(data);
                   ctrl.userPosts = data;

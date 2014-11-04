@@ -10,8 +10,8 @@ var PostSchema = new Schema({
 var PostSchema = new Schema({
    user: {type: Schema.Types.ObjectId, ref: "User"},
    date: { type: Date, default: Date.now },
-   caption: String //,
-   //image: //////
+   caption: String,
+   imageLink: String
 
    //name: String,
    //info: String,

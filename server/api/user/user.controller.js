@@ -26,7 +26,7 @@ exports.getInstagramPhotos = function(req, res, next) {
 exports.addPost = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-        Post.create({user: user._id, caption: req.body.caption}, function(err, post) {
+        Post.create({user: user._id, imageLink: req.body.imageLink, caption: req.body.caption}, function(err, post) {
                 user.posts.push(post._id);
                 user.lastTimePosted = Date.now();
                 user.save(function(err, user) {

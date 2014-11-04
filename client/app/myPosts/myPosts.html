@@ -7,25 +7,24 @@
   <div class="col-md-9" id="myPosts"> <!-- this is displayed when looking at your own posts,
   and also has the entry form for making new posts -->
 
-
-    <form name="myPostForm" class = "entryform" ng-submit="mpCtrl.addPost()"  novalidate>
-      Post a photo<br/>
-      Image:<br/>
-      Caption:<br/>
-      <textarea name = "caption" rows="4" cols="35" maxlength="140">
-      </textarea><br/>
-      <input class= "btn btn-primary" type = "submit" value = "Submit">
-    </form>
-
     <div ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
       <span class="date">{{post.date | date}}</span>
     <!-- <img> -->
       <span class="caption">{{post.caption}}</span>
+      <div class="imageDiv">
+         <img ng-src="{{post.imageLink}}"/>
+      </div>
       <button class="btn btn-xs" ng-click="mpCtrl.removePost(postId)">X</button>
     </div>
 
-  </div> <!--  end myPosts -->
-
   <button ng-click="mpCtrl.accessInstagram()">Get Instagram photos</button>
+ 
+    <div ng-repeat="image in mpCtrl.instagramImages">
+         <img ng-src="{{image.imageLink}}"/>
+         <span>{{image.caption}}</span>
+         <button ng-click="mpCtrl.addPost(image.imageLink, image.caption)">Post this to Travel Photos<button>
+    </div>
+
+  </div> <!--  end myPosts -->
 
   </div> <!--  end mpCtrl -->
