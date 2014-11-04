@@ -9,8 +9,10 @@ module.exports = {
   DOMAIN:           'http://localhost:9000',
   SESSION_SECRET:   'travelphotos-secret',
 
-  FACEBOOK_ID:      'app-id',
-  FACEBOOK_SECRET:  'secret',
+  // FACEBOOK_ID:      'app-id',
+  // FACEBOOK_SECRET:  'secret',
+  INSTAGRAM_ID:      'app-id',
+  INSTAGRAM_SECRET:  'secret',
 
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''

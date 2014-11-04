@@ -18,11 +18,12 @@ app.controller('FriendslistCtrl', function ($scope, $state, $http, $location, fr
   
     var friendSearch = $("#friendSearch");
 
+    friendsListService.initializeSidebar(friendSearch, ctrl, $http);
+
     $(".ui-widget").on("click", ".ui-menu-item", function(event){
-       ctrl.addFriend($(event.target).text(), ctrl, $http);
+      ctrl.addFriend($(event.target).text(), ctrl, $http);
     });
 
-    friendsListService.initializeSidebar(friendSearch, ctrl, $http);
 
     this.removeFriend = function(friendName) {
        friendsListService.removeFriend(friendName, ctrl, $http);

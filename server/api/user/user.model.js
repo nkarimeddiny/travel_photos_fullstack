@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var crypto = require('crypto');
-var authTypes = ['github', 'twitter', 'facebook', 'google'];
+var authTypes = ['github', 'twitter', 'facebook', 'instagram', 'google'];
 
 var User;//, PlaceToGo
 
@@ -17,7 +17,7 @@ var UserSchema = new Schema({
   hashedPassword: String,
   provider: String,
   salt: String,
-  facebook: {},
+  instagram: {},
   github: {},
   places: [{type: Schema.Types.ObjectId, ref: "Place"}],
   posts: [{type: Schema.Types.ObjectId, ref: "Post"}],

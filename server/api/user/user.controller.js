@@ -6,6 +6,7 @@ var Place = require('../place/place.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
+//require socket io
 
 var validationError = function(res, err) {
   return res.json(422, err);
