@@ -14,7 +14,7 @@ angular.module('travelPhotosApp')
              $http.post("api/users/getPosts", {friendName: optionalFriendName})
                .success( function(data) {
                 console.log(data);
-                ctrl.userPosts = data;
+                ctrl.userPosts = data.myPosts;
        });
       },
         removePost : function($http, ctrl, postId) {

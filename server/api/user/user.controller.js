@@ -7,9 +7,20 @@ var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 //require socket io
+var request = require('request');
 
 var validationError = function(res, err) {
   return res.json(422, err);
+};
+
+exports.getInstagramPhotos = function(req, res, next) {
+    var userId = req.user._id;
+    User.findById(userId,  '-salt -hashedPassword', function (err, user) { 
+        request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + "/media/recent/?access_token=" + user.accessToken,
+          function(err, response, body) {
+            res.send(body);
+          });
+    });
 };
 
 exports.addPost = function(req, res, next) {
@@ -109,7 +120,7 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            users.forEach(function(aUser){
              userList.push(aUser.name);
           });
-           res.send({"instagram_info": updatedUser.instagram, "username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
+           res.send({"username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
          }
          else if (newFriendsOrder) {
             updatedUser.save(function(err, user){
@@ -269,7 +280,7 @@ exports.getPosts = function(req, res, next) {
             });
         }
         else{
-          res.send(user.posts).end();
+          res.send({myPosts: user.posts}).end();
         }
       });
   });

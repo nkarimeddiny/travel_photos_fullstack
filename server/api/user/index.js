@@ -22,5 +22,6 @@ router.post('/addPlace', auth.isAuthenticated(), controller.addPlace);
 router.post('/removePlace', auth.isAuthenticated(), controller.removePlace);
 router.post('/updateFriendsOrder', auth.isAuthenticated(), controller.updateFriendsOrder);
 router.post('/removePost', auth.isAuthenticated(), controller.removePost);
+router.get('/accessInstagram', auth.isAuthenticated(), controller.getInstagramPhotos);
 
 module.exports = router;

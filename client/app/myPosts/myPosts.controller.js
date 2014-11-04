@@ -17,6 +17,13 @@ angular.module('travelPhotosApp')
        postingService.removePost($http, ctrl, postId);
     };
 
+    this.accessInstagram = function() {
+        $http.get("api/users/accessInstagram")
+             .success( function(data) {
+                 console.log(data);
+        });
+    };
+
 });
 
 

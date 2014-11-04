@@ -18,6 +18,7 @@ var UserSchema = new Schema({
   provider: String,
   salt: String,
   instagram: {},
+  accessToken: String,
   github: {},
   places: [{type: Schema.Types.ObjectId, ref: "Place"}],
   posts: [{type: Schema.Types.ObjectId, ref: "Post"}],
