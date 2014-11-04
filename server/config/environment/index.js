@@ -54,6 +54,8 @@ var all = {
 
 };
 
+//console.log('server-side: instagram info: ', all.instagram );
+
 // Export the config object based on the NODE_ENV
 // ==============================================
 module.exports = _.merge(

@@ -1,19 +1,19 @@
-'use strict';
+// 'use strict';
 
-// Use local.env.js for environment variables that grunt will set when the server starts locally.
-// Use for your api keys, secrets, etc. This file should not be tracked by git.
-//
-// You will need to set these on the server you deploy to.
+// // Use local.env.js for environment variables that grunt will set when the server starts locally.
+// // Use for your api keys, secrets, etc. This file should not be tracked by git.
+// //
+// // You will need to set these on the server you deploy to.
 
-module.exports = {
-  DOMAIN:           'http://localhost:9000',
-  SESSION_SECRET:   'travelphotos-secret',
+// module.exports = {
+//   DOMAIN:           'http://localhost:9000',
+//   SESSION_SECRET:   'travelphotos-secret',
 
-  // FACEBOOK_ID:      'app-id',
-  // FACEBOOK_SECRET:  'secret',
-  INSTAGRAM_ID:      'app-id',
-  INSTAGRAM_SECRET:  'secret',
+//   // FACEBOOK_ID:      'app-id',
+//   // FACEBOOK_SECRET:  'secret',
+//   INSTAGRAM_ID:      'app-id',
+//   INSTAGRAM_SECRET:  'secret',
 
-  // Control debug level for modules using visionmedia/debug
-  DEBUG: ''
-};
+//   // Control debug level for modules using visionmedia/debug
+//   DEBUG: ''
+// };

@@ -109,7 +109,7 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            users.forEach(function(aUser){
              userList.push(aUser.name);
           });
-           res.send({"username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
+           res.send({"instagram_info": updatedUser.instagram, "username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
          }
          else if (newFriendsOrder) {
             updatedUser.save(function(err, user){
