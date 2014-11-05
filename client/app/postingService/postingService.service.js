@@ -13,8 +13,7 @@ angular.module('travelPhotosApp')
         retrievePosts : function($http, ctrl, optionalFriendName) {
              $http.post("api/users/getPosts", {friendName: optionalFriendName})
                .success( function(data) {
-                console.log(data);
-                ctrl.userPosts = data.myPosts;
+                ctrl.userPosts = data.posts;
        });
       },
         removePost : function($http, ctrl, postId) {

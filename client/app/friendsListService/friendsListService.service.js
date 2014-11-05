@@ -40,7 +40,7 @@ angular.module('travelPhotosApp')
                   ctrl.signedUpUsers = data.users
                   
                   friendSearch.autocomplete({
-                   minLength: 3,
+                   minLength: 2,
                    source: ctrl.signedUpUsers,
                    position: { my: "left top", at: "left bottom" },
                    appendTo: ".ui-widget"

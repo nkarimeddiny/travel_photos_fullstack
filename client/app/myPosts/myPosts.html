@@ -6,22 +6,29 @@
 
   <div class="col-md-9" id="myPosts"> <!-- this is displayed when looking at your own posts,
   and also has the entry form for making new posts -->
-
-    <button ng-show="mpCtrl.instagramImagesIsEmpty" ng-click="mpCtrl.accessInstagram()">View 5 most recent Instagram photos</button>
-    <h3 ng-show="!mpCtrl.instagramImagesIsEmpty">Posted on Instagram:</h3>
-    <div ng-repeat="image in mpCtrl.instagramImages">
-         <span>{{image.caption}}</span> </br>
-         <img ng-src="{{image.thumbnailLink}}"/>
-         <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption)">Post this to Travel Photos</button>
+    
+    <div class="photoContainer">
+      <button ng-show="mpCtrl.isInstagramUser && mpCtrl.instagramImagesIsEmpty" ng-click="mpCtrl.accessInstagram()">View 10 most recent Instagram photos</button>
     </div>
 
-    <h3 ng-show="!ctrl.instagramImagesIsEmpty">Posted on Travel Photos:</h3>
-    <div ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
-      <span class="caption">{{post.caption}}</span> <br/>
-      <span class="date">Posted: {{post.date | date}}</span>
-      <button class="btn btn-xs" ng-click="mpCtrl.removePost(postId)">X</button>
-      <div class="imageDiv">
-         <img ng-src="{{post.imageLink}}"/>
+    <div class="photoContainer">
+      <h3 ng-show="!mpCtrl.instagramImagesIsEmpty">Posted on Instagram:</h3>
+      <div class = "photo" ng-repeat="image in mpCtrl.instagramImages">
+           <span>{{image.caption}}</span> </br>
+           <img ng-src="{{image.thumbnailLink}}"/>
+           <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption)">Post to Travel Photos</button>
+      </div>
+    </div>
+    
+    <div class="photoContainer">
+      <h3>Posted on Travel Photos from Instagram:</h3>
+      <div class = "photo" ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
+        <span class="caption">{{post.caption}}</span> <br/>
+        <span class="date">Posted: {{post.date | date}}</span>
+        <button class="btn btn-xs" ng-click="mpCtrl.removePost(postId)">X</button>
+        <div class="imageDiv">
+           <img ng-src="{{post.imageLink}}"/>
+        </div>
       </div>
     </div>
 

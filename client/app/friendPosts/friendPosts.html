@@ -6,11 +6,14 @@
     {{fpCtrl.friendName}}
 	<div class="col-md-9" id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
 
-	    <div ng-repeat = "post in fpCtrl.userPosts">
-	      <span class="date">{{post.date | date}}</span><br/>
-	   <!--  <img> -->
-	      <span class="caption">{{post.caption}}</span><br/>
-	    </div>
+    <h3>Posted on Travel Photos from Instagram:</h3>
+	  <div class = "photo" ng-repeat="post in fpCtrl.userPosts">
+        <span class="caption">{{post.caption}}</span> <br/>
+        <span class="date">Posted: {{post.date | date}}</span>
+        <div class="imageDiv">
+           <img ng-src="{{post.imageLink}}"/>
+        </div>
+      </div>
 	   
 	</div> <!-- end friendsPosts -->
 

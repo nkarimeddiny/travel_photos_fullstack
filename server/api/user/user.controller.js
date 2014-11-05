@@ -16,7 +16,7 @@ var validationError = function(res, err) {
 exports.getInstagramPhotos = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) { 
-        request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + "/media/recent/?access_token=" + user.accessToken + "&count=5",
+        request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + "/media/recent/?access_token=" + user.accessToken + "&count=10",
           function(err, response, body) {
             res.send(body);
           });
@@ -275,12 +275,12 @@ exports.getPosts = function(req, res, next) {
                   }
                 });
                 me.save(function(err, updatedUser){
-                    res.send(user.posts).end();
+                    res.send({posts: user.posts}).end();
                 });
             });
         }
         else{
-          res.send({myPosts: user.posts}).end();
+          res.send({posts: user.posts}).end();
         }
       });
   });

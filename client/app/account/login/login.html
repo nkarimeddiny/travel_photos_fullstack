@@ -3,9 +3,15 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <h1>Login</h1>
-      <p>Accounts are reset on server restart from <code>server/config/seed.js</code>. Default account is <code>test@test.com</code> / <code>test</code></p>
-      <p>Admin account is <code>admin@admin.com</code> / <code>admin</code></p>
+      <h1>Welcome!</h1>
+    </div>
+     <div id="instagramButton" class="col-sm-12">
+<!--           <a class="btn btn-facebook" href="" ng-click="loginOauth('facebook')">
+            <i class="fa fa-facebook"></i> Connect with Facebook
+          </a> -->
+      <a class="btn btn-lg btn-instagram" href="" ng-click="loginOauth('instagram')">
+          Sign in with Instagram
+      </a>
     </div>
     <div class="col-sm-12">
       <form class="form" name="form" ng-submit="login(form)" novalidate>
@@ -43,14 +49,6 @@
         </div>
 
         <hr>
-        <div>
-<!--           <a class="btn btn-facebook" href="" ng-click="loginOauth('facebook')">
-            <i class="fa fa-facebook"></i> Connect with Facebook
-          </a> -->
-            <a class="btn btn-facebook" href="" ng-click="loginOauth('instagram')">
-              Sign in with Instagram
-           </a>
-        </div>
       </form>
     </div>
   </div>

@@ -73,6 +73,21 @@ body {
    cursor: pointer;
 }
 
+.photo {
+  float: left;
+}
+
+.photoContainer {
+  clear: both;
+  float: left;
+}
+
+#instagramButton {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('travelPhotosApp')
-  .controller('MypostsCtrl', function ($scope, $http, postingService) {
+  .controller('MypostsCtrl', function (Auth, $scope, $http, postingService) {
     
     $scope.message = 'Hello';
 
@@ -12,6 +12,9 @@ angular.module('travelPhotosApp')
 
     postingService.retrievePosts($http, ctrl);
 
+
+    var currentUser = Auth.getCurrentUser();
+    ctrl.isInstagramUser = (currentUser.provider === 'instagram');
 
     this.addPost = function(imageLink, caption) {
        postingService.addPost(imageLink, caption, ctrl, $http);

@@ -15,7 +15,7 @@ exports.setup = function (User, config) {
   //   },
     function(accessToken, refreshToken, profile, done) {
       User.findOne({
-        'instagram.id': profile.id
+        'instagram.data.id': profile.id
         //'facebook.id': profile.id
       },
       function(err, user) {
