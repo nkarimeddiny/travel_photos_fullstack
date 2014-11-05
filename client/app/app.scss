@@ -104,6 +104,39 @@ body {
   margin-bottom: 10px;
 }
 
+.placesToGoThumbnail {
+  float: left;
+  margin-right: 10px;
+  height: 130px;
+}
+
+.placeForm {
+  clear: both;
+}
+
+.placesToGoInnerContainer {
+  position: relative;
+  height: 148px;
+  width: 128px;
+}
+
+.placesToGoInnerContainer button {
+  position: absolute;
+  top: 100px;
+  left: 120px;
+}
+
+.photoHeader {
+   position: relative;
+   margin-bottom: 5px;
+}
+
+.photoHeader button {
+  position: absolute;
+  top: 23px;
+  left: 287px;
+}
+
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,

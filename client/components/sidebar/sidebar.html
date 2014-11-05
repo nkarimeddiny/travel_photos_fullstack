@@ -6,9 +6,9 @@
        <div ui-sortable="flCtrl.sortableOptions" ng-model="flCtrl.myFriendsList">
          <div ng-repeat="friend in flCtrl.myFriendsList" class="friendInList">
            <div class="friendName"> 
+            <button class="btn btn-xs" ng-click="flCtrl.removeFriend(friend.name)">X</button>
             <a class="h4" ui-sref="friendPosts({friendName: friend.name})">{{friend.name}}</a>
             <div ng-show="friend.uncheckedPost" class="greendot"></div>
-            <button class="btn btn-xs" ng-click="flCtrl.removeFriend(friend.name)">X</button>
            </div>
          </div> <br/>
        </div>
@@ -18,21 +18,7 @@
         <div class = "ui-widget">
           <input id="friendSearch" type="text" name="friend" size="30" maxlength="30"><br/>
         </div>
-<!--        <div ui-sortable="flCtrl.sortableOptions" ng-model="friends">
-         <div  ng-repeat="friend in friends" class="friendInList">
-           <div class="friendName friend"> <a ng-href="#/friendPosts/{{friend.name}}" >{{friend.name}}</a></div>
-            <div ng-show="friend.uncheckedPost" class="greendot">green dot</div>
-         </div> <br/>
-       </div> -->
-
-
-
-
-<!--
-    <div id="credits">
-      <span id="copyrightcredit" class="credits"> &copy; 2014 Navid Karimeddiny</span><br/>
-    </div>
--->    
+   
   </div> <!-- end friendsColumn -->
 
 </div> <!-- end friendsListCtl -->

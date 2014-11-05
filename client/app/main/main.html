@@ -54,15 +54,20 @@
       </div>
       
     <div>
-      <h2>My Places-to-Go</h2>  
-      <div ng-repeat="place in main.myPlacesList">
-      <span>{{place.date | date}}</span> <br/>
-      <span class="place">{{place.location}}</span> <br/>
-      <span>{{place.text}}</span><br/>
-      <button class="btn btn-xs" ng-click="main.removePlace(place._id)">X</button>
+      <h2>My Places-to-Go</h2>
+      <div id="placesToGoContainer">  
+        <div class="thumbnail placesToGoThumbnail" ng-repeat="place in main.myPlacesList">
+          <div class="placesToGoInnerContainer">
+            <span>{{place.date | date}}</span> <br/>
+            <span class="place">{{place.location}}</span> <br/>
+            <span>{{place.text}}</span> </br>
+            <button class="btn btn-xs removeButton" ng-click="main.removePlace(place._id)">X</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <form name="placeForm" ng-submit="main.addPlace()" novalidate>
+    <form class="placeForm" name="placeForm" ng-submit="main.addPlace()" novalidate>
       <label for="placeInput">Enter a Place-to-Go (country, city, specific museum, national park, etc.)</label><br/>
       <span class="text-warning" ng-show="main.placeInputError">Please enter a place<br/></span>
       <input id="placeInput" type="text" name = "place" size="50" maxlength="30" ><br/>
@@ -70,7 +75,7 @@
       <span class="text-warning" ng-show="main.addressInputError">Please enter a location<br/></span>
       <input id="locationInput" type="text" name = "address" size="50" maxlength="50"><br/>
       <label for="commentInput">Comment:</label><br/>
-      <input id="commentInput" name = "comment" size="50"><br/><br/>
+      <input id="commentInput" name = "comment" size="50" maxlength="48"><br/><br/>
       <input id="savePlaceButton" class="btn btn-primary" type ="submit" id="savePlaceButton" value="Submit">
     </form>
 
