@@ -3,9 +3,10 @@
 angular.module('travelPhotosApp')
   .factory("postingService", function() {
       return {
-        addPost : function(imageLink, caption, instagramLink, ctrl, $http) {
+        addPost : function(imageLink, caption, instagramLink, imageId, ctrl, $http) {
             $http.post("/api/users/addPost", {username: name, imageLink: imageLink, 
-                                             instagramLink: instagramLink, caption: caption})
+                                             instagramLink: instagramLink, 
+                                             imageId: imageId, caption: caption})
                .success( function(data) {
                   console.log(data);
                   ctrl.userPosts = data;
@@ -15,6 +16,10 @@ angular.module('travelPhotosApp')
              $http.post("api/users/getPosts", {friendName: optionalFriendName})
                .success( function(data) {
                 ctrl.userPosts = data.posts;
+                data.posts.forEach(function(post){
+                  ctrl.lowResImageIds[post.imageId] = "hello";
+                });
+                console.log(ctrl.userPosts);
        });
       },
         removePost : function($http, ctrl, postId) {

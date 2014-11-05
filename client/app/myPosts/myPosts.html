@@ -8,17 +8,17 @@
   and also has the entry form for making new posts -->
     
     <div class="photoContainer">
-      <button ng-show="mpCtrl.isInstagramUser && mpCtrl.instagramImagesIsEmpty" ng-click="mpCtrl.accessInstagram()">View 10 most recent Instagram photos</button>
+      <button ng-show="mpCtrl.isInstagramUser && mpCtrl.thumbnailImagesIsEmpty" ng-click="mpCtrl.accessInstagram()">View 10 most recent Instagram photos</button>
     </div>
 
     <div class="photoContainer">
-      <h3 ng-show="!mpCtrl.instagramImagesIsEmpty">Posted on Instagram:</h3>
-      <div class = "photo thumbnail" ng-repeat="image in mpCtrl.instagramImages">
+      <h3 ng-show="!mpCtrl.thumbnailImagesIsEmpty">Posted on Instagram:</h3>
+      <div class = "photo thumbnail" ng-repeat="image in mpCtrl.thumbnailImages">
            <h5>{{image.caption}}</span> </h5>
            <div class="onePhotoBox">
              <a ng-href="{{image.instagramLink}}"> <img ng-src="{{image.thumbnailLink}}"/> </a>
            </div>
-           <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption, image.instagramLink)">Post to Travel Photos</button>
+           <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption, image.instagramLink, image.id)">Post to Travel Photos</button>
       </div>
     </div>
     

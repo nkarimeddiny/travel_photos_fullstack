@@ -12,7 +12,8 @@ var PostSchema = new Schema({
    date: { type: Date, default: Date.now },
    caption: String,
    imageLink: String,
-   instagramLink: String
+   instagramLink: String,
+   imageId: String
    //name: String,
    //info: String,
    //active: Boolean
