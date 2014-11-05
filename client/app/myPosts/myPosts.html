@@ -16,9 +16,9 @@
       <div class = "photo thumbnail" ng-repeat="image in mpCtrl.instagramImages">
            <h5>{{image.caption}}</span> </h5>
            <div class="onePhotoBox">
-             <img ng-src="{{image.thumbnailLink}}"/>
+             <a ng-href="{{image.instagramLink}}"> <img ng-src="{{image.thumbnailLink}}"/> </a>
            </div>
-           <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption)">Post to Travel Photos</button>
+           <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption, image.instagramLink)">Post to Travel Photos</button>
       </div>
     </div>
     
@@ -29,7 +29,7 @@
         <span class="date">Posted: {{post.date | date}}</span>
         <button class="btn btn-xs" ng-click="mpCtrl.removePost(postId)">X</button>
         <div class="imageDiv">
-           <img ng-src="{{post.imageLink}}"/>
+           <a ng-href="{{post.instagramLink}}"><img ng-src="{{post.imageLink}}"/> </a>
         </div>
       </div>
     </div>

@@ -11,8 +11,8 @@ var PostSchema = new Schema({
    user: {type: Schema.Types.ObjectId, ref: "User"},
    date: { type: Date, default: Date.now },
    caption: String,
-   imageLink: String
-
+   imageLink: String,
+   instagramLink: String
    //name: String,
    //info: String,
    //active: Boolean
