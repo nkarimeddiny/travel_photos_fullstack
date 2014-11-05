@@ -8,6 +8,7 @@ angular.module('travelPhotosApp')
     var ctrl = this;
     ctrl.userPosts = {};
     ctrl.instagramImages = {};
+    ctrl.instagramImagesIsEmpty = true;
 
     postingService.retrievePosts($http, ctrl);
 
@@ -24,9 +25,11 @@ angular.module('travelPhotosApp')
              .success( function(data) {
                  data.data.forEach(function(post, index){
                      ctrl.instagramImages[index] = 
-                       {imageLink: post.images.low_resolution.url,
+                       {lowresLink: post.images.low_resolution.url,
+                        thumbnailLink: post.images.thumbnail.url,
                         caption : post.caption.text};
                  });
+                 ctrl.instagramImagesIsEmpty = $.isEmptyObject(ctrl.instagramImages);
         });
     };
 

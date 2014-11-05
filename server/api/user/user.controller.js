@@ -16,7 +16,7 @@ var validationError = function(res, err) {
 exports.getInstagramPhotos = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) { 
-        request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + "/media/recent/?access_token=" + user.accessToken,
+        request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + "/media/recent/?access_token=" + user.accessToken + "&count=5",
           function(err, response, body) {
             res.send(body);
           });
