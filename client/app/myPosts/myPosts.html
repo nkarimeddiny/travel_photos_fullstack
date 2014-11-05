@@ -13,17 +13,19 @@
 
     <div class="photoContainer">
       <h3 ng-show="!mpCtrl.instagramImagesIsEmpty">Posted on Instagram:</h3>
-      <div class = "photo" ng-repeat="image in mpCtrl.instagramImages">
-           <span>{{image.caption}}</span> </br>
-           <img ng-src="{{image.thumbnailLink}}"/>
+      <div class = "photo thumbnail" ng-repeat="image in mpCtrl.instagramImages">
+           <h5>{{image.caption}}</span> </h5>
+           <div class="onePhotoBox">
+             <img ng-src="{{image.thumbnailLink}}"/>
+           </div>
            <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption)">Post to Travel Photos</button>
       </div>
     </div>
     
-    <div class="photoContainer">
+    <div class="photoContainer postedPhotos">
       <h3>Posted on Travel Photos from Instagram:</h3>
-      <div class = "photo" ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
-        <span class="caption">{{post.caption}}</span> <br/>
+      <div class = "photo low_res" ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
+        <h5 class="caption">{{post.caption}}</h5>
         <span class="date">Posted: {{post.date | date}}</span>
         <button class="btn btn-xs" ng-click="mpCtrl.removePost(postId)">X</button>
         <div class="imageDiv">

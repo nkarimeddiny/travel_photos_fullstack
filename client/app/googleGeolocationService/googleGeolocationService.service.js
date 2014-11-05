@@ -19,12 +19,7 @@ angular.module('travelPhotosApp')
 
               $scope.$apply();
         
-              postingService.addPlace(place, $http, ctrl, googleMapsService)
-              // $http.post("http://localhost:9000/api/users/addPlace", place) 
-              //     .success(function(data) {
-              //         ctrl.myPlacesList = data;
-              //         googleMapsService.initialize(ctrl)
-              //     });
+              postingService.addPlace(place, $http, ctrl, googleMapsService);
           }
          
           else {

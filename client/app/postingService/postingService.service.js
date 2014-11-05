@@ -30,6 +30,14 @@ angular.module('travelPhotosApp')
                       googleMapsService.initialize(ctrl);
               });
        },
+        retrievePlaces : function($http, ctrl, googleMapsService) {
+              $http.get("api/users/retrievePlaces") 
+                  .success(function(data) {
+                      ctrl.myPlacesList = data.placesToGo;
+                      console.log(ctrl.myPlacesList);
+                      googleMapsService.initialize(ctrl);
+              });
+       },
         removePlace : function(placeId, $http, ctrl) {
               $http.post("api/users/removePlace", {placeId : placeId}) 
                   .success(function(data) {

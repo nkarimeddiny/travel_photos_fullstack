@@ -75,11 +75,28 @@ body {
 
 .photo {
   float: left;
+  margin-right: 10px;
+}
+
+.thumbnail {
+  width: 150px;
+}
+
+.low_res {
+  width: 306px;
+}
+
+.onePhotoBox {
+  float: left;
 }
 
 .photoContainer {
   clear: both;
   float: left;
+}
+
+.postedPhotos {
+  margin-bottom: 30px;
 }
 
 #instagramButton {

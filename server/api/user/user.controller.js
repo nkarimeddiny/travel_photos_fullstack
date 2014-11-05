@@ -59,6 +59,18 @@ exports.addPlace = function(req, res, next) {
     });
 };
 
+exports.retrievePlaces = function(req, res, next) {
+    var userId = req.user._id;
+    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+      if (err) return next(err);
+      if (!user) return res.json(401);
+      User.populate(user, { path: 'places' , model: "Place"}, 
+          function (err, user) {
+              res.send({placesToGo: user.places});
+      });
+    });
+};
+
 exports.removePlace = function(req, res, next) {
     var userId = req.user._id;
     var placeId = req.body.placeId;

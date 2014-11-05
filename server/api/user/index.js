@@ -19,6 +19,7 @@ router.post('/addFriend', auth.isAuthenticated(), controller.addFriend);
 router.post('/removeFriend', auth.isAuthenticated(), controller.removeFriend);
 router.post('/addPost', auth.isAuthenticated(), controller.addPost);
 router.post('/addPlace', auth.isAuthenticated(), controller.addPlace);
+router.get('/retrievePlaces', auth.isAuthenticated(), controller.retrievePlaces);
 router.post('/removePlace', auth.isAuthenticated(), controller.removePlace);
 router.post('/updateFriendsOrder', auth.isAuthenticated(), controller.updateFriendsOrder);
 router.post('/removePost', auth.isAuthenticated(), controller.removePost);
