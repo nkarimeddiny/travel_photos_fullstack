@@ -4,16 +4,16 @@
 
 <div ng-controller = "MypostsCtrl as mpCtrl">
 
-  <div class="col-md-9" id="myPosts"> <!-- this is displayed when looking at your own posts,
+  <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="myPosts"> <!-- this is displayed when looking at your own posts,
   and also has the entry form for making new posts -->
     
-    <div class="photoContainer">
+    <div id="retrieveInstagramPhotos" class="photoContainer">
       <button ng-show="mpCtrl.isInstagramUser && mpCtrl.thumbnailImagesIsEmpty" ng-click="mpCtrl.accessInstagram()">View 10 most recent Instagram photos</button>
     </div>
 
     <div class="photoContainer">
       <h3 ng-show="!mpCtrl.thumbnailImagesIsEmpty">Posted on Instagram:</h3>
-      <div ng-hide="hideThumbnail" class = "photo thumbnail" ng-repeat="image in mpCtrl.thumbnailImages">
+      <div ng-hide="hideThumbnail" class = "photo thumbnail col-xs-6 col-sm-3 col-md-3 col-lg-3" ng-repeat="image in mpCtrl.thumbnailImages">
            <h5>{{image.caption}}</span> </h5>
            <div class="onePhotoBox">
              <a ng-href="{{image.instagramLink}}"> <img ng-src="{{image.thumbnailLink}}"/> </a>
