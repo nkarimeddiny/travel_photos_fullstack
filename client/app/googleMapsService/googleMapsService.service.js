@@ -14,6 +14,8 @@ angular.module('travelPhotosApp')
 
       return({
 
+        //the initialize method creates a Google map in the #map-canvas
+        //div, and adds markers
         initialize : function(ctrl) {
 
            for (var i = 0; i < ctrl.myPlacesList.length; i++){
@@ -27,12 +29,12 @@ angular.module('travelPhotosApp')
                   title: placeName
               });
 
-              // var infoWindow = new google.maps.InfoWindow();
+              var infoWindow = new google.maps.InfoWindow();
              
-              // google.maps.event.addListener(marker, 'mousedown',function(){
-              //     infoWindow.setContent(this.title);
-              //     infoWindow.open(this.getMap(), this);
-              // });
+              google.maps.event.addListener(marker, 'mousedown',function(){
+                  infoWindow.setContent(this.title);
+                  infoWindow.open(this.getMap(), this);
+              });
               }
          }//end intialize()  
     });
