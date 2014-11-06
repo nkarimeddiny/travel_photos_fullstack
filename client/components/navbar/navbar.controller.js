@@ -7,6 +7,7 @@ angular.module('travelPhotosApp')
       'link': '/'
     }];
 
+
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.isAdmin = Auth.isAdmin;

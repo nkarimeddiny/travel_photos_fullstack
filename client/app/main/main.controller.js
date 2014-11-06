@@ -19,12 +19,14 @@ var app = angular.module('travelPhotosApp');
 
     //googleMapsService.initialize(ctrl);  
 
-    ctrl.placeInputError = false;
-    ctrl.addressInputError = false;
-
     this.removePlace = function(placeId) {
       postingService.removePlace(placeId, $http, ctrl);
     }
+
+/////////////////////////////////////////////////////////////////////
+//For validating and submitting the places-to-go form:
+    this.placeInputError = false;
+    this.addressInputError = false;
 
     this.addPlace = function() {
       if (!placeForm.place.value) {
@@ -41,10 +43,11 @@ var app = angular.module('travelPhotosApp');
       }
       if (!ctrl.placeInputError && !ctrl.addressInputError) {
         //use address to get geolocation, by ajax, then in callback save the data
-        googleGeolocationService.geolocate(placeForm.address.value, ctrl, $scope, googleMapsService, $http, postingService);
+        googleGeolocationService.geolocate(placeForm, ctrl, 
+          $scope, googleMapsService, $http, postingService);
       }
     }; 
- 
+//////////////////////////////////////////////////////////////////// 
   });
 
 
