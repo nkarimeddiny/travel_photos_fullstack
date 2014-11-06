@@ -1,43 +1,4 @@
 
-
-
-<!-- <header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
-  </div>
-</header>
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in awesomeThings">
-        <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="deleteThing(thing)">&times;</button></a></li>
-      </ul>
-    </div>
-  </div>
-
-  <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
-    <p class="input-group">
-      <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="newThing">
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" ng-click="addThing()">Add New</button>
-      </span>
-    </p>
-  </form>
-</div>
-
-<footer class="footer">
-  <div class="container">
-      <p>Angular Fullstack v2.0.13 |
-        <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
-         <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a></p>
-  </div>
-</footer> -->
-
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container-fluid">
@@ -46,9 +7,7 @@
 
 <div ng-controller = "MainCtrl as main"> <!-- MainCtrl is for Places-to-go -->
 
-<div ui-view="hello"></div>
-  <div id="placesToGo"> <!-- this is displayed when first logging on,
-    but is hidden when looking at your own posts or a friend's posts-->
+  <div id="placesToGo">
     <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="map-container">
       <div class = "map-canvas" id="map-canvas">
       </div>
@@ -80,13 +39,7 @@
     </form>
 
 
-  </div>  <!-- end map container
-
-<!-- unnecessary, because google maps script can just directly iterate through locations data in main.js
-    <div id="myLocationsList">
-         <input id="location{{loop.index}}" type="hidden" data-place="{{aPlace.place}}" data-latitude ="{{aPlace.latitude}}" data-longitude="{{aPlace.longitude}}">
-    </div>
--->
+  </div>  <!-- end map container -->
 
   </div> <!-- end placesToGo -->
 
