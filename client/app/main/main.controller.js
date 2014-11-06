@@ -7,17 +7,9 @@ var app = angular.module('travelPhotosApp');
      
     var ctrl = this;
 
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-
     this.myPlacesList = [];
 
     postingService.retrievePlaces($http, ctrl, googleMapsService);
-
-    //googleMapsService.initialize(ctrl);  
 
     this.removePlace = function(placeId) {
       postingService.removePlace(placeId, $http, ctrl);
