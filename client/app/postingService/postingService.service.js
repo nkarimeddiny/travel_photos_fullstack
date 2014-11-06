@@ -27,6 +27,6 @@ angular.module('travelPhotosApp')
                 console.log(data);
                 ctrl.userPosts = data;
        });
-      },
+      }
     };
 });

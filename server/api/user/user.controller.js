@@ -117,6 +117,7 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
          var friendList = [];
          updatedUser.friends.forEach(function(aFriend){
+           console.log("aFriend: " , aFriend);
            if (newFriendsOrder) {
              aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
            }
@@ -126,21 +127,24 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
            }
            friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
                                              uncheckedPost: uncheckedPost};
-         });
+          });
+          friendList = friendList.filter(function(el){
+              return el !== null;
+          }); 
          if (users) {
            var userList = [];
            users.forEach(function(aUser){
              userList.push(aUser.name);
           });
-           res.send({"username": updatedUser.name, userFriends: friendList.slice(1), "users": userList}).end();
+           res.send({"username": updatedUser.name, userFriends: friendList, "users": userList}).end();
          }
          else if (newFriendsOrder) {
             updatedUser.save(function(err, user){
-               res.send({userFriends: friendList.slice(1)});
+               res.send({userFriends: friendList});
             });
          }
          else {
-           res.send({userFriends: friendList.slice(1)});
+           res.send({userFriends: friendList});
           }
        });
 };
