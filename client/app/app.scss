@@ -156,6 +156,16 @@ body {
   }
 }
 
+.placeFormInput {
+    width : 500px;
+  }
+
+@media (max-width: 535px) {
+  .placeFormInput {
+    width : 100%;
+  }
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
