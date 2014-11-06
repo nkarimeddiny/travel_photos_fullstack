@@ -137,6 +137,15 @@ body {
   left: 287px;
 }
 
+#friendsColumn {
+  margin-bottom: 20px;
+}
+
+@media (max-width: 930px) {
+  #friendSearch {
+    width : 150px;
+  }
+}
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
