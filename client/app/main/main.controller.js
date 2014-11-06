@@ -3,16 +3,17 @@
 
 var app = angular.module('travelPhotosApp');
   
-  app.controller('MainCtrl', function ($scope, $http, googleMapsService, googleGeolocationService, postingService) {
+  app.controller('MainCtrl', function ($scope, $http, googleMapsService, 
+                               googleGeolocationService, placeService) {
      
     var ctrl = this;
 
     this.myPlacesList = [];
 
-    postingService.retrievePlaces($http, ctrl, googleMapsService);
+    placeService.retrievePlaces($http, ctrl, googleMapsService);
 
     this.removePlace = function(placeId) {
-      postingService.removePlace(placeId, $http, ctrl);
+      placeService.removePlace(placeId, $http, ctrl);
     }
 
 /////////////////////////////////////////////////////////////////////
@@ -34,9 +35,10 @@ var app = angular.module('travelPhotosApp');
          ctrl.addressInputError = false;
       }
       if (!ctrl.placeInputError && !ctrl.addressInputError) {
-        //use address to get geolocation, by ajax, then in callback save the data
+        //use address to get geolocation, by ajax,
+        // then in callback save the data
         googleGeolocationService.geolocate(placeForm, ctrl, 
-          $scope, googleMapsService, $http, postingService);
+          $scope, googleMapsService, $http, placeService);
       }
     }; 
 //////////////////////////////////////////////////////////////////// 

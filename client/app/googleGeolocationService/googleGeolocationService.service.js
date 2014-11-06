@@ -14,7 +14,7 @@ angular.module('travelPhotosApp')
         //the postingService.addPlace method is called in order to save this 
         //object
         geolocate : function(placeForm, ctrl, $scope, googleMapsService,
-                            $http, postingService) {
+                            $http, placeService) {
           geocoder.geocode({ 'address': placeForm.address.value }, 
             function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
@@ -27,7 +27,7 @@ angular.module('travelPhotosApp')
 
               $scope.$apply();
         
-              postingService.addPlace(place, $http, ctrl, googleMapsService);
+              placeService.addPlace(place, $http, ctrl, googleMapsService);
           }
          
           else {
