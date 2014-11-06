@@ -75,11 +75,15 @@ body {
 
 .photo {
   float: left;
-  margin-right: 10px;
 }
 
-.thumbnail {
-  width: 150px;
+@media (min-width: 415px) {
+  .thumbnail {
+    width: 150px;
+  }
+  .photo {
+    margin-right: 10px;
+  }
 }
 
 .low_res {

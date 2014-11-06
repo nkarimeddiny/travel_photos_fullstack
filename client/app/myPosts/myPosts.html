@@ -13,8 +13,17 @@
 
     <div class="photoContainer">
       <h3 ng-show="!mpCtrl.thumbnailImagesIsEmpty">Posted on Instagram:</h3>
+      <!-- for testing -->
+            <div ng-hide="hideThumbnail" class = "photo thumbnail col-xs-6 col-sm-3 col-md-3 col-lg-3">
+           <h5>Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello</h5>
+           <div class="onePhotoBox">
+             <a ng-href="{{image.instagramLink}}"> <img src=""/> </a>
+           </div>
+           <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption, image.instagramLink, image.id); hideThumbnail = true">Post to Travel Photos</button>
+      </div>
+    <!-- for testing -->
       <div ng-hide="hideThumbnail" class = "photo thumbnail col-xs-6 col-sm-3 col-md-3 col-lg-3" ng-repeat="image in mpCtrl.thumbnailImages">
-           <h5>{{image.caption}}</span> </h5>
+           <h5>{{image.caption}}</h5>
            <div class="onePhotoBox">
              <a ng-href="{{image.instagramLink}}"> <img ng-src="{{image.thumbnailLink}}"/> </a>
            </div>
