@@ -56,8 +56,8 @@
     <div>
       <h2>My Places-to-Go</h2>
       <div id="placesToGoContainer">  
-        <div class="thumbnail placesToGoThumbnail" ng-repeat="place in main.myPlacesList">
-          <div class="placesToGoInnerContainer">
+        <div class="thumbnail placesToGoThumbnail col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-repeat="place in main.myPlacesList">
+          <div class="placesToGoInnerContainer ">
             <span>{{place.date | date}}</span> <br/>
             <span class="place">{{place.location}}</span> <br/>
             <span>{{place.text}}</span> </br>
