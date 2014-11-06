@@ -78,7 +78,7 @@ body {
 }
 
 @media (min-width: 415px) {
-  .thumbnail {
+  .smallThumbnail {
     width: 150px;
   }
   .photo {
@@ -86,8 +86,16 @@ body {
   }
 }
 
-.low_res {
-  width: 306px;
+@media (min-width: 768px) {
+  .bigThumbnail {
+    width: 306px;
+  }
+}
+
+@media (min-width: 415px) and (max-width: 768px) {
+  .bigThumbnail.photo {
+    margin-right: 0px;
+  }
 }
 
 .onePhotoBox {
