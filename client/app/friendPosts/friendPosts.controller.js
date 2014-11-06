@@ -5,6 +5,7 @@ angular.module('travelPhotosApp')
     $scope.message = 'Hello';
     var ctrl = this;
     ctrl.userPosts = {}
+    ctrl.lowResImageIds = {};
     postingService.retrievePosts($http, ctrl, $stateParams.friendName);
     
 }); 

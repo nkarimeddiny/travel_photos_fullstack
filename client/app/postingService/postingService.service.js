@@ -19,7 +19,6 @@ angular.module('travelPhotosApp')
                 data.posts.forEach(function(post){
                   ctrl.lowResImageIds[post.imageId] = "hello";
                 });
-                console.log(ctrl.userPosts);
        });
       },
         removePost : function($http, ctrl, postId) {

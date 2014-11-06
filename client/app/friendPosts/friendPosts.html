@@ -4,17 +4,21 @@
 
 <div ng-controller = "FriendpostsCtrl as fpCtrl">
     {{fpCtrl.friendName}}
-	<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
+<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
 
+<div class="photoContainer postedPhotos">
     <h3>Posted on Travel Photos from Instagram:</h3>
-	  <div class = "photo postedPhotos" ng-repeat="post in fpCtrl.userPosts">
-        <span class="caption">{{post.caption}}</span> <br/>
-        <span class="date">Posted: {{post.date | date}}</span>
-        <div class="imageDiv">
-           <img ng-src="{{post.imageLink}}"/>
+	  <div class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="post in fpCtrl.userPosts">
+        <div class="photoHeader">
+          <h5 class="caption">{{post.caption}}</h5>
+          <h5 class="caption">Posted: {{post.date | date}}</h5>
         </div>
-      </div>
+        <div class="imageDiv">
+          <a ng-href="{{post.instagramLink}}"><img ng-src="{{post.imageLink}}"/></a>
+        </div>
+    </div>
+</div>
 	   
-	</div> <!-- end friendsPosts -->
+</div> <!-- end friendsPosts -->
 
 </div> <!-- end FriendsPostsCtrl -->
