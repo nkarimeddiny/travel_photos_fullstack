@@ -2,13 +2,8 @@
 
 angular.module('travelPhotosApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth, friendsListService, $state) {
-    $scope.menu = [{
-      'title': 'Home',
-      'link': '/'
-    }];
 
-
-    $scope.isCollapsed = true;
+    $scope.showMobileNavbar = false;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.isAdmin = Auth.isAdmin;
     $scope.getCurrentUser = Auth.getCurrentUser;
