@@ -40,7 +40,7 @@ exports.getInstagramPhotos = function(req, res, next) {
 //null elements filtered out. Depending on where the populateUserAndFriendList function
 //was called from, friendList may be sent back to the client at this point, but if called
 //from updateFriendsOrder, the updated user document must first be saved. If called from
-//sideBarInfo, a list of all signed up users is generated.
+//sideBarInfo, a list of all signed-up users is generated.
 var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrder) {
       
       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, 
@@ -60,6 +60,10 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
                 uncheckedPost = true;
               }
       
+              //if one or more friends have been removed since the last time
+              //updateFriendsOrder was called, there will be one or more indices
+              //in the friendList array which are not assigned to an element,
+              //and will therefore be null
               friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
                                                uncheckedPost: uncheckedPost};
             });
@@ -75,7 +79,8 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
                 userList.push(aUser.name);
               });
             
-              res.send({"username": updatedUser.name, userFriends: friendList, "users": userList}).end();
+              res.send({"username": updatedUser.name, userFriends: friendList, 
+                        "users": userList}).end();
             }
             
             else if (newFriendsOrder) {          
@@ -90,21 +95,33 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
       });
 };
 
+//addPost creates a new Post document, then adds the id of the new post
+//to the current user's posts array. The user's lastTimePost is also
+//updated, then the updated User document is saved and the posts array
+//is populated and returned to the client
 exports.addPost = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-        Post.create({user: user._id, imageId: req.body.imageId, instagramLink: req.body.instagramLink, imageLink: req.body.imageLink, caption: req.body.caption}, function(err, post) {
-                user.posts.push(post._id);
-                user.lastTimePosted = Date.now();
-                user.save(function(err, user) {
-                  User.populate(user, { path: 'posts' , model: "Post"}, function (err, user) {
-                      res.send(user.posts).end();
-                  });
+        Post.create({user: user._id, imageId: req.body.imageId, 
+                    instagramLink: req.body.instagramLink, 
+                    imageLink: req.body.imageLink, 
+                    caption: req.body.caption}, 
+          function(err, post) {
+            user.posts.push(post._id);
+            user.lastTimePosted = Date.now();
+            user.save(function(err, user) {
+              User.populate(user, { path: 'posts' , model: "Post"},
+                function (err, user) {
+                  res.send(user.posts).end();
                 });
-
-        })
+            });
+          })
     });
 };
+
+//getPosts retrieves one user's posts. This can be the current user of the
+//site, or a friend whose posts they've requested. If a friend's posts have 
+//been requested, req.body.friendName will be defined.
 
 exports.getPosts = function(req, res, next) {
   var myId = req.user._id;
@@ -115,14 +132,13 @@ exports.getPosts = function(req, res, next) {
     var searchCriteria = {_id: myId};
   }
 
-  User.findOne(searchCriteria //{_id: userId}
-  , '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+  User.findOne(searchCriteria, '-salt -hashedPassword', function(err, user) {
     if (err) return next(err);
     if (!user) return res.json(401);
       User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
-        //if checking a friend's posts, need to retrieve my own model, iterate through
-        //friends, find the friend by id, and update lastTimeChecked
         if (req.body.friendName) {
+           //if checking a friend's posts, need to retrieve my own model, iterate through
+           //friends, find the friend by id, and update lastTimeChecked
             User.findById(myId,  '-salt -hashedPassword', function (err, me) {
                 if (err) return next(err);
                 if (!user) return res.send(401);
@@ -216,8 +232,6 @@ exports.removePlace = function(req, res, next) {
     });
 };
 
-
-
 exports.updateFriendsOrder = function (req, res, next) {
   //get this user's ID:
   var userId = req.user._id;
@@ -239,7 +253,7 @@ exports.addFriend = function (req, res, next) {
     //get friend's ID:
     User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
        var len = user.friends.length;
-       user.friends.push({friend: friend._id, orderNumber: len + 1,lastTimeChecked: ""});
+       user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
        user.save(function(err, updatedUser){
          populateUserAndFriendList(res, updatedUser, null, null);
     });
@@ -283,12 +297,12 @@ exports.removeFriend = function (req, res, next) {
  * Get list of users
  * restriction: 'admin'
  */
-exports.index = function(req, res) {
-  User.find({}, '-salt -hashedPassword', function (err, users) {
-    if(err) return res.send(500, err);
-    res.json(200, users);
-  });
-};
+// exports.index = function(req, res) {
+//   User.find({}, '-salt -hashedPassword', function (err, users) {
+//     if(err) return res.send(500, err);
+//     res.json(200, users);
+//   });
+// };
 
 /**
  * Creates a new user
@@ -307,15 +321,15 @@ exports.create = function (req, res, next) {
 /**
  * Get a single user
  */
-exports.show = function (req, res, next) {
-  var userId = req.params.id;
+// exports.show = function (req, res, next) {
+//   var userId = req.params.id;
 
-  User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-    if (err) return next(err);
-    if (!user) return res.send(401);
-    res.json(user.profile);
-  });
-};
+//   User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+//     if (err) return next(err);
+//     if (!user) return res.send(401);
+//     res.json(user.profile);
+//   });
+// };
 
 /**
  * Deletes a user

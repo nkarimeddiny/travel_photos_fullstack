@@ -47,7 +47,7 @@ angular.module('travelPhotosApp')
       //containing an object for each of the user's friends.
       updateFriendsOrder : function(ctrl, $http) {
           ctrl.myFriendsList.forEach(function(friend, index){
-             ctrl.friendsOrderObject[friend.name] = index + 1;
+             ctrl.friendsOrderObject[friend.name] = index;
           });
          $http.post("api/users/updateFriendsOrder", 
                     {friendsOrder : ctrl.friendsOrderObject})
