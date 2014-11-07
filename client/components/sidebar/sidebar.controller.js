@@ -5,9 +5,9 @@ var app = angular.module('travelPhotosApp');
 app.controller('FriendslistCtrl', 
   function ($scope, $state, $http, friendsListService) {
    var ctrl = this;
-   ctrl.myFriendsList = [];
-   ctrl.signedUpUsers = [];
-   ctrl.friendsOrderObject = {};
+   this.myFriendsList = [];
+   this.signedUpUsers = [];
+   this.friendsOrderObject = {};
 
    this.removeFriend = function(friendName) {
       friendsListService.removeFriend(friendName, ctrl, $http);
@@ -17,7 +17,7 @@ app.controller('FriendslistCtrl',
 
 ///////////////////////////////////////////////////
 //for angular/jquery-ui sortable:
-   ctrl.sortableOptions = {
+   this.sortableOptions = {
       'ui-floating': true,
       stop: function( event, ui ) {
         friendsListService.updateFriendsOrder(ctrl, $http);
