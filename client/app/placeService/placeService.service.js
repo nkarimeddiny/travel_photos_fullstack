@@ -37,10 +37,10 @@ angular.module('travelPhotosApp')
        //deletes the place-to-go, then assigns myPlacesList to the returned
        //data, which is an array of objects for each place-to-go that has been
        //saved by the current user
-        removePlace : function(placeId, $http, ctrl) {
+        removePlace : function(placeId, $http, ctrl, googleMapsService) {
               $http.post("api/users/removePlace", {placeId : placeId}) 
                   .success(function(data) {
-                      ctrl.myPlacesList = data;
+                      document.location.reload();
               });
        }
     };

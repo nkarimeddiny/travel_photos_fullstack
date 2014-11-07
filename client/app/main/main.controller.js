@@ -13,7 +13,7 @@ var app = angular.module('travelPhotosApp');
     placeService.retrievePlaces($http, ctrl, googleMapsService);
 
     this.removePlace = function(placeId) {
-      placeService.removePlace(placeId, $http, ctrl);
+      placeService.removePlace(placeId, $http, ctrl, googleMapsService);
     }
 
 /////////////////////////////////////////////////////////////////////
