@@ -6,21 +6,88 @@ var Place = require('../place/place.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
-//require socket io
 var request = require('request');
 
 var validationError = function(res, err) {
   return res.json(422, err);
 };
 
+//getInstagramPhotos makes an api call to Instagram for a user who has already authorized
+//the travelPhotos app to access their photos. Whenever a user signs into travelPhotos
+//through Instagram, they get an access token that is stored in the database along with
+//their instagram id number
 exports.getInstagramPhotos = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) { 
-        request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + "/media/recent/?access_token=" + user.accessToken + "&count=10",
+        request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + 
+                     "/media/recent/?access_token=" + user.accessToken + "&count=10",
+                     
           function(err, response, body) {
             res.send(body);
           });
+    
     });
+};
+
+//populateUserAndFriendList is a helper function called by 4 of the user.controller
+//functions. It populates a user's array of friends, then iterates through the array
+//and compares the last time each friend posted against the last time the user checked
+//their posts, to determine if the friend has one or more unchecked posts. While
+//iterating, it also builds the friendList array, with friends in the correct order.
+//If populateUserAndFriendList was called by updateFriendsOrder, before building the 
+//friendList array it will first adjust each friend's orderNumber according to user
+//input. A new friendList array is then created using the filter method, with any 
+//null elements filtered out. Depending on where the populateUserAndFriendList function
+//was called from, friendList may be sent back to the client at this point, but if called
+//from updateFriendsOrder, the updated user document must first be saved. If called from
+//sideBarInfo, a list of all signed up users is generated.
+var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrder) {
+      
+      User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, 
+          
+          function (err, updatedUser) {
+          
+            var friendList = [];
+            updatedUser.friends.forEach(function(aFriend){
+      
+              if (newFriendsOrder) {
+                aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
+              }
+      
+              var uncheckedPost = false;  
+      
+              if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
+                uncheckedPost = true;
+              }
+      
+              friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
+                                               uncheckedPost: uncheckedPost};
+            });
+            
+            friendList = friendList.filter(function(el){
+              return el !== null;
+            }); 
+            
+            if (users) {
+              var userList = [];
+            
+              users.forEach(function(aUser){
+                userList.push(aUser.name);
+              });
+            
+              res.send({"username": updatedUser.name, userFriends: friendList, "users": userList}).end();
+            }
+            
+            else if (newFriendsOrder) {          
+              updatedUser.save(function(err, user){
+                res.send({userFriends: friendList});
+              });          
+            }
+            
+            else {
+              res.send({userFriends: friendList});
+            }
+      });
 };
 
 exports.addPost = function(req, res, next) {
@@ -37,6 +104,68 @@ exports.addPost = function(req, res, next) {
 
         })
     });
+};
+
+exports.getPosts = function(req, res, next) {
+  var myId = req.user._id;
+  if (req.body.friendName){
+    var searchCriteria = {name: req.body.friendName};
+  }
+  else {
+    var searchCriteria = {_id: myId};
+  }
+
+  User.findOne(searchCriteria //{_id: userId}
+  , '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+    if (err) return next(err);
+    if (!user) return res.json(401);
+      User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
+        //if checking a friend's posts, need to retrieve my own model, iterate through
+        //friends, find the friend by id, and update lastTimeChecked
+        if (req.body.friendName) {
+            User.findById(myId,  '-salt -hashedPassword', function (err, me) {
+                if (err) return next(err);
+                if (!user) return res.send(401);
+                me.friends.forEach(function(aFriend){
+                  if (String(aFriend.friend) === String(user._id)){
+                    aFriend.lastTimeChecked = Date.now();
+                  }
+                });
+                me.save(function(err, updatedUser){
+                    res.send({posts: user.posts}).end();
+                });
+            });
+        }
+        else{
+          res.send({posts: user.posts}).end();
+        }
+      });
+  });
+};
+
+exports.removePost = function(req, res, next) {
+    var userId = req.user._id;
+    var postId = req.body.postId;
+    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+        user.posts.remove(postId);
+        user.save(function(err, user) {
+        Post.remove({_id : postId}, function(err, numberRemoved) {
+          User.populate(user, { path: 'posts' , model: "Post"}, 
+             function (err, user) {
+               if (user.posts.length > 0) {
+                 user.lastTimePosted = user.posts[user.posts.length - 1].date;
+               }
+               else {
+                 user.lastTimePosted = null;
+               }
+               user.save(function(updatedUser) {
+                 res.send(user.posts).end();
+               });
+          });
+       });
+
+    });
+   });     
 };
 
 exports.addPlace = function(req, res, next) {
@@ -87,67 +216,7 @@ exports.removePlace = function(req, res, next) {
     });
 };
 
-exports.removePost = function(req, res, next) {
-    var userId = req.user._id;
-    var postId = req.body.postId;
-    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-        user.posts.remove(postId);
-        user.save(function(err, user) {
-        Post.remove({_id : postId}, function(err, numberRemoved) {
-          User.populate(user, { path: 'posts' , model: "Post"}, 
-             function (err, user) {
-               if (user.posts.length > 0) {
-                 user.lastTimePosted = user.posts[user.posts.length - 1].date;
-               }
-               else {
-                 user.lastTimePosted = null;
-               }
-               user.save(function(updatedUser) {
-                 res.send(user.posts).end();
-               });
-          });
-       });
 
-    });
-   });     
-};
-
-
-var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrder) {
-      User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, function (err, updatedUser) {
-         var friendList = [];
-         updatedUser.friends.forEach(function(aFriend){
-           console.log("aFriend: " , aFriend);
-           if (newFriendsOrder) {
-             aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
-           }
-           var uncheckedPost = false;  
-           if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
-             uncheckedPost = true;
-           }
-           friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
-                                             uncheckedPost: uncheckedPost};
-          });
-          friendList = friendList.filter(function(el){
-              return el !== null;
-          }); 
-         if (users) {
-           var userList = [];
-           users.forEach(function(aUser){
-             userList.push(aUser.name);
-          });
-           res.send({"username": updatedUser.name, userFriends: friendList, "users": userList}).end();
-         }
-         else if (newFriendsOrder) {
-            updatedUser.save(function(err, user){
-               res.send({userFriends: friendList});
-            });
-         }
-         else {
-           res.send({userFriends: friendList});
-          }
-       });
-};
 
 exports.updateFriendsOrder = function (req, res, next) {
   //get this user's ID:
@@ -177,6 +246,20 @@ exports.addFriend = function (req, res, next) {
   });
 });
 }
+
+exports.sideBarInfo = function(req, res, next) {
+  var userId = req.user._id;
+  User.findOne({
+    _id: userId
+  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+    if (err) return next(err);
+    if (!user) return res.json(401);
+    User.find({}, '-salt -hashedPassword', function (err, users) {
+      if(err) return res.send(500, err);
+      populateUserAndFriendList(res, user, users, null);
+    });
+  });
+};
 
 exports.removeFriend = function (req, res, next) {
   var userId = req.user._id;
@@ -265,44 +348,6 @@ exports.changePassword = function(req, res, next) {
     }
   });
 };
-exports.getPosts = function(req, res, next) {
-  var myId = req.user._id;
-  if (req.body.friendName){
-    var searchCriteria = {name: req.body.friendName};
-  }
-  else {
-    var searchCriteria = {_id: myId};
-  }
-
-  User.findOne(searchCriteria //{_id: userId}
-  , '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
-    if (err) return next(err);
-    if (!user) return res.json(401);
-      User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
-        //if checking a friend's posts, need to retrieve my own model, iterate through
-        //friends, find the friend by id, and update lastTimeChecked
-        if (req.body.friendName) {
-            User.findById(myId,  '-salt -hashedPassword', function (err, me) {
-                if (err) return next(err);
-                if (!user) return res.send(401);
-                me.friends.forEach(function(aFriend){
-                  if (String(aFriend.friend) === String(user._id)){
-                    aFriend.lastTimeChecked = Date.now();
-                  }
-                });
-                me.save(function(err, updatedUser){
-                    res.send({posts: user.posts}).end();
-                });
-            });
-        }
-        else{
-          res.send({posts: user.posts}).end();
-        }
-      });
-  });
-};
-
-
 
 /**
  * Get my info
@@ -318,20 +363,6 @@ exports.me = function(req, res, next) {
     if (err) return next(err);
     if (!user) return res.json(401);
     res.json(user);
-  });
-};
-
-exports.sideBarInfo = function(req, res, next) {
-  var userId = req.user._id;
-  User.findOne({
-    _id: userId
-  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
-    if (err) return next(err);
-    if (!user) return res.json(401);
-    User.find({}, '-salt -hashedPassword', function (err, users) {
-      if(err) return res.send(500, err);
-      populateUserAndFriendList(res, user, users, null);
-    });
   });
 };
 
