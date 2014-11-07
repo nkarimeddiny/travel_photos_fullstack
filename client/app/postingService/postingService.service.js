@@ -3,16 +3,25 @@
 angular.module('travelPhotosApp')
   .factory("postingService", function() {
       return {
-        addPost : function(imageLink, caption, instagramLink, imageId, ctrl, $http) {
-            $http.post("/api/users/addPost", {username: name, imageLink: imageLink, 
-                                             instagramLink: instagramLink, 
-                                             imageId: imageId, caption: caption})
-               .success( function(data) {
-                  console.log(data);
-                  ctrl.userPosts = data;
-        });
-      },
-      
+
+        //addPost is called by myPosts controller. It takes
+        //the link to a CDN where the image is hosted, the link 
+        //to where it can be viewed on Instagram, the image's 
+        //Instagram id, and the image's caption.
+        //The callback function assigns userPosts to data,
+        //which is an array containing an object for each of 
+        //the user's posts.
+        addPost : function(imageLink, caption, instagramLink,
+                           imageId, ctrl, $http) {
+            $http.post("/api/users/addPost", 
+                       {imageLink: imageLink, 
+                        instagramLink: instagramLink, 
+                        imageId: imageId, caption: caption})
+                 .success( function(data) {
+                    ctrl.userPosts = data;
+                  });
+        },
+
         //retrievePosts is called by friendPosts AND myPosts
         //controllers. When called by myPosts, it retrieves the
         //current user's posts. When called by friendPosts, it 
@@ -28,19 +37,23 @@ angular.module('travelPhotosApp')
              $http.post("api/users/getPosts", 
                        {friendName: optionalFriendName})
                .success( function(data) {
-                  console.log(data.posts);
                   ctrl.userPosts = data.posts;
                   data.posts.forEach(function(post){
                     ctrl.lowResImageIds[post.imageId] = "hello";
                 });
         });
       },
+
+        //removePost is called by myPosts controller. It takes
+        //the post's id (not the image's Instagram id).
+        //The callback function assigns userPosts to data,
+        //which is an array containing an object for each of 
+        //the user's posts.
         removePost : function($http, ctrl, postId) {
              $http.post("api/users/removePost", {postId: postId})
                .success( function(data) {
-                console.log(data);
-                ctrl.userPosts = data;
-       });
-      }
+                  ctrl.userPosts = data;
+               });
+        }
     };
 });
