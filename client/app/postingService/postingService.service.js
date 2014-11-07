@@ -38,9 +38,11 @@ angular.module('travelPhotosApp')
                        {friendName: optionalFriendName})
                .success( function(data) {
                   ctrl.userPosts = data.posts;
-                  data.posts.forEach(function(post){
-                    ctrl.lowResImageIds[post.imageId] = "hello";
-                });
+                  if (!optionalFriendName) {
+                    data.posts.forEach(function(post){
+                      ctrl.lowResImageIds[post.imageId] = "hello";
+                    });
+                  }
         });
       },
 
