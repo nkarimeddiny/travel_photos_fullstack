@@ -299,22 +299,28 @@ exports.sideBarInfo = function(req, res, next) {
   });
 };
 
+//removeFriend finds the document of the friend being removed (in order
+//to find their id), then finds the current user's document, and iterates
+//through their array of friend objects, creating a new array of
+//friend objects (newFriendsArr) that does not include the removed friend. 
+//It then assigns the user's friends field to newFriendsArr and calls 
+//populateUserAndFriendList, passing a reference to the updatedUser document
 exports.removeFriend = function (req, res, next) {
   var userId = req.user._id;
   var friendName = req.body.friendName;
-   User.findOne({name: friendName},  '-salt -hashedPassword', function (err, friend) {
-      User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-        if (err) return next(err);
-        if (!user) return res.send(401);
-        var newFriendsArr = user.friends.filter(function(aFriend){
-            return String(aFriend.friend) !== String(friend._id);
-        });
-        user.friends = newFriendsArr;
-        user.save(function(err, updatedUser){
-           populateUserAndFriendList(res, updatedUser, null, null);
-        });
+  User.findOne({name: friendName},  '-salt -hashedPassword', function (err, friend) {
+    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+      if (err) return next(err);
+      if (!user) return res.send(401);
+      var newFriendsArr = user.friends.filter(function(aFriend) {
+        return String(aFriend.friend) !== String(friend._id);
       });
-   });
+      user.friends = newFriendsArr;
+      user.save(function(err, updatedUser) {
+        populateUserAndFriendList(res, updatedUser, null, null);
+      });
+    });
+  });
 };
 
 /**
