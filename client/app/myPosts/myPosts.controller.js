@@ -1,21 +1,19 @@
 'use strict';
 
 angular.module('travelPhotosApp')
-  .controller('MypostsCtrl', function (Auth, $scope, $http, postingService) {
+  .controller('MypostsCtrl', 
+    function (Auth, $scope, $http, postingService) {
     
-    $scope.message = 'Hello';
-
     var ctrl = this;
-    ctrl.userPosts = {};
-    ctrl.lowResImageIds = {};
-    ctrl.thumbnailImages = {};
-    ctrl.thumbnailImagesIsEmpty = true;
+    this.userPosts = {};
+    this.lowResImageIds = {};
+    this.thumbnailImages = {};
+    this.thumbnailImagesIsEmpty = true;
 
     postingService.retrievePosts($http, ctrl);
 
-
     var currentUser = Auth.getCurrentUser();
-    ctrl.isInstagramUser = (currentUser.provider === 'instagram');
+    this.isInstagramUser = (currentUser.provider === 'instagram');
 
     this.addPost = function(imageLink, caption, instagramLink, imageId) {
        postingService.addPost(imageLink, caption, instagramLink, imageId, ctrl, $http);
