@@ -190,65 +190,77 @@ exports.removePost = function(req, res, next) {
    });     
 };
 
+//addPlace creates a new document in the Place collection, and
+//adds the id of that document to the user's places array. It then
+//populates the places array, and returns the populated array to the user
 exports.addPlace = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-        Place.create({user: user._id, 
-                      location: req.body.location,
-                      text: req.body.text,
-                      latitude: req.body.latitude,
-                      longitude: req.body.longitude
-                     }, function(err, place) {
-                user.places.push(place._id);
-                user.save(function(err, user) {
-                  User.populate(user, { path: 'places' , model: "Place"}, function (err, user) {
-                      res.send(user.places).end();
-                  });
-                });
-
+      Place.create({user: user._id, 
+                    location: req.body.location,
+                    text: req.body.text,
+                    latitude: req.body.latitude,
+                    longitude: req.body.longitude
+                    }, 
+        function(err, place) {
+          user.places.push(place._id);
+          user.save(function(err, user) {
+          User.populate(user, { path: 'places' , model: "Place"}, 
+            function (err, user) {
+              res.send(user.places).end();
+            });
+          });
         })
     });
 };
 
+//retrievePlaces populates a user's places array, then returns the 
+//populated array to the user
 exports.retrievePlaces = function(req, res, next) {
-    var userId = req.user._id;
-    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-      if (err) return next(err);
-      if (!user) return res.json(401);
-      User.populate(user, { path: 'places' , model: "Place"}, 
+  var userId = req.user._id;
+  User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.json(401);
+    User.populate(user, { path: 'places' , model: "Place"}, 
+        function (err, user) {
+            res.send({placesToGo: user.places});
+    });
+  });
+};
+
+//removePlace removes a place id from a user's places array, and also removes
+//that place's document from the Place collection. It then returns a 
+//populated places array to the user 
+exports.removePlace = function(req, res, next) {
+  var userId = req.user._id;
+  var placeId = req.body.placeId;
+  User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+    user.places.remove(placeId);
+    user.save(function(err, user) {
+      Place.remove({_id : placeId}, function(err, numberRemoved) {
+        User.populate(user, { path: 'places' , model: "Place"}, 
           function (err, user) {
-              res.send({placesToGo: user.places});
+            res.send(user.places).end();
+        });
       });
     });
+  });
 };
 
-exports.removePlace = function(req, res, next) {
-    var userId = req.user._id;
-    var placeId = req.body.placeId;
-    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-        user.places.remove(placeId);
-        user.save(function(err, user) {
-          Place.remove({_id : placeId}, function(err, numberRemoved) {
-            User.populate(user, { path: 'places' , model: "Place"}, 
-                function (err, user) {
-                  res.send(user.places).end();
-            });
-          });
-        });
-    });
-};
-
+//updateFriendsOrder finds a user's document, then calls
+//populateUserAndFriendList, passing references to the
+//user's document and req.body.friendsOrder
 exports.updateFriendsOrder = function (req, res, next) {
-  //get this user's ID:
   var userId = req.user._id;
   User.findOne({
     _id: userId
-  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+  }, '-salt -hashedPassword', function(err, user) {
     if (err) return next(err);
     if (!user) return res.json(401);
-       populateUserAndFriendList(res, user, null, req.body.friendsOrder);
-});
+      populateUserAndFriendList(res, user, null, req.body.friendsOrder);
+  });
 };
+
 
 
 exports.addFriend = function (req, res, next) {
@@ -256,7 +268,6 @@ exports.addFriend = function (req, res, next) {
   User.findById(userId, '-salt -hashedPassword', function (err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
-    //get friend's ID:
     User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
        var len = user.friends.length;
        user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
