@@ -8,7 +8,8 @@ angular.module('travelPhotosApp')
     this.userPosts = {};
     this.lowResImageIds = {};  //lowResImageIds is used to 
     //determine whether or not an image retrieved from Instagram
-    //has already been posted
+    //has already been posted, and is populated by 
+    //postingService.retrievePosts method
     this.thumbnailImages = {};
     this.thumbnailImagesIsEmpty = true; //thumbnailImagesIsEmpty 
     //is used to determine whether or not to show the button for

@@ -50,11 +50,18 @@ angular.module('travelPhotosApp')
         //the post's id (not the image's Instagram id).
         //The callback function assigns userPosts to data,
         //which is an array containing an object for each of 
-        //the user's posts.
+        //the user's posts, and re-populates the lowResImageIds
+        //object, so that if the user removes a post and then
+        //retrives Instagram thumbnails, they will see the
+        //thumbnail for the picture they just removed
         removePost : function($http, ctrl, postId) {
              $http.post("api/users/removePost", {postId: postId})
                .success( function(data) {
                   ctrl.userPosts = data;
+                  ctrl.lowResImageIds = {};
+                  data.forEach(function(post){
+                    ctrl.lowResImageIds[post.imageId] = "hello";
+                  });
                });
         }
     };
