@@ -261,28 +261,35 @@ exports.updateFriendsOrder = function (req, res, next) {
   });
 };
 
-
-
+//addFriend finds the current user's document, then finds the document of
+//the friend being added (in order to find that friend's id), and adds an 
+//object to the user's friends array. It then saves the updated user document, 
+//and calls populateUserAndFriendList, passing the reference to the 
+//updatedUser document
 exports.addFriend = function (req, res, next) {
   var userId = req.user._id;
   User.findById(userId, '-salt -hashedPassword', function (err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
     User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
-       var len = user.friends.length;
-       user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
-       user.save(function(err, updatedUser){
-         populateUserAndFriendList(res, updatedUser, null, null);
+      var len = user.friends.length;
+      user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
+      user.save(function(err, updatedUser){
+        populateUserAndFriendList(res, updatedUser, null, null);
+      });
     });
   });
-});
-}
+};
 
+//sideBarInfo finds the current user's document, then finds all
+//users' documents, and passes references to the current user's
+//document and an array of all users' documents to
+//populateUserAndFriendList
 exports.sideBarInfo = function(req, res, next) {
   var userId = req.user._id;
   User.findOne({
     _id: userId
-  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+  }, '-salt -hashedPassword', function(err, user) {
     if (err) return next(err);
     if (!user) return res.json(401);
     User.find({}, '-salt -hashedPassword', function (err, users) {
