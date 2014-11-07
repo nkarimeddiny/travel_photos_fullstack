@@ -3,20 +3,22 @@
 angular.module('travelPhotosApp')
   .factory("googleMapsService", function() {
 
-      var mapOptions = {
-          center: new google.maps.LatLng(0,0),
-          zoom: 2,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-
-      var map = new google.maps.Map(document.getElementById('map-canvas'),
-          mapOptions);
-
       return({
 
         //the initialize method creates a Google map in the #map-canvas
         //div, and adds markers
         initialize : function(ctrl) {
+
+          var mapOptions = {
+              center: new google.maps.LatLng(0,0),
+              zoom: 2,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+
+          var map = new google.maps.Map(document.getElementById('map-canvas'),
+              mapOptions);
+
+
           for (var i = 0; i < ctrl.myPlacesList.length; i++){
             var lat = ctrl.myPlacesList[i].latitude;
             var lng = ctrl.myPlacesList[i].longitude;
@@ -27,6 +29,7 @@ angular.module('travelPhotosApp')
                 map: map,
                 title: placeName
             });
+            
             var infoWindow = new google.maps.InfoWindow();
              
             google.maps.event.addListener(marker, 'mousedown',function(){
@@ -35,6 +38,6 @@ angular.module('travelPhotosApp')
             });
           }
           $(".placeFormInput").val(" ");
-         }//end intialize()  
+         }//end intialize() 
     });
   });
