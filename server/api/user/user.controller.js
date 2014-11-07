@@ -197,7 +197,7 @@ exports.removePost = function(req, res, next) {
                  else {
                    user.lastTimePosted = null;
                  }
-                 user.save(function(updatedUser) {
+                 user.save(function(err, updatedUser) {
                    if (err) return next(err);
                    if (!updatedUser) return res.send(401);
                    res.send(user.posts).end();
