@@ -122,10 +122,11 @@ exports.addPost = function(req, res, next) {
 //getPosts retrieves one user's posts. This can be the current user of the
 //site, or a friend whose posts they've requested. If a friend's posts have 
 //been requested, req.body.friendName will be defined.
-
 exports.getPosts = function(req, res, next) {
+  
   var myId = req.user._id;
-  if (req.body.friendName){
+  
+  if (req.body.friendName) {
     var searchCriteria = {name: req.body.friendName};
   }
   else {
@@ -137,28 +138,33 @@ exports.getPosts = function(req, res, next) {
     if (!user) return res.json(401);
       User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
         if (req.body.friendName) {
-           //if checking a friend's posts, need to retrieve my own model, iterate through
-           //friends, find the friend by id, and update lastTimeChecked
+           //if retrieving a friend's posts, also retrieve current user's document, 
+           //iterate through friends' id's, find the friend, and update lastTimeChecked
             User.findById(myId,  '-salt -hashedPassword', function (err, me) {
                 if (err) return next(err);
                 if (!user) return res.send(401);
-                me.friends.forEach(function(aFriend){
-                  if (String(aFriend.friend) === String(user._id)){
+                me.friends.forEach(function(aFriend) {
+                  if (String(aFriend.friend) === String(user._id)) {
                     aFriend.lastTimeChecked = Date.now();
                   }
                 });
-                me.save(function(err, updatedUser){
+                me.save(function(err, updatedUser) {
                     res.send({posts: user.posts}).end();
                 });
             });
         }
-        else{
+        else {
           res.send({posts: user.posts}).end();
         }
       });
   });
 };
 
+//removePost removes a single post from a user's posts array, and
+//removes that post's document from the Post collection. The user's
+//lastTimePosted variable is also re-assigned, in case the user's
+//most recent post has been deleted, or if they have deleted all 
+//of their posts
 exports.removePost = function(req, res, next) {
     var userId = req.user._id;
     var postId = req.body.postId;
@@ -167,7 +173,7 @@ exports.removePost = function(req, res, next) {
         user.save(function(err, user) {
         Post.remove({_id : postId}, function(err, numberRemoved) {
           User.populate(user, { path: 'posts' , model: "Post"}, 
-             function (err, user) {
+            function (err, user) {
                if (user.posts.length > 0) {
                  user.lastTimePosted = user.posts[user.posts.length - 1].date;
                }
