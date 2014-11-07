@@ -18,7 +18,9 @@ var validationError = function(res, err) {
 //their instagram id number
 exports.getInstagramPhotos = function(req, res, next) {
     var userId = req.user._id;
-    User.findById(userId,  '-salt -hashedPassword', function (err, user) { 
+    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+        if (err) return next(err);
+        if (!user) return res.send(401); 
         request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + 
                      "/media/recent/?access_token=" + user.accessToken + "&count=10",        
           function(err, response, body) {
@@ -101,16 +103,24 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
 exports.addPost = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+        if (err) return next(err);
+        if (!user) return res.send(401);
         Post.create({user: user._id, imageId: req.body.imageId, 
                     instagramLink: req.body.instagramLink, 
                     imageLink: req.body.imageLink, 
                     caption: req.body.caption}, 
           function(err, post) {
+            if (err) return next(err);
+            if (!post) return res.send(401);
             user.posts.push(post._id);
             user.lastTimePosted = Date.now();
             user.save(function(err, user) {
+              if (err) return next(err);
+              if (!user) return res.send(401);
               User.populate(user, { path: 'posts' , model: "Post"},
                 function (err, user) {
+                  if (err) return next(err);
+                  if (!user) return res.send(401);
                   res.send(user.posts).end();
                 });
             });
@@ -168,22 +178,32 @@ exports.removePost = function(req, res, next) {
     var userId = req.user._id;
     var postId = req.body.postId;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+        if (err) return next(err);
+        if (!user) return res.send(401);
         user.posts.remove(postId);
         user.save(function(err, user) {
-        Post.remove({_id : postId}, function(err, numberRemoved) {
-          User.populate(user, { path: 'posts' , model: "Post"}, 
-            function (err, user) {
-               if (user.posts.length > 0) {
-                 user.lastTimePosted = user.posts[user.posts.length - 1].date;
-               }
-               else {
-                 user.lastTimePosted = null;
-               }
-               user.save(function(updatedUser) {
-                 res.send(user.posts).end();
-               });
+          if (err) return next(err);
+          if (!user) return res.send(401);
+          Post.remove({_id : postId}, function(err, numberRemoved) {
+            if (err) return next(err);
+            if (!numberRemoved) return res.send(401);
+            User.populate(user, { path: 'posts' , model: "Post"}, 
+              function (err, user) {
+                 if (err) return next(err);
+                 if (!user) return res.send(401);
+                 if (user.posts.length > 0) {
+                   user.lastTimePosted = user.posts[user.posts.length - 1].date;
+                 }
+                 else {
+                   user.lastTimePosted = null;
+                 }
+                 user.save(function(updatedUser) {
+                   if (err) return next(err);
+                   if (!updatedUser) return res.send(401);
+                   res.send(user.posts).end();
+                 });
+            });
           });
-       });
 
     });
    });     
@@ -195,6 +215,8 @@ exports.removePost = function(req, res, next) {
 exports.addPlace = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+      if (err) return next(err);
+      if (!user) return res.send(401);
       Place.create({user: user._id, 
                     location: req.body.location,
                     text: req.body.text,
@@ -202,12 +224,18 @@ exports.addPlace = function(req, res, next) {
                     longitude: req.body.longitude
                     }, 
         function(err, place) {
+          if (err) return next(err);
+          if (!place) return res.send(401);
           user.places.push(place._id);
           user.save(function(err, user) {
-          User.populate(user, { path: 'places' , model: "Place"}, 
-            function (err, user) {
-              res.send(user.places).end();
-            });
+            if (err) return next(err);
+            if (!user) return res.send(401);
+            User.populate(user, { path: 'places' , model: "Place"}, 
+              function (err, user) {
+                if (err) return next(err);
+                if (!user) return res.send(401);
+                res.send(user.places).end();
+              });
           });
         })
     });
@@ -222,7 +250,9 @@ exports.retrievePlaces = function(req, res, next) {
     if (!user) return res.json(401);
     User.populate(user, { path: 'places' , model: "Place"}, 
         function (err, user) {
-            res.send({placesToGo: user.places});
+          if (err) return next(err);
+          if (!user) return res.send(401);
+          res.send({placesToGo: user.places});
     });
   });
 };
@@ -234,11 +264,19 @@ exports.removePlace = function(req, res, next) {
   var userId = req.user._id;
   var placeId = req.body.placeId;
   User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
     user.places.remove(placeId);
     user.save(function(err, user) {
+      if (err) return next(err);
+      if (!user) return res.send(401);
       Place.remove({_id : placeId}, function(err, numberRemoved) {
+        if (err) return next(err);
+        if (!numberRemoved) return res.send(401);
         User.populate(user, { path: 'places' , model: "Place"}, 
           function (err, user) {
+            if (err) return next(err);
+            if (!user) return res.send(401);
             res.send(user.places).end();
         });
       });
@@ -271,9 +309,13 @@ exports.addFriend = function (req, res, next) {
     if (err) return next(err);
     if (!user) return res.send(401);
     User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
+      if (err) return next(err);
+      if (!friend) return res.send(401);
       var len = user.friends.length;
       user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
       user.save(function(err, updatedUser){
+        if (err) return next(err);
+        if (!updatedUser) return res.send(401);
         populateUserAndFriendList(res, updatedUser, null, null);
       });
     });
@@ -290,9 +332,10 @@ exports.sideBarInfo = function(req, res, next) {
     _id: userId
   }, '-salt -hashedPassword', function(err, user) {
     if (err) return next(err);
-    if (!user) return res.json(401);
+    if (!user) return res.send(401);
     User.find({}, '-salt -hashedPassword', function (err, users) {
-      if(err) return res.send(500, err);
+      if (err) return next(err);
+      if (!users) return res.send(401);
       populateUserAndFriendList(res, user, users, null);
     });
   });
@@ -308,6 +351,8 @@ exports.removeFriend = function (req, res, next) {
   var userId = req.user._id;
   var friendName = req.body.friendName;
   User.findOne({name: friendName},  '-salt -hashedPassword', function (err, friend) {
+    if (err) return next(err);
+    if (!friend) return res.send(401);
     User.findById(userId,  '-salt -hashedPassword', function (err, user) {
       if (err) return next(err);
       if (!user) return res.send(401);
@@ -316,6 +361,8 @@ exports.removeFriend = function (req, res, next) {
       });
       user.friends = newFriendsArr;
       user.save(function(err, updatedUser) {
+        if (err) return next(err);
+        if (!updatedUser) return res.send(401);
         populateUserAndFriendList(res, updatedUser, null, null);
       });
     });

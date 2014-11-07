@@ -10,13 +10,24 @@ var router = express.Router();
 //router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/me', auth.isAuthenticated(), controller.me);
+
+///////////////////
+// add this:
+//router.use('/me', auth.isAuthenticate(), myRouter)
+///
+
 //router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/sideBarInfo', auth.isAuthenticated(), controller.sideBarInfo);
+
+//can change to get(/posts)
 router.post('/getPosts', auth.isAuthenticated(), controller.getPosts);
+
 router.post('/addFriend', auth.isAuthenticated(), controller.addFriend);
 router.post('/removeFriend', auth.isAuthenticated(), controller.removeFriend);
+
+//can change to post(/post)
 router.post('/addPost', auth.isAuthenticated(), controller.addPost);
 router.post('/addPlace', auth.isAuthenticated(), controller.addPlace);
 router.get('/retrievePlaces', auth.isAuthenticated(), controller.retrievePlaces);

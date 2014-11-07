@@ -25,4 +25,8 @@ module.exports = function(app) {
     .get(function(req, res) {
       res.sendfile(app.get('appPath') + '/index.html');
     });
+
+  app.use(function(err, req, res, next) {
+    console.log(err);
+  })
 };
