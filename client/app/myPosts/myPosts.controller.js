@@ -17,7 +17,7 @@ angular.module('travelPhotosApp')
     this.isInstagramUser;  //isInstagramUser is used to determine 
     //whether or not to show the button for retrieving Instagram images
 
-    postingService.retrievePosts($http, ctrl);
+    postingService.retrieveMyPosts($http, ctrl);
 
     var currentUser = Auth.getCurrentUser();
     this.isInstagramUser = (currentUser.provider === 'instagram');
