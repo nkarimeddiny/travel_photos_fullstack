@@ -13,7 +13,7 @@ angular.module('travelPhotosApp')
         //the user's posts.
         addPost : function(imageLink, caption, instagramLink,
                            imageId, ctrl, $http) {
-            $http.post("/api/users/addPost", 
+            $http.post("/api/users/post", 
                        {imageLink: imageLink, 
                         instagramLink: instagramLink, 
                         imageId: imageId, caption: caption})

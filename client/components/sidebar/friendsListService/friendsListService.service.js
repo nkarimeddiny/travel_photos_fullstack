@@ -12,7 +12,7 @@ angular.module('travelPhotosApp')
       //which is an array containing an object for each
       //of the user's friends 
       addFriend : function(friend, ctrl, $http) {
-          $http.post("api/users/addFriend", {
+          $http.post("api/users/friend", {
               friend: friend
            })
              .success( function(data) {
