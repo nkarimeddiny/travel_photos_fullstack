@@ -142,7 +142,7 @@ exports.getPosts = function(req, res, next) {
     if (err) return next(err);
     if (!user) return res.json(401);
       User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
-        if (req.body.friendName) {
+        if (req.params.friendName) {
            //if retrieving a friend's posts, also retrieve current user's document, 
            //iterate through friends' id's, find the friend, and update lastTimeChecked
             User.findById(myId,  '-salt -hashedPassword', function (err, me) {
