@@ -12,25 +12,32 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 BEGIN STYLES I ADDED
 */
 
-.friendInList .btn, 
-.friendInList a,
-.friendInList .greendot {
-  float: left
-}
-
-.friendInList .btn,  {
-  margin-top: 9px;
-  margin-right: 7px;
-}
+/*
+Sidebar styles
+*/
 
 
-.friendInList .greendot {
-  margin-top: 17px;
-  margin-left: 7px;
-  background-color: green;
-  height: 7px;
-  width: 7px;
-  border-radius: 7px;
+.friendInList {
+
+    a  {
+      float: left;
+    }
+
+    .btn  { 
+      float: left;    
+      margin-top: 9px;
+      margin-right: 7px;
+    }
+
+    .greendot {
+      float: left;
+      margin-top: 17px;
+      margin-left: 7px;
+      background-color: green;
+      height: 7px;
+      width: 7px;
+      border-radius: 7px;
+    }
 }
 
 .ui-widget{
@@ -72,6 +79,14 @@ BEGIN STYLES I ADDED
   }
 }
 
+/*
+End sidebar styles
+*/
+
+/*
+Dropdown navbar styles
+*/
+
 .dropdownNavbar {
   float: right;
   width: 50%;
@@ -80,25 +95,31 @@ BEGIN STYLES I ADDED
   font-size: 125%;
 }
 
-.dropdownNavbar ul {
-  list-style-type: none;
+.dropdownNavbar {
+   ul {
+     list-style-type: none;
+   }
+
+   ul li {
+     margin-top: 10px;
+     margin-bottom: 10px;
+   }
+   a {
+     color: #777;
+     text-decoration: none;
+   }
 }
 
-.dropdownNavbar ul li {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.dropdownNavbar a {
-  color: #777;
-  text-decoration: none;
-}
 
 @media (min-width: 768px) {
   .dropdownNavbar {
     display: none;
   }
 }
+
+/*
+End dropdown navbar styles
+*/
 
 /*
 END STYLES I ADDED
