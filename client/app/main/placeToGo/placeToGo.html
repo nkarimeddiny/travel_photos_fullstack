@@ -1,0 +1,9 @@
+  <!-- inner container needed in order to give
+  relative positioning, so remove button can 
+  have absolute positioning -->
+  <div class="placesToGoInnerContainer ">
+    <span>{{place.date | date}}</span> <br/>
+    <span class="place">{{place.location}}</span> <br/>
+    <span>{{place.text}}</span> </br>
+    <button class="btn btn-xs removeButton" ng-click="main.removePlace(place._id)">X</button>
+  </div>
