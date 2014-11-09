@@ -31,19 +31,19 @@ body {
   clear: both;
 }
 
-.friendName .btn, 
-.friendName a,
-.friendName .greendot {
+.friendInList .btn, 
+.friendInList a,
+.friendInList .greendot {
   float: left
 }
 
-.friendName .btn,  {
+.friendInList .btn,  {
   margin-top: 9px;
   margin-right: 7px;
 }
 
 
-.friendName .greendot {
+.friendInList .greendot {
   margin-top: 17px;
   margin-left: 7px;
   background-color: green;
