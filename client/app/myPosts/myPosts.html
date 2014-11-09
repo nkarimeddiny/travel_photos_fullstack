@@ -13,30 +13,16 @@
 
     <div class="photoContainer">
       <h3 ng-show="!mpCtrl.thumbnailImagesIsEmpty">Posted on Instagram:</h3>
-      <div ng-hide="hideThumbnail" class = "photo thumbnail smallThumbnail col-xs-6 col-sm-3 col-md-3 col-lg-3" ng-repeat="image in mpCtrl.thumbnailImages">
-           <h5>{{image.caption}}</h5>
-           <div class="onePhotoBox">
-             <a ng-href="{{image.instagramLink}}"> <img ng-src="{{image.thumbnailLink}}"/> </a>
-           </div>
-           <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption, image.instagramLink, image.id); hideThumbnail = true">Post to Travel Photos</button>
-      </div>
+      <thumbnail-photo ng-hide="hideThumbnail" class = "photo thumbnail smallThumbnail col-xs-6 col-sm-3 col-md-3 col-lg-3" ng-repeat="image in mpCtrl.thumbnailImages">
+
+      </thumbnail-photo>
     </div>
     
     <div class="photoContainer postedPhotos">
       <h3>Posted on Travel Photos from Instagram:</h3>
-      <div class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
-      <!-- .photoHeader div needed in order to give
-          relative positioning, so remove button can 
-          have absolute positioning -->
-        <div class="photoHeader">
-          <h5 class="caption">{{post.caption}}</h5>
-          <h5 class="caption">Posted: {{post.date | date}}</h5>
-          <button class="btn btn-xs" ng-click="mpCtrl.removePost(postId)">X</button>
-        </div>
-        <div class="imageDiv">
-           <a ng-href="{{post.instagramLink}}"><img ng-src="{{post.imageLink}}"/> </a>
-        </div>
-      </div>
+      <lowres-photo class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
+
+      </lowres-photo>
     </div>
 
   </div> <!--  end myPosts -->

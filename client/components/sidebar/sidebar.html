@@ -5,13 +5,17 @@
        </div>
        <div ui-sortable="flCtrl.sortableOptions" ng-model="flCtrl.myFriendsList">
          <div ng-repeat="friend in flCtrl.myFriendsList" class="friendInList">
-
-            <button class="btn btn-xs" ng-click="flCtrl.removeFriend(friend.name)">X</button>
-            <a class="h4" ui-sref="friendPosts({friendName: friend.name})">{{friend.name}}</a>
+  
+            <button class="btn btn-xs" ng-click="flCtrl.removeFriend(friend.name)">
+              X
+            </button>
+            <a class="h4" ui-sref="friendPosts({friendName: friend.name})">
+              {{friend.name}}
+            </a>
             <div ng-show="friend.uncheckedPost" class="greendot"></div>
             <div class="clearfix"></div>
 
-         </div> <br/>
+         </div>
        </div>
 
 
