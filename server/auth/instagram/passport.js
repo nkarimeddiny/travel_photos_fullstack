@@ -24,10 +24,9 @@ exports.setup = function (User, config) {
         }
         if (!user) {
           user = new User({
-            name: profile.displayName,
+            name: profile.username,
             //email: profile.emails[0].value,
             role: 'user',
-            username: profile.username,
             provider: 'instagram',
             instagram: profile._json,
             accessToken: accessToken

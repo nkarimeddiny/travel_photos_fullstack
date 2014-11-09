@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'instagram', 'google'];
 
-var User;//, PlaceToGo
+var User;
 
 var UserSchema = new Schema({
   name: String,
@@ -24,23 +24,11 @@ var UserSchema = new Schema({
   posts: [{type: Schema.Types.ObjectId, ref: "Post"}],
   friends: [{
       friend: {type: Schema.Types.ObjectId, ref: "User"},
-      //compare friend's lastTimePosted to lastTimeChecked
       lastTimeChecked: { type: Date },
       orderNumber: Number
   }],
   lastTimePosted: { type: Date }
 });
-
-/* Wait until later to add this
-var placeToGoSchema = new Schema({
-  username:  String,
-  date: { type: Date, default: Date.now },
-  place : String,
-  comment : String //,
-  //longitude : //// ,
-  //latitude : ////
-});
-*/
 
 /**
  * Virtuals
@@ -110,6 +98,21 @@ UserSchema
       respond(true);
     });
 }, 'The specified email address is already in use.');
+
+// Validate username is not taken
+UserSchema
+  .path('name')
+  .validate(function(value, respond) {
+    var self = this;
+    this.constructor.findOne({name: value}, function(err, user) {
+      if(err) throw err;
+      if(user) {
+        if(self.id === user.id) return respond(true);
+        return respond(false);
+      }
+      respond(true);
+    });
+}, 'The specified username is already in use.');  
 
 var validatePresenceOf = function(value) {
   return value && value.length;
