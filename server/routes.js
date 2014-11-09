@@ -26,7 +26,14 @@ module.exports = function(app) {
       res.sendfile(app.get('appPath') + '/index.html');
     });
 
-  app.use(function(err, req, res, next) {
-    console.log(err);
-  })
+//possible error handler to add for production
+//no stacktraces leaked to user
+// app.use(function(err, req, res, next) {
+//     res.status(err.status || 500);
+//     res.render('error', {
+//         message: err.message,
+//         error: {}
+//     });
+// });
+
 };
