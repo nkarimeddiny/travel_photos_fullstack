@@ -8,28 +8,9 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
  * App-wide Styles
  */
 
-.browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
-}
-
-/* Space out content a bit */
-body {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
-#map-canvas { 
-  max-width: 1050px;
-  height: 500px;
-  margin-bottom: 10px;
-}
-
-.footer {
-  clear: both;
-}
+/*
+BEGIN STYLES I ADDED
+*/
 
 .friendInList .btn, 
 .friendInList a,
@@ -80,102 +61,14 @@ body {
    cursor: pointer;
 }
 
-.photo {
-  float: left;
-}
-
-.onePhotoBox {
-  float: left;
-}
-
-.photoContainer {
-  clear: both;
-  float: left;
-}
-
-.postedPhotos {
-  margin-bottom: 30px;
-}
-
-#instagramButton {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.placeForm {
-  clear: both;
-}
-
-.placesToGoThumbnail {
-  float: left;
-}
-
-.placesToGoInnerContainer {
-  position: relative;
-}
-
-.placesToGoInnerContainer button {
-  position: absolute;
-  top: 1px;
-  left: 87%;
-}
-
-.photoHeader {
-   position: relative;
-   margin-bottom: 5px;
-}
-
-.photoHeader button {
-  position: absolute;
-  top: 6px;
-  left: 93%;
-}
 
 #friendsColumn {
   margin-bottom: 20px;
 }
 
-@media (min-width: 415px) {
-  .smallThumbnail, .placesToGoThumbnail {
-    width: 150px;
-    margin-right: 10px;
-  }
-  .photo {
-    margin-right: 10px;
-  }
-}
-
-@media (min-width: 768px) {
-  .bigThumbnail {
-    width: 306px;
-  }
-}
-
-@media (min-width: 415px) and (max-width: 768px) {
-  .bigThumbnail.photo {
-    margin-right: 0px;
-  }
-}
-
 @media (max-width: 930px) {
   #friendSearch {
     width : 150px;
-  }
-}
-
-.placeFormInput {
-    width : 500px;
-  }
-
-@media (max-width: 535px) {
-  .placeFormInput {
-    width : 100%;
-  }
-}
-
-@media (min-width: 768px) {
-  .dropdownNavbar {
-    display: none;
   }
 }
 
@@ -200,6 +93,34 @@ body {
   color: #777;
   text-decoration: none;
 }
+
+@media (min-width: 768px) {
+  .dropdownNavbar {
+    display: none;
+  }
+}
+
+/*
+END STYLES I ADDED
+*/
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+/* Space out content a bit */
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.footer {
+  clear: both;
+}
+
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
@@ -283,6 +204,7 @@ body {
 @import 'friendPosts/friendPosts.scss';
 @import 'friendPosts/lowresFriendphoto/lowresFriendphoto.scss';
 @import 'main/main.scss';
+@import 'main/placeToGo/placeToGo.scss';
 @import 'myPosts/lowresPhoto/lowresPhoto.scss';
 @import 'myPosts/myPosts.scss';
 @import 'myPosts/thumbnailPhoto/thumbnailPhoto.scss';

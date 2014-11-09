@@ -1,0 +1,55 @@
+
+.photo {
+  float: left;
+}
+
+.onePhotoBox {
+  float: left;
+}
+
+.photoContainer {
+  clear: both;
+  float: left;
+}
+
+.postedPhotos {
+  margin-bottom: 30px;
+}
+
+#instagramButton {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.photoHeader {
+   position: relative;
+   margin-bottom: 5px;
+}
+
+.photoHeader button {
+  position: absolute;
+  top: 6px;
+  left: 93%;
+}
+
+@media (min-width: 415px) {
+  .smallThumbnail, .placesToGoThumbnail {
+    width: 150px;
+    margin-right: 10px;
+  }
+  .photo {
+    margin-right: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .bigThumbnail {
+    width: 306px;
+  }
+}
+
+@media (min-width: 415px) and (max-width: 768px) {
+  .bigThumbnail.photo {
+    margin-right: 0px;
+  }
+}

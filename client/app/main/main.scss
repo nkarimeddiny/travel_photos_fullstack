@@ -1,3 +1,45 @@
+/*
+BEGIN STYLES I ADDED
+*/
+
+#map-canvas { 
+  max-width: 1050px;
+  height: 500px;
+  margin-bottom: 10px;
+}
+
+.placeForm {
+  clear: both;
+}
+
+.placesToGoThumbnail {
+  float: left;
+}
+
+.placesToGoInnerContainer {
+  position: relative;
+}
+
+.placesToGoInnerContainer button {
+  position: absolute;
+  top: 1px;
+  left: 87%;
+}
+
+.placeFormInput {
+    width : 500px;
+  }
+
+@media (max-width: 535px) {
+  .placeFormInput {
+    width : 100%;
+  }
+}
+
+/*
+END STYLES I ADDED
+*/
+
 .thing-form {
     margin: 20px 0;
 }
