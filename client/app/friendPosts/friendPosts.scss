@@ -3,13 +3,9 @@
   float: left;
 }
 
-.onePhotoBox {
-  float: left;
-}
-
 .photoContainer {
   clear: both;
-  float: left;
+  @extend .photo;
 }
 
 .postedPhotos {

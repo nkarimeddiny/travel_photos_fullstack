@@ -3,13 +3,9 @@
   float: left;
 }
 
-.onePhotoBox {
-  float: left;
-}
-
 .photoContainer {
   clear: both;
-  float: left;
+  @extend .photo;
 }
 
 .postedPhotos {
@@ -22,8 +18,8 @@
 }
 
 .photoHeader {
-   position: relative;
-   margin-bottom: 5px;
+  position: relative;
+  margin-bottom: 5px;
 }
 
 .photoHeader button {
