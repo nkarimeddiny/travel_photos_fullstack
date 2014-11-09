@@ -20,6 +20,7 @@ angular.module('travelPhotosApp')
         })
         .catch( function(err) {
           err = err.data;
+          console.log(err);
           $scope.errors = {};
 
           // Update validity of form fields that match the mongoose errors
