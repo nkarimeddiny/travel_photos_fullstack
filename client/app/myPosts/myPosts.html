@@ -25,6 +25,9 @@
     <div class="photoContainer postedPhotos">
       <h3>Posted on Travel Photos from Instagram:</h3>
       <div class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id;">
+      <!-- .photoHeader div needed in order to give
+          relative positioning, so remove button can 
+          have absolute positioning -->
         <div class="photoHeader">
           <h5 class="caption">{{post.caption}}</h5>
           <h5 class="caption">Posted: {{post.date | date}}</h5>
