@@ -11,11 +11,14 @@ angular.module('travelPhotosApp')
     //has already been posted, and is populated by 
     //postingService.retrievePosts method
     this.thumbnailImages = {};
-    this.thumbnailImagesIsEmpty = true; //thumbnailImagesIsEmpty 
+    this.alreadyAccessedInstagram = false; //alreadyAccessedInstagram
     //is used to determine whether or not to show the button for
     //retrieving Instagram images
-    this.isInstagramUser;  //isInstagramUser is used to determine 
+    this.isInstagramUser;  //isInstagramUser is also used to determine 
     //whether or not to show the button for retrieving Instagram images
+    this.allRecentImagesPosted = false; //allRecentImagesPosted is used
+    //to determine whether or not to show a message to the user that
+    //all of their recent Instagram photos have already been posted
 
     postingService.retrieveMyPosts($http, ctrl);
 
@@ -52,7 +55,10 @@ angular.module('travelPhotosApp')
                    caption : post.caption.text};
                }
             });
-            ctrl.thumbnailImagesIsEmpty = $.isEmptyObject(ctrl.thumbnailImages);
+            ctrl.alreadyAccessedInstagram = true;
+            if (data.data.length > 0 && $.isEmptyObject(ctrl.thumbnailImages)) {
+              ctrl.allRecentImagesPosted = true;
+            };
         });
     };
 
