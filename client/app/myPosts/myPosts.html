@@ -20,10 +20,12 @@
     
     <div class="photoContainer postedPhotos">
       <h3>Posted on Travel Photos from Instagram:</h3>
-      <lowres-photo class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id; i = $index" ng-show="i < mpCtrl.displayNum">
+      <lowres-photo class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="post in mpCtrl.userPosts" ng-init="postId = post._id">
 
       </lowres-photo>
     </div>
+
+    <div class="clearfix"> </div>
 
     <button class="btn btn-primary" ng-click="mpCtrl.increaseDisplayNum()">See more photos</button>
 

@@ -5,7 +5,11 @@
 
 .photoContainer {
   clear: both;
-  @extend .photo;
+  float: left;
+}
+
+#myPosts .btn {
+  float: left;
 }
 
 .postedPhotos {
@@ -26,6 +30,10 @@
   position: absolute;
   top: 6px;
   left: 93%;
+}
+
+#myPosts {
+  margin-bottom: 30px;
 }
 
 @media (min-width: 415px) {

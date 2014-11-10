@@ -7,8 +7,8 @@ angular.module('travelPhotosApp')
         this.userPosts = {}
         postingService.retrieveFriendPosts($http, ctrl, $stateParams.friendName);
     
-        this.displayNum = 3;
-        this.increaseDisplayNum = function() {
-        	ctrl.displayNum += 3;
-        }
+        // this.displayNum = 3;
+        // this.increaseDisplayNum = function() {
+        // 	ctrl.displayNum += 3;
+        // }
 }); 

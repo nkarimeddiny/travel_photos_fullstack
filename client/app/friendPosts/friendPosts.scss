@@ -5,7 +5,7 @@
 
 .photoContainer {
   clear: both;
-  @extend .photo;
+  float: left;
 }
 
 .postedPhotos {
@@ -30,6 +30,10 @@
 
 #friendsPosts {
   margin-bottom: 30px;
+}
+
+#friendsPosts .btn{
+  float: left;
 }
 
 @media (min-width: 415px) {
