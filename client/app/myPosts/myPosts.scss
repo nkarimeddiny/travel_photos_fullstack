@@ -21,7 +21,7 @@
 
   /* default is that every third photo
   should have clearfix class */
-  lowres-photo:nth-child(2n+1) {
+  lowres-photo:nth-child(2n + 1) {
       @extend .bclear;
   }
 

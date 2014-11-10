@@ -13,12 +13,12 @@
 
 
 @media (min-width: 1330px) {
-  .innerclear {
+  .clear2 {
     clear: both
   }
 
   lowres-friendphoto:nth-child(4) {
-    @extend .innerclear;
+    @extend .clear2;
   }
 }
 
