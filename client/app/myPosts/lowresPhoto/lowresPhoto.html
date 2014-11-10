@@ -1,11 +1,21 @@
   <!-- .photoHeader div needed in order to give
       relative positioning, so remove button can 
       have absolute positioning -->
-    <div class="photoHeader">
+
+<!--     <div class="photoHeader">
       <h5 class="caption">{{post.caption}}</h5>
       <h5 class="caption">Posted: {{post.date | date}}</h5>
       <button class="btn btn-xs" ng-click="mpCtrl.removePost(postId)">X</button>
     </div>
     <div class="imageDiv">
        <a ng-href="{{post.instagramLink}}"><img ng-src="{{post.imageLink}}"/> </a>
-    </div>
+    </div> -->
+
+  <div class="photoHeader">
+    <h5 class="caption">{{mpCtrl.userPosts[i].caption}}</h5>
+    <h5 class="caption">Posted: {{mpCtrl.userPosts[i].date | date}}</h5>
+    <button class="btn btn-xs" ng-click="mpCtrl.removePost(mpCtrl.userPosts[i]._id)">X</button>
+  </div>
+  <div class="imageDiv">
+    <a ng-href="{{mpCtrl.userPosts[i].instagramLink}}"><img ng-src="{{mpCtrl.userPosts[i].imageLink}}"/></a>
+  </div>

@@ -22,10 +22,25 @@ angular.module('travelPhotosApp')
 
     postingService.retrieveMyPosts($http, ctrl);
 
-    // this.displayNum = 3;
-    // this.increaseDisplayNum = function() {
-    //   ctrl.displayNum += 3;
-    // }
+    this.displayNum = 3;
+    this.increaseDisplayNum = function() {
+      if (ctrl.displayNum <= ctrl.userPosts.length - 3) {
+      ctrl.displayNum += 3;
+      }
+      else {
+      ctrl.displayNum = ctrl.userPosts.length;
+      }
+    }
+
+    //length of returnArray determines how many posts
+    //will be displayed (because of ng-repeat attritbute)
+    this.returnArray = function(num) {
+      var arr = []; 
+      for (var i = 0; i < num; i++) {
+        arr.push(i);
+      }
+     return arr;
+     };
 
     var currentUser = Auth.getCurrentUser();
     this.isInstagramUser = (currentUser.provider === 'instagram');
