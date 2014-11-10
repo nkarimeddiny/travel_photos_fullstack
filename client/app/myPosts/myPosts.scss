@@ -26,10 +26,17 @@
   margin-bottom: 5px;
 }
 
-.photoHeader button {
-  position: absolute;
-  top: 6px;
-  left: 93%;
+.photoHeader {
+  
+  button {
+    position: absolute;
+    top: 6px;
+    left: 93%;
+  }
+
+  h5 {
+    width: 95%;
+  }
 }
 
 #myPosts {

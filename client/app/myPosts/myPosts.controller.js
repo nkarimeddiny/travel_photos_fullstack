@@ -69,8 +69,11 @@ angular.module('travelPhotosApp')
                    instagramLink : post.link,
                    lowresLink: post.images.low_resolution.url,
                    thumbnailLink: post.images.thumbnail.url,
-                   caption : post.caption.text};
-               }
+                   }
+                   if (post.caption) {
+                     ctrl.thumbnailImages[index].caption = post.caption.text;
+                   }
+              };
             });
             ctrl.alreadyAccessedInstagram = true;
             if (data.data.length > 0 && $.isEmptyObject(ctrl.thumbnailImages)) {

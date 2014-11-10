@@ -1,4 +1,28 @@
 
+@media (min-width: 900px) and (max-width: 1329px) {
+  .clear {
+    clear: both;
+  }
+
+  /* default is that every third photo
+  should have clearfix class */
+  lowres-friendphoto:nth-child(2n+1) {
+      @extend .clear;
+  }
+}
+
+
+@media (min-width: 1330px) {
+  .innerclear {
+    clear: both
+  }
+
+  lowres-friendphoto:nth-child(4) {
+    @extend .innerclear;
+  }
+}
+
+
 .photo {
   float: left;
 }

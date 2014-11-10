@@ -16,6 +16,7 @@ angular.module('travelPhotosApp')
         	ctrl.displayNum = ctrl.userPosts.length;
           }
         }
+
         
         //length of returnArray determines how many posts
         //will be displayed (because of ng-repeat attritbute)

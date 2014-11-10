@@ -1,22 +1,28 @@
 
 <div ng-include="'components/navbar/navbar.html'"></div>
-<div ng-include="'components/sidebar/sidebar.html'"></div>
 
-<div ng-controller = "FriendpostsCtrl as fpCtrl">
-    {{fpCtrl.friendName}}
-<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
 
-<div class="photoContainer postedPhotos">
-    <h3>Posted on Travel Photos from Instagram:</h3>
-	  <lowres-friendphoto class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="i in fpCtrl.returnArray(fpCtrl.displayNum)">
+   <div ng-include="'components/sidebar/sidebar.html'"></div>
 
-     </lowres-friendphoto>
-</div>
+   <div ng-controller = "FriendpostsCtrl as fpCtrl">
+      {{fpCtrl.friendName}}
 
-<div class="clearfix"> </div>
 
-<button ng-show="fpCtrl.userPosts.length > fpCtrl.displayNum" class="btn btn-primary" ng-click="fpCtrl.increaseDisplayNum()">See more photos</button>
-	   
-</div> <!-- end friendsPosts -->
+	 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
 
-</div> <!-- end FriendsPostsCtrl -->
+	  <div class="photoContainer postedPhotos" ng-init="i = 0">
+	       <h3>Posted on Travel Photos from Instagram:</h3>
+            
+            <div class="innerPhotoContainer">   
+	    		<lowres-friendphoto class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="i in fpCtrl.returnArray(fpCtrl.displayNum)">
+
+		        </lowres-friendphoto>
+            </div>
+	  </div>
+
+	  <div class="clearfix"> </div>
+
+	  <button ng-show="fpCtrl.userPosts.length > fpCtrl.displayNum" class="btn btn-primary" ng-click="fpCtrl.increaseDisplayNum()">See more photos</button>
+		   
+	 </div> <!-- end friendsPosts -->
+  </div> <!-- end FriendsPostsCtrl -->
