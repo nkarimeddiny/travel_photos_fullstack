@@ -38,7 +38,8 @@ angular.module('travelPhotosApp')
                   data.posts.forEach(function(post){
                     ctrl.lowResImageIds[post.imageId] = "hello";
                   });
-        });
+                  ctrl.displayNum = Math.min(3, ctrl.userPosts.length);
+              });
       },
 
         //retrieveFriendPosts is called by friendPosts controller, 
@@ -50,7 +51,8 @@ angular.module('travelPhotosApp')
                $http.get("api/users/posts/" + friendName)
                   .success( function(data) {
                     ctrl.userPosts = data.posts;
-          });
+                    ctrl.displayNum = Math.min(3, ctrl.userPosts.length);
+                 });
         },
 
         //removePost is called by myPosts controller. It takes

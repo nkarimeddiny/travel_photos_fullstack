@@ -22,7 +22,7 @@ angular.module('travelPhotosApp')
 
     postingService.retrieveMyPosts($http, ctrl);
 
-    this.displayNum = 3;
+    this.displayNum;
     this.increaseDisplayNum = function() {
       if (ctrl.displayNum <= ctrl.userPosts.length - 3) {
       ctrl.displayNum += 3;
