@@ -19,6 +19,11 @@ angular.module('travelPhotosApp')
 
     postingService.retrieveMyPosts($http, ctrl);
 
+    this.displayNum = 3;
+    this.increaseDisplayNum = function() {
+      ctrl.displayNum += 3;
+    }
+
     var currentUser = Auth.getCurrentUser();
     this.isInstagramUser = (currentUser.provider === 'instagram');
 
