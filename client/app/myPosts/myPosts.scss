@@ -1,26 +1,45 @@
 
-@media (min-width: 900px) and (max-width: 1329px) {
-  .clear {
+
+@media (min-width: 1336px) {
+  .aclear {
+    clear: both
+  }
+
+  lowres-photo:nth-child(4) {
+    @extend .aclear;
+  }
+
+  thumbnail-photo:nth-child(7) {
+    @extend .aclear;
+  }
+}
+
+@media (min-width: 524px) and (max-width: 1335px) {
+  .bclear {
     clear: both;
   }
 
   /* default is that every third photo
   should have clearfix class */
   lowres-photo:nth-child(2n+1) {
-      @extend .clear;
+      @extend .bclear;
+  }
+
+  thumbnail-photo:nth-child(3n + 1) {
+      @extend .bclear;
   }
 }
 
-
-@media (min-width: 1330px) {
-  .innerclear {
-    clear: both
+@media (max-width: 523px) {
+  .cclear {
+    clear: both;
   }
 
-  lowres-photo:nth-child(4) {
-    @extend .innerclear;
+  thumbnail-photo:nth-child(2n + 1) {
+      @extend .cclear;
   }
 }
+
 
 .photo {
   float: left;
