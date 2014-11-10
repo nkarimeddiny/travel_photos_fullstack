@@ -8,10 +8,12 @@
 
 <div class="photoContainer postedPhotos">
     <h3>Posted on Travel Photos from Instagram:</h3>
-	  <lowres-friendphoto class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="post in fpCtrl.userPosts">
+	  <lowres-friendphoto class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="post in fpCtrl.userPosts" ng-init="i = $index" ng-show="i < fpCtrl.displayNum">
 
-    </lowres-friendphoto>
+     </lowres-friendphoto>
 </div>
+
+<button ng-click="fpCtrl.increaseDisplayNum()">See more photos</button>
 	   
 </div> <!-- end friendsPosts -->
 
