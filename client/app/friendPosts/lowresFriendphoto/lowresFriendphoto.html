@@ -1,7 +1,15 @@
-	<div class="photoHeader">
+<!-- 	<div class="photoHeader">
 	  <h5 class="caption">{{post.caption}}</h5>
 	  <h5 class="caption">Posted: {{post.date | date}}</h5>
 	</div>
 	<div class="imageDiv">
 	  <a ng-href="{{post.instagramLink}}"><img ng-src="{{post.imageLink}}"/></a>
+	</div> -->
+
+    <div class="photoHeader">
+	  <h5 class="caption">{{fpCtrl.userPosts[i].caption}}</h5>
+	  <h5 class="caption">Posted: {{fpCtrl.userPosts[i].date | date}}</h5>
+	</div>
+	<div class="imageDiv">
+	  <a ng-href="{{fpCtrl.userPosts[i].instagramLink}}"><img ng-src="{{fpCtrl.userPosts[i].imageLink}}"/></a>
 	</div>

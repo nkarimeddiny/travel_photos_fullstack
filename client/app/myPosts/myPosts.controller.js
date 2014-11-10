@@ -5,7 +5,7 @@ angular.module('travelPhotosApp')
     function (Auth, $scope, $http, postingService) {
     
     var ctrl = this;
-    this.userPosts = {};
+    this.userPosts = [];
     this.lowResImageIds = {};  //lowResImageIds is used to 
     //determine whether or not an image retrieved from Instagram
     //has already been posted, and is populated by 
