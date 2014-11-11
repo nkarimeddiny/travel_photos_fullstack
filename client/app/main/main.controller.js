@@ -22,13 +22,13 @@ var app = angular.module('travelPhotosApp');
     this.addressInputError = false;
 
     this.addPlace = function() {
-      if (!placeForm.place.value) {
+      if (!(placeForm.place.value.trim())) {
          ctrl.placeInputError = true;
       }
       else {
          ctrl.placeInputError = false;
       }
-      if (!placeForm.address.value) {
+      if (!(placeForm.address.value.trim())) {
          ctrl.addressInputError = true;
       }
       else {
