@@ -19,6 +19,7 @@ angular.module('travelPhotosApp')
                         imageId: imageId, caption: caption})
                  .success( function(data) {
                     ctrl.userPosts = data;
+                    ctrl.displayNum++;
                   });
         },
 
@@ -71,6 +72,7 @@ angular.module('travelPhotosApp')
                   data.forEach(function(post){
                     ctrl.lowResImageIds[post.imageId] = "hello";
                   });
+                  ctrl.displayNum--;
                });
         }
     };

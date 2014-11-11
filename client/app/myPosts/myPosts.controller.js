@@ -49,12 +49,10 @@ angular.module('travelPhotosApp')
                             instagramLink, imageId) {
        postingService.addPost(imageLink, caption, instagramLink, 
                               imageId, ctrl, $http);
-       ctrl.displayNum++;
     };
 
     this.removePost = function(postId) {
        postingService.removePost($http, ctrl, postId);
-       ctrl.displayNum--;
     };
 
     this.accessInstagram = function() {
