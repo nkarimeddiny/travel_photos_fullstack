@@ -56,8 +56,10 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
               if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
                 uncheckedPost = true;
               }
-      
-              //if one or more friends have been removed since the last time
+
+              //friends are properly ordered by adding them to the friendList
+              //array at the index corresponding to their orderNumber. 
+              //If one or more friends have been removed since the last time
               //updateFriendsOrder was called, there will be one or more indices
               //in the friendList array which are not assigned to an element,
               //and will therefore be null
