@@ -24,6 +24,8 @@ var UserSchema = new Schema({
   posts: [{type: Schema.Types.ObjectId, ref: "Post"}],
   friends: [{
       friend: {type: Schema.Types.ObjectId, ref: "User"},
+      //compare lastTimeChecked to friend's lastTimePosted
+      //to determine whether there is a new post
       lastTimeChecked: { type: Date },
       orderNumber: Number
   }],
