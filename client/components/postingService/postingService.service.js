@@ -4,6 +4,7 @@ angular.module('travelPhotosApp')
   .factory("postingService", function() {
       return {
 
+
         //addPost is called by myPosts controller. It takes
         //the link to a CDN where the image is hosted, the link 
         //to where it can be viewed on Instagram, the image's 

@@ -3,7 +3,6 @@
 angular.module('travelPhotosApp')
   .controller('MypostsCtrl', 
     function (Auth, $scope, $http, postingService) {
-    
     var ctrl = this;
     this.userPosts = [];
     this.lowResImageIds = {};  //lowResImageIds is used to 
@@ -22,7 +21,7 @@ angular.module('travelPhotosApp')
 
     postingService.retrieveMyPosts($http, ctrl);
 
-    this.displayNum;
+    this.displayNum; //set in postingService
     this.increaseDisplayNum = function() {
       if (ctrl.displayNum <= ctrl.userPosts.length - 3) {
       ctrl.displayNum += 3;

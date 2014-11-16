@@ -5,7 +5,6 @@ var app = angular.module('travelPhotosApp');
   
   app.controller('MainCtrl', function ($scope, $http, googleMapsService, 
                                googleGeolocationService, placeService) {
-     
     var ctrl = this;
 
     this.myPlacesList = [];

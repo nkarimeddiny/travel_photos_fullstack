@@ -7,7 +7,7 @@ angular.module('travelPhotosApp')
         this.userPosts = [];
         postingService.retrieveFriendPosts($http, ctrl, $stateParams.friendName);
     
-        this.displayNum;
+        this.displayNum; //set in postingService
         this.increaseDisplayNum = function() {
           if (ctrl.displayNum <= ctrl.userPosts.length - 3) {
         	ctrl.displayNum += 3;
