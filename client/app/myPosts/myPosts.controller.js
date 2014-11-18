@@ -15,9 +15,10 @@ angular.module('travelPhotosApp')
     //retrieving Instagram images
     this.isInstagramUser;  //isInstagramUser is also used to determine 
     //whether or not to show the button for retrieving Instagram images
-    this.allRecentImagesPosted = false; //allRecentImagesPosted is used
+    this.noMoreImages = false; //noMoreImages is used
     //to determine whether or not to show a message to the user that
-    //all of their recent Instagram photos have already been posted
+    //all of their Instagram images have been retrieved
+    this.next_max_id; //for retrieving more Instagram photos
 
     postingService.retrieveMyPosts($http, ctrl);
 
@@ -54,9 +55,11 @@ angular.module('travelPhotosApp')
        postingService.removePost($http, ctrl, postId);
     };
 
-    this.accessInstagram = function() {
-        $http.get("api/users/accessInstagram")
-          .success( function(data) {
+    var onSuccess = function(data) {
+            ctrl.next_max_id = data.pagination.next_max_id;
+            if (data.data.length < 10) {
+              ctrl.noMoreImages = true;
+            }
             data.data.forEach(function(post, index) { 
               if (!ctrl.lowResImageIds[post.id]) {
                //if the image retrieved from Instagram hasn't
@@ -76,7 +79,22 @@ angular.module('travelPhotosApp')
             if (data.data.length > 0 && $.isEmptyObject(ctrl.thumbnailImages)) {
               ctrl.allRecentImagesPosted = true;
             };
-        });
+        };
+
+    this.accessInstagram = function(next_max_id) {
+        if (!next_max_id) {
+          $http.get("api/users/accessInstagram")
+            .success(function(data) {
+                onSuccess(data);
+            });
+        }
+        else {
+          $http.get("api/users/accessInstagram/" + next_max_id)
+            .success(function(data) {
+                onSuccess(data);
+            });
+
+        } 
     };
 
 });

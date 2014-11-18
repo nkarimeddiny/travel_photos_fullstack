@@ -13,6 +13,7 @@ NOTE: These routes start with api/user.
 router.get('/sideBarInfo', auth.isAuthenticated(), controller.sideBarInfo);
 router.get('/places', auth.isAuthenticated(), controller.getPlaces);
 router.get('/accessInstagram', auth.isAuthenticated(), controller.getInstagramPhotos);
+router.get('/accessInstagram/:nextMaxId', auth.isAuthenticated(), controller.getInstagramPhotos);
 router.get('/posts', auth.isAuthenticated(), controller.getPosts);
 router.get('/posts/:friendName', auth.isAuthenticated(), controller.getPosts);
 

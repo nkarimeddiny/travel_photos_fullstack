@@ -16,10 +16,17 @@ exports.getInstagramPhotos = function(req, res, next) {
     var userId = req.user._id;
     User.findById(userId,  '-salt -hashedPassword', function (err, user) {
         if (err) return next(err);
-        if (!user) return res.send(401); 
-        request.get("https://api.instagram.com/v1/users/" + user.instagram.data.id + 
-                     "/media/recent/?access_token=" + user.accessToken + "&count=10",        
-          function(err, response, body) {
+        if (!user) return res.send(401);
+        if (req.params.nextMaxId) {
+          console.log(req.params.nextMaxId);
+          var url = "https://api.instagram.com/v1/users/" + user.instagram.data.id + 
+                     "/media/recent/?access_token=" + user.accessToken + "&max_id=" + req.params.nextMaxId;
+        }
+        else {
+          var url = "https://api.instagram.com/v1/users/" + user.instagram.data.id + 
+                     "/media/recent/?access_token=" + user.accessToken + "&count=10";
+        } 
+        request.get(url, function(err, response, body) {
             res.send(body);
           });
     

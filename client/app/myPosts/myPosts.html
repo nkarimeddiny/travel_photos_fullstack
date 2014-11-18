@@ -9,18 +9,18 @@
     
     <div id="retrieveInstagramPhotos" class="photoContainer">
       <button class="btn btn-primary" ng-show="mpCtrl.isInstagramUser && !mpCtrl.alreadyAccessedInstagram" ng-click="mpCtrl.accessInstagram()">View 10 most recent Instagram photos</button>
+      <button class="text-info" ng-show="mpCtrl.alreadyAccessedInstagram && !mpCtrl.noMoreImages" ng-click="mpCtrl.accessInstagram(mpCtrl.next_max_id)"><em>Show more images</em></button>
     </div>
 
     <div class="photoContainer">
       <h3 ng-show="mpCtrl.alreadyAccessedInstagram">Posted on Instagram:</h3>
-      <h4 class="text-info" ng-show="mpCtrl.allRecentImagesPosted"><em>All recent photos have been posted on Travel Photos</em></h4>
 
       <div class="innerThumbnailContainer">
         <thumbnail-photo ng-hide="hideThumbnail" class = "photo thumbnail smallThumbnail col-xs-6 col-sm-3 col-md-3 col-lg-3" ng-repeat="image in mpCtrl.thumbnailImages">
 
         </thumbnail-photo>
       </div>
-
+    
     </div>
     
     <div class="photoContainer postedPhotos">
