@@ -5,11 +5,11 @@
     clear: both
   }
 
-  lowres-photo:nth-child(4) {
+  lowres-photo:nth-child(3n + 1) {
     @extend .aclear;
   }
 
-  thumbnail-photo:nth-child(7) {
+  thumbnail-photo:nth-child(6n + 1) {
     @extend .aclear;
   }
 }
