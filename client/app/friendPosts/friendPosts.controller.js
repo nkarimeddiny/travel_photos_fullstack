@@ -2,10 +2,12 @@
 
 angular.module('travelPhotosApp')
   .controller('FriendpostsCtrl', 
-  	  function ($scope, $stateParams, postingService, $http) {
+  	  function ($scope, $stateParams, postingService,
+                $http) {
         var ctrl = this;
         this.userPosts = [];
-        postingService.retrieveFriendPosts($http, ctrl, $stateParams.friendName);
+        postingService.retrieveFriendPosts($http, ctrl, 
+          $stateParams.friendName);
     
         this.displayNum; //set in postingService
         this.increaseDisplayNum = function() {

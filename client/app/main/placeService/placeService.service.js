@@ -24,7 +24,7 @@ angular.module('travelPhotosApp')
        //objects for each place-to-go that has been saved by the current user.
        //The googleMapsService.initialize method is then called in order to 
        //add markers to the map 
-        retrievePlaces : function($http, ctrl, googleMapsService) {
+        retrievePlaces : function($http, ctrl, googleMapsService, $rootScope) {
               $http.get("api/users/places") 
                   .success(function(data) {
                       ctrl.myPlacesList = data.placesToGo;

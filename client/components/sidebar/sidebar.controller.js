@@ -3,7 +3,7 @@
 var app = angular.module('travelPhotosApp');
 
 app.controller('FriendslistCtrl', 
-  function ($scope, $state, $http, friendsListService) {
+  function ($scope, $state, $http, friendsListService, $rootScope) {
    var ctrl = this;
    this.myFriendsList = [];
    this.signedUpUsers = [];
@@ -26,8 +26,9 @@ app.controller('FriendslistCtrl',
 ///////////////////////////////////////////////////////   
 
     var friendSearch = $("#friendSearch");
-
+    
     friendsListService.initializeSidebar(friendSearch, ctrl, $http);
+
 
 /////////////////////////////////////////////
 //when the search form is used, the user can click on a friend's

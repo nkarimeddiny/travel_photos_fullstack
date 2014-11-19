@@ -2,7 +2,8 @@
 
 angular.module('travelPhotosApp')
   .controller('MypostsCtrl', 
-    function (Auth, $scope, $http, postingService) {
+    function (Auth, $scope, $http, 
+              postingService) {
     var ctrl = this;
     this.userPosts = [];
     this.lowResImageIds = {};  //lowResImageIds is used to 
