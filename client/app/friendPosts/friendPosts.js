@@ -6,6 +6,7 @@ angular.module('travelPhotosApp')
       .state('friendPosts', {
         url: '/friendPosts/:friendName',
         templateUrl :  'app/friendPosts/friendPosts.html',
-        controller : 'FriendpostsCtrl'
+        controller : 'FriendpostsCtrl',
+        authenticate: true
       });
   });
