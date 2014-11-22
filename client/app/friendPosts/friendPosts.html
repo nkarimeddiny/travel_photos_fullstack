@@ -13,7 +13,8 @@
 	  <div class="photoContainer postedPhotos" ng-init="i = 0">
 	       <h3>Posted on Travel Photos from Instagram:</h3>
             
-            <div class="innerPhotoContainer">   
+            <div class="innerPhotoContainer"> 
+                <!-- lowres photos are given 306px width above 768px screen width, overwriting the bootstrap columns-->  
 	    		<lowres-friendphoto class = "photo thumbnail bigThumbnail col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="i in fpCtrl.returnArray(fpCtrl.displayNum)">
 
 		        </lowres-friendphoto>
