@@ -218,72 +218,57 @@ exports.removePost = function(req, res, next) {
 //adds the id of that document to the user's places array. It then
 //populates the places array, and returns the populated array to the user
 exports.addPlace = function(req, res, next) {
-    var userId = req.user._id;
-    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+  Place.create({user: req.user._id, 
+                location: req.body.location,
+                text: req.body.text,
+                latitude: req.body.latitude,
+                longitude: req.body.longitude
+                }, 
+    function(err, place) {
       if (err) return next(err);
-      if (!user) return res.send(401);
-      Place.create({user: user._id, 
-                    location: req.body.location,
-                    text: req.body.text,
-                    latitude: req.body.latitude,
-                    longitude: req.body.longitude
-                    }, 
-        function(err, place) {
-          if (err) return next(err);
-          if (!place) return res.send(401);
-          user.places.push(place._id);
-          user.save(function(err, user) {
+      if (!place) return res.send(401);
+      req.user.places.push(place._id);
+      req.user.save(function(err, user) {
+        if (err) return next(err);
+        if (!user) return res.send(401);
+        User.populate(user, { path: 'places' , model: "Place"}, 
+          function (err, user) {
             if (err) return next(err);
             if (!user) return res.send(401);
-            User.populate(user, { path: 'places' , model: "Place"}, 
-              function (err, user) {
-                if (err) return next(err);
-                if (!user) return res.send(401);
-                res.send(user.places).end();
-              });
+            res.send(user.places).end();
           });
-        })
-    });
+      });
+    })
 };
 
 //getPlaces populates a user's places array, then returns the 
 //populated array to the user
 exports.getPlaces = function(req, res, next) {
-  var userId = req.user._id;
-  User.findById(userId,  '-salt -hashedPassword', function (err, user) {
-    if (err) return next(err);
-    if (!user) return res.json(401);
-    User.populate(user, { path: 'places' , model: "Place"}, 
-        function (err, user) {
-          if (err) return next(err);
-          if (!user) return res.send(401);
-          res.send({placesToGo: user.places});
+  User.populate(req.user, { path: 'places' , model: "Place"}, 
+      function (err, user) {
+        if (err) return next(err);
+        if (!user) return res.send(401);
+        res.send({placesToGo: user.places});
     });
-  });
 };
 
 //removePlace removes a place id from a user's places array, and also removes
 //that place's document from the Place collection. It then returns a 
 //populated places array to the user 
 exports.removePlace = function(req, res, next) {
-  var userId = req.user._id;
   var placeId = req.body.placeId;
-  User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+  req.user.places.remove(placeId);
+  req.user.save(function(err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
-    user.places.remove(placeId);
-    user.save(function(err, user) {
+    Place.remove({_id : placeId}, function(err, numberRemoved) {
       if (err) return next(err);
-      if (!user) return res.send(401);
-      Place.remove({_id : placeId}, function(err, numberRemoved) {
-        if (err) return next(err);
-        if (!numberRemoved) return res.send(401);
-        User.populate(user, { path: 'places' , model: "Place"}, 
-          function (err, user) {
-            if (err) return next(err);
-            if (!user) return res.send(401);
-            res.send(user.places).end();
-        });
+      if (!numberRemoved) return res.send(401);
+      User.populate(user, { path: 'places' , model: "Place"}, 
+        function (err, user) {
+          if (err) return next(err);
+          if (!user) return res.send(401);
+          res.send(user.places).end();
       });
     });
   });
@@ -293,14 +278,7 @@ exports.removePlace = function(req, res, next) {
 //populateUserAndFriendList, passing references to the
 //user's document and req.body.friendsOrder
 exports.updateFriendsOrder = function (req, res, next) {
-  var userId = req.user._id;
-  User.findOne({
-    _id: userId
-  }, '-salt -hashedPassword', function(err, user) {
-    if (err) return next(err);
-    if (!user) return res.json(401);
-      populateUserAndFriendList(res, user, null, req.body.friendsOrder);
-  });
+  populateUserAndFriendList(res, req.user, null, req.body.friendsOrder);
 };
 
 //addFriend finds the current user's document, then finds the document of
@@ -309,20 +287,15 @@ exports.updateFriendsOrder = function (req, res, next) {
 //and calls populateUserAndFriendList, passing the reference to the 
 //updatedUser document
 exports.addFriend = function (req, res, next) {
-  var userId = req.user._id;
-  User.findById(userId, '-salt -hashedPassword', function (err, user) {
+  User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
     if (err) return next(err);
-    if (!user) return res.send(401);
-    User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
+    if (!friend) return res.send(401);
+    var len = req.user.friends.length;
+    req.user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
+    req.user.save(function(err, updatedUser){
       if (err) return next(err);
-      if (!friend) return res.send(401);
-      var len = user.friends.length;
-      user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
-      user.save(function(err, updatedUser){
-        if (err) return next(err);
-        if (!updatedUser) return res.send(401);
-        populateUserAndFriendList(res, updatedUser, null, null);
-      });
+      if (!updatedUser) return res.send(401);
+      populateUserAndFriendList(res, updatedUser, null, null);
     });
   });
 };
@@ -332,17 +305,10 @@ exports.addFriend = function (req, res, next) {
 //document and an array of all users' documents to
 //populateUserAndFriendList
 exports.sideBarInfo = function(req, res, next) {
-  var userId = req.user._id;
-  User.findOne({
-    _id: userId
-  }, '-salt -hashedPassword', function(err, user) {
+  User.find({}, '-salt -hashedPassword', function (err, users) {
     if (err) return next(err);
-    if (!user) return res.send(401);
-    User.find({}, '-salt -hashedPassword', function (err, users) {
-      if (err) return next(err);
-      if (!users) return res.send(401);
-      populateUserAndFriendList(res, user, users, null);
-    });
+    if (!users) return res.send(401);
+    populateUserAndFriendList(res, req.user, users, null);
   });
 };
 
@@ -353,23 +319,18 @@ exports.sideBarInfo = function(req, res, next) {
 //It then assigns the user's friends field to newFriendsArr and calls 
 //populateUserAndFriendList, passing a reference to the updatedUser document
 exports.removeFriend = function (req, res, next) {
-  var userId = req.user._id;
   var friendName = req.body.friendName;
   User.findOne({name: friendName},  '-salt -hashedPassword', function (err, friend) {
     if (err) return next(err);
     if (!friend) return res.send(401);
-    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+    var newFriendsArr = req.user.friends.filter(function(aFriend) {
+      return String(aFriend.friend) !== String(friend._id);
+    });
+    req.user.friends = newFriendsArr;
+    req.user.save(function(err, updatedUser) {
       if (err) return next(err);
-      if (!user) return res.send(401);
-      var newFriendsArr = user.friends.filter(function(aFriend) {
-        return String(aFriend.friend) !== String(friend._id);
-      });
-      user.friends = newFriendsArr;
-      user.save(function(err, updatedUser) {
-        if (err) return next(err);
-        if (!updatedUser) return res.send(401);
-        populateUserAndFriendList(res, updatedUser, null, null);
-      });
+      if (!updatedUser) return res.send(401);
+      populateUserAndFriendList(res, updatedUser, null, null);
     });
   });
 };
