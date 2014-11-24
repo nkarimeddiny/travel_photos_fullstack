@@ -106,31 +106,26 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
 //updated, then the updated User document is saved and the posts array
 //is populated and returned to the client
 exports.addPost = function(req, res, next) {
-    var userId = req.user._id;
-    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+  Post.create({user: req.user._id, imageId: req.body.imageId, 
+              instagramLink: req.body.instagramLink, 
+              imageLink: req.body.imageLink, 
+              caption: req.body.caption}, 
+    function(err, post) {
+      if (err) return next(err);
+      if (!post) return res.send(401);
+      req.user.posts.push(post._id);
+      req.user.lastTimePosted = Date.now();
+      req.user.save(function(err, user) {
         if (err) return next(err);
         if (!user) return res.send(401);
-        Post.create({user: user._id, imageId: req.body.imageId, 
-                    instagramLink: req.body.instagramLink, 
-                    imageLink: req.body.imageLink, 
-                    caption: req.body.caption}, 
-          function(err, post) {
+        User.populate(user, { path: 'posts' , model: "Post"},
+          function (err, user) {
             if (err) return next(err);
-            if (!post) return res.send(401);
-            user.posts.push(post._id);
-            user.lastTimePosted = Date.now();
-            user.save(function(err, user) {
-              if (err) return next(err);
-              if (!user) return res.send(401);
-              User.populate(user, { path: 'posts' , model: "Post"},
-                function (err, user) {
-                  if (err) return next(err);
-                  if (!user) return res.send(401);
-                  res.send(user.posts).end();
-                });
-            });
-          })
-    });
+            if (!user) return res.send(401);
+            res.send(user.posts).end();
+          });
+      });
+    })
 };
 
 //getPosts retrieves one user's posts. This can be the current user of the
@@ -138,40 +133,33 @@ exports.addPost = function(req, res, next) {
 //been requested, req.params.friendName will be defined.
 exports.getPosts = function(req, res, next) {
   
+  var me = req.user;
   var myId = req.user._id;
   
   if (req.params.friendName) {
-    var searchCriteria = {name: req.params.friendName};
+
+    User.findOne({name: req.params.friendName}, '-salt -hashedPassword', function(err, user) {
+      if (err) return next(err);
+      if (!user) return res.json(401);
+      User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
+         //if retrieving a friend's posts, also retrieve current user's document, 
+         //iterate through friends' id's, find the friend, and update lastTimeChecked   
+          me.friends.forEach(function(aFriend) {
+            if (String(aFriend.friend) === String(user._id)) {
+              aFriend.lastTimeChecked = Date.now();
+            }
+          });
+          me.save(function(err, updatedUser) {
+              res.send({posts: user.posts}).end();
+          });
+      });
+    });
   }
   else {
-    var searchCriteria = {_id: myId};
+    User.populate(me, { path: "posts" , model: "Post"}, function (err, user) {
+      res.send({posts: user.posts}).end();
+    });
   }
-
-  User.findOne(searchCriteria, '-salt -hashedPassword', function(err, user) {
-    if (err) return next(err);
-    if (!user) return res.json(401);
-      User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
-        if (req.params.friendName) {
-           //if retrieving a friend's posts, also retrieve current user's document, 
-           //iterate through friends' id's, find the friend, and update lastTimeChecked
-            User.findById(myId,  '-salt -hashedPassword', function (err, me) {
-                if (err) return next(err);
-                if (!user) return res.send(401);
-                me.friends.forEach(function(aFriend) {
-                  if (String(aFriend.friend) === String(user._id)) {
-                    aFriend.lastTimeChecked = Date.now();
-                  }
-                });
-                me.save(function(err, updatedUser) {
-                    res.send({posts: user.posts}).end();
-                });
-            });
-        }
-        else {
-          res.send({posts: user.posts}).end();
-        }
-      });
-  });
 };
 
 //removePost removes a single post from a user's posts array, and
@@ -180,38 +168,32 @@ exports.getPosts = function(req, res, next) {
 //most recent post has been deleted, or if they have deleted all 
 //of their posts
 exports.removePost = function(req, res, next) {
-    var userId = req.user._id;
-    var postId = req.body.postId;
-    User.findById(userId,  '-salt -hashedPassword', function (err, user) {
+  var postId = req.body.postId;
+    req.user.posts.remove(postId);
+    req.user.save(function(err, user) {
+      if (err) return next(err);
+      if (!user) return res.send(401);
+      Post.remove({_id : postId}, function(err, numberRemoved) {
         if (err) return next(err);
-        if (!user) return res.send(401);
-        user.posts.remove(postId);
-        user.save(function(err, user) {
-          if (err) return next(err);
-          if (!user) return res.send(401);
-          Post.remove({_id : postId}, function(err, numberRemoved) {
-            if (err) return next(err);
-            if (!numberRemoved) return res.send(401);
-            User.populate(user, { path: 'posts' , model: "Post"}, 
-              function (err, user) {
-                 if (err) return next(err);
-                 if (!user) return res.send(401);
-                 if (user.posts.length > 0) {
-                   user.lastTimePosted = user.posts[user.posts.length - 1].date;
-                 }
-                 else {
-                   user.lastTimePosted = null;
-                 }
-                 user.save(function(err, updatedUser) {
-                   if (err) return next(err);
-                   if (!updatedUser) return res.send(401);
-                   res.send(user.posts).end();
-                 });
-            });
-          });
-
-    });
-   });     
+        if (!numberRemoved) return res.send(401);
+        User.populate(user, { path: 'posts' , model: "Post"}, 
+          function (err, user) {
+             if (err) return next(err);
+             if (!user) return res.send(401);
+             if (user.posts.length > 0) {
+               user.lastTimePosted = user.posts[user.posts.length - 1].date;
+             }
+             else {
+               user.lastTimePosted = null;
+             }
+             user.save(function(err, updatedUser) {
+               if (err) return next(err);
+               if (!updatedUser) return res.send(401);
+               res.send(user.posts).end();
+             });
+        });
+      });
+  });    
 };
 
 //addPlace creates a new document in the Place collection, and
