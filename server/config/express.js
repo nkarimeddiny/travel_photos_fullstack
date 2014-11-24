@@ -29,7 +29,15 @@ module.exports = function(app) {
   app.use(cookieParser());
   app.use(passport.initialize());
 
+  var forceSsl = function (req, res, next) {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+    return next();
+  };
+
   if ('production' === env) {
+    app.use(forceSsl);
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));
     app.set('appPath', config.root + '/public');
