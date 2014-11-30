@@ -23,7 +23,12 @@ exports.getInstagramPhotos = function(req, res, next) {
                  "/media/recent/?access_token=" + user.accessToken + "&count=10";
     } 
     request.get(url, function(err, response, body) {
-        res.send(body);
+        if (err) {
+          res.status(500).send("error");
+        }
+        else {
+          res.status(200).send(body);
+        }
     });
 };
 
@@ -44,6 +49,8 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
       User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, 
           
           function (err, updatedUser) {
+            if (err) return next(err);
+            if (!updatedUser) return res.status(500).send("error");
           
             var friendList = [];
             updatedUser.friends.forEach(function(aFriend){
@@ -79,18 +86,20 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
                 userList.push(aUser.name);
               });
             
-              res.send({"username": updatedUser.name, userFriends: friendList, 
+              res.status(200).send({"username": updatedUser.name, userFriends: friendList, 
                         "users": userList}).end();
             }
             
             else if (newFriendsOrder) {          
               updatedUser.save(function(err, user){
-                res.send({userFriends: friendList});
+                if (err) return next(err);
+                if (!user) return res.status(500).send("error");
+                res.status(200).send({userFriends: friendList});
               });          
             }
             
             else {
-              res.send({userFriends: friendList});
+              res.status(200).send({userFriends: friendList});
             }
       });
 };
@@ -106,17 +115,17 @@ exports.addPost = function(req, res, next) {
               caption: req.body.caption}, 
     function(err, post) {
       if (err) return next(err);
-      if (!post) return res.send(401);
+      if (!post) return res.status(500).send("error");
       req.user.posts.push(post._id);
       req.user.lastTimePosted = Date.now();
       req.user.save(function(err, user) {
         if (err) return next(err);
-        if (!user) return res.send(401);
+        if (!user) return res.status(500).send("error");
         User.populate(user, { path: 'posts' , model: "Post"},
           function (err, user) {
             if (err) return next(err);
-            if (!user) return res.send(401);
-            res.send(user.posts).end();
+            if (!user) return res.status(500).send("error");
+            res.status(200).send(user.posts).end();
           });
       });
     })
@@ -135,8 +144,10 @@ exports.getPosts = function(req, res, next) {
 
     User.findOne({name: req.params.friendName}, '-salt -hashedPassword', function(err, user) {
       if (err) return next(err);
-      if (!user) return res.json(401);
+      if (!user) return res.status(500).send("error");
       User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
+         if (err) return next(err);
+         if (!user) return res.status(500).send("error");
          //if retrieving a friend's posts, also retrieve current user's document, 
          //iterate through friends' id's, find the friend, and update lastTimeChecked   
           me.friends.forEach(function(aFriend) {
@@ -145,7 +156,9 @@ exports.getPosts = function(req, res, next) {
             }
           });
           me.save(function(err, updatedUser) {
-              res.send({posts: user.posts}).end();
+              if (err) return next(err);
+              if (!updatedUser) return res.status(500).send("error");
+              res.status(200).send({posts: user.posts}).end();
           });
       });
     });
@@ -154,7 +167,9 @@ exports.getPosts = function(req, res, next) {
   else {
 
     User.populate(me, { path: "posts" , model: "Post"}, function (err, user) {
-      res.send({posts: user.posts}).end();
+      if (err) return next(err);
+      if (!user) return res.status(500).send("error");
+      res.status(200).send({posts: user.posts}).end();
     });
   }
 
@@ -170,14 +185,14 @@ exports.removePost = function(req, res, next) {
     req.user.posts.remove(postId);
     req.user.save(function(err, user) {
       if (err) return next(err);
-      if (!user) return res.send(401);
+      if (!user) return res.status(500).send("error");
       Post.remove({_id : postId}, function(err, numberRemoved) {
         if (err) return next(err);
-        if (!numberRemoved) return res.send(401);
+        if (!numberRemoved) return res.status(500).send("error");
         User.populate(user, { path: 'posts' , model: "Post"}, 
           function (err, user) {
              if (err) return next(err);
-             if (!user) return res.send(401);
+             if (!user) return res.status(500).send("error");
              if (user.posts.length > 0) {
                user.lastTimePosted = user.posts[user.posts.length - 1].date;
              }
@@ -186,8 +201,8 @@ exports.removePost = function(req, res, next) {
              }
              user.save(function(err, updatedUser) {
                if (err) return next(err);
-               if (!updatedUser) return res.send(401);
-               res.send(user.posts).end();
+               if (!updatedUser) return res.status(500).send("error");
+               res.status(200).send(user.posts).end();
              });
         });
       });
@@ -206,16 +221,16 @@ exports.addPlace = function(req, res, next) {
                 }, 
     function(err, place) {
       if (err) return next(err);
-      if (!place) return res.send(401);
+      if (!place) return res.status(500).send("error");
       req.user.places.push(place._id);
       req.user.save(function(err, user) {
         if (err) return next(err);
-        if (!user) return res.send(401);
+        if (!user) return res.status(500).send("error");
         User.populate(user, { path: 'places' , model: "Place"}, 
           function (err, user) {
             if (err) return next(err);
-            if (!user) return res.send(401);
-            res.send(user.places).end();
+            if (!user) return res.status(500).send("error");
+            res.status(200).send(user.places).end();
           });
       });
     })
@@ -227,8 +242,8 @@ exports.getPlaces = function(req, res, next) {
   User.populate(req.user, { path: 'places' , model: "Place"}, 
       function (err, user) {
         if (err) return next(err);
-        if (!user) return res.send(401);
-        res.send({placesToGo: user.places});
+        if (!user) return res.status(500).send("error");
+        res.status(200).send({placesToGo: user.places});
     });
 };
 
@@ -240,15 +255,15 @@ exports.removePlace = function(req, res, next) {
   req.user.places.remove(placeId);
   req.user.save(function(err, user) {
     if (err) return next(err);
-    if (!user) return res.send(401);
+    if (!user) return res.status(500).send("error");
     Place.remove({_id : placeId}, function(err, numberRemoved) {
       if (err) return next(err);
-      if (!numberRemoved) return res.send(401);
+      if (!numberRemoved) return res.status(500).send("error");
       User.populate(user, { path: 'places' , model: "Place"}, 
         function (err, user) {
           if (err) return next(err);
-          if (!user) return res.send(401);
-          res.send(user.places).end();
+          if (!user) return res.status(500).send("error");
+          res.status(200).send(user.places).end();
       });
     });
   });
@@ -267,12 +282,12 @@ exports.updateFriendsOrder = function (req, res, next) {
 exports.addFriend = function (req, res, next) {
   User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
     if (err) return next(err);
-    if (!friend) return res.send(401);
+    if (!friend) return res.status(500).send("error");
     var len = req.user.friends.length;
     req.user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
     req.user.save(function(err, updatedUser){
       if (err) return next(err);
-      if (!updatedUser) return res.send(401);
+      if (!updatedUser) return res.status(500).send("error");
       populateUserAndFriendList(res, updatedUser, null, null);
     });
   });
@@ -283,7 +298,7 @@ exports.addFriend = function (req, res, next) {
 exports.sideBarInfo = function(req, res, next) {
   User.find({}, '-salt -hashedPassword', function (err, users) {
     if (err) return next(err);
-    if (!users) return res.send(401);
+    if (!users) return res.status(500).send("error");
     populateUserAndFriendList(res, req.user, users, null);
   });
 };
@@ -297,14 +312,14 @@ exports.removeFriend = function (req, res, next) {
   var friendName = req.body.friendName;
   User.findOne({name: friendName},  '-salt -hashedPassword', function (err, friend) {
     if (err) return next(err);
-    if (!friend) return res.send(401);
+    if (!friend) return res.status(500).send("error");
     var newFriendsArr = req.user.friends.filter(function(aFriend) {
       return String(aFriend.friend) !== String(friend._id);
     });
     req.user.friends = newFriendsArr;
     req.user.save(function(err, updatedUser) {
       if (err) return next(err);
-      if (!updatedUser) return res.send(401);
+      if (!updatedUser) return res.status(500).send("error");
       populateUserAndFriendList(res, updatedUser, null, null);
     });
   });

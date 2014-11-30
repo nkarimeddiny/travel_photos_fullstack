@@ -56,43 +56,43 @@ angular.module('travelPhotosApp')
        postingService.removePost($http, ctrl, postId);
     };
 
-    var onSuccess = function(data) {
-            ctrl.next_max_id = data.pagination.next_max_id;
-            if (data.data.length < 10) {
-              ctrl.noMoreImages = true;
-            }
-            data.data.forEach(function(post, index) { 
-              if (!ctrl.lowResImageIds[post.id]) {
-               //if the image retrieved from Instagram hasn't
-               //already been posted: 
-                ctrl.thumbnailImages[index] = 
-                   {id : post.id,
-                   instagramLink : post.link,
-                   lowresLink: post.images.low_resolution.url,
-                   thumbnailLink: post.images.thumbnail.url,
-                   }
-                   if (post.caption) {
-                     ctrl.thumbnailImages[index].caption = post.caption.text;
-                   }
-              };
-            });
-            ctrl.alreadyAccessedInstagram = true;
-            if (data.data.length > 0 && $.isEmptyObject(ctrl.thumbnailImages)) {
-              ctrl.allRecentImagesPosted = true;
-            };
+    var prepThumbnailImgs = function(data) {
+        ctrl.next_max_id = data.pagination.next_max_id;
+        if (data.data.length < 10) {
+          ctrl.noMoreImages = true;
+        }
+        data.data.forEach(function(post, index) { 
+          if (!ctrl.lowResImageIds[post.id]) {
+           //if the image retrieved from Instagram hasn't
+           //already been posted: 
+            ctrl.thumbnailImages[index] = 
+               {id : post.id,
+               instagramLink : post.link,
+               lowresLink: post.images.low_resolution.url,
+               thumbnailLink: post.images.thumbnail.url,
+               }
+               if (post.caption) {
+                 ctrl.thumbnailImages[index].caption = post.caption.text;
+               }
+          };
+        });
+        ctrl.alreadyAccessedInstagram = true;
+        if (data.data.length > 0 && $.isEmptyObject(ctrl.thumbnailImages)) {
+          ctrl.allRecentImagesPosted = true;
         };
+    };
 
     this.accessInstagram = function(next_max_id) {
         if (!next_max_id) {
           $http.get("api/users/accessInstagram")
             .success(function(data) {
-                onSuccess(data);
+                prepThumbnailImgs(data);
             });
         }
         else {
           $http.get("api/users/accessInstagram/" + next_max_id)
             .success(function(data) {
-                onSuccess(data);
+                prepThumbnailImgs(data);
             });
 
         } 
