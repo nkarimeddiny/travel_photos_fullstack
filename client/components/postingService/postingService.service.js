@@ -64,7 +64,6 @@ angular.module('travelPhotosApp')
              $http.get("api/users/posts/" + friendName)
                 .success( function(data) {
                   ctrl.userPosts = data.posts;
-                  console.log(ctrl.userPosts);
                   ctrl.displayNum = Math.min(3, ctrl.userPosts.length);
                 })
                 .error(function(data) {
