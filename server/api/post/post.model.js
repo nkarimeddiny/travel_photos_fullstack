@@ -13,7 +13,9 @@ var PostSchema = new Schema({
    caption: String,
    imageLink: String,
    instagramLink: String,
-   imageId: String
+   imageId: String,
+   longitude: Number,
+   latitude: Number
    //name: String,
    //info: String,
    //active: Boolean

@@ -112,7 +112,9 @@ exports.addPost = function(req, res, next) {
   Post.create({user: req.user._id, imageId: req.body.imageId, 
               instagramLink: req.body.instagramLink, 
               imageLink: req.body.imageLink, 
-              caption: req.body.caption}, 
+              caption: req.body.caption,
+              longitude: req.body.longitude,
+              latitude: req.body.latitude}, 
     function(err, post) {
       if (err) return next(err);
       if (!post) return res.status(500).send("error");

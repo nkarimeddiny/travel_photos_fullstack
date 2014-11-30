@@ -13,11 +13,16 @@ angular.module('travelPhotosApp')
         //which is an array containing an object for each of 
         //the user's posts.
         addPost : function(imageLink, caption, instagramLink,
-                           imageId, ctrl, $http) {
+                           imageId, longitude, latitude, 
+                           ctrl, $http) {
             $http.post("/api/users/post", 
                        {imageLink: imageLink, 
                         instagramLink: instagramLink, 
-                        imageId: imageId, caption: caption})
+                        imageId: imageId, 
+                        caption: caption,
+                        longitude: longitude,
+                        latitude: latitude
+                      })
                .success( function(data) {
                   ctrl.userPosts = data;
                   ctrl.displayNum++;
@@ -59,6 +64,7 @@ angular.module('travelPhotosApp')
              $http.get("api/users/posts/" + friendName)
                 .success( function(data) {
                   ctrl.userPosts = data.posts;
+                  console.log(ctrl.userPosts);
                   ctrl.displayNum = Math.min(3, ctrl.userPosts.length);
                 })
                 .error(function(data) {

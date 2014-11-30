@@ -50,9 +50,11 @@ angular.module('travelPhotosApp')
     this.isInstagramUser = (currentUser.provider === 'instagram');
 
     this.addPost = function(imageLink, caption, 
-                            instagramLink, imageId) {
+                            instagramLink, imageId, 
+                            longitude, latitude) {
        postingService.addPost(imageLink, caption, instagramLink, 
-                              imageId, ctrl, $http);
+                              imageId, longitude, latitude,
+                              ctrl, $http);
     };
 
     this.removePost = function(postId) {
@@ -64,7 +66,7 @@ angular.module('travelPhotosApp')
         if (data.data.length < 10) {
           ctrl.noMoreImages = true;
         }
-        data.data.forEach(function(post, index) { 
+        data.data.forEach(function(post, index) {
           if (!ctrl.lowResImageIds[post.id]) {
            //if the image retrieved from Instagram hasn't
            //already been posted: 
@@ -72,10 +74,14 @@ angular.module('travelPhotosApp')
                {id : post.id,
                instagramLink : post.link,
                lowresLink: post.images.low_resolution.url,
-               thumbnailLink: post.images.thumbnail.url,
+               thumbnailLink: post.images.thumbnail.url
                }
                if (post.caption) {
                  ctrl.thumbnailImages[index].caption = post.caption.text;
+               }
+               if (post.location) {
+                  ctrl.thumbnailImages[index].latitude = post.location.latitude;
+                  ctrl.thumbnailImages[index].longitude = post.location.longitude;
                }
           };
         });
