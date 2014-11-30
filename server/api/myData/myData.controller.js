@@ -96,7 +96,7 @@ var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrde
 };
 
 //addPost creates a new Post document, then adds the id of the new post
-//to the current user's posts array. The user's lastTimePost is also
+//to the current user's posts array. The user's lastTimePosted is also
 //updated, then the updated User document is saved and the posts array
 //is populated and returned to the client
 exports.addPost = function(req, res, next) {
@@ -122,9 +122,10 @@ exports.addPost = function(req, res, next) {
     })
 };
 
-//getPosts retrieves one user's posts. This can be the current user of the
-//site, or a friend whose posts they've requested. If a friend's posts have 
-//been requested, req.params.friendName will be defined.
+//getPosts populates one user's posts array and sends it to the client. This can be the 
+//client's posts array, or the posts array of a friend whose posts they've requested. 
+//If a friend's posts have been requested, req.params.friendName will be defined and the 
+//friend's document will be retrieved before the posts are populated
 exports.getPosts = function(req, res, next) {
   
   var me = req.user;
@@ -149,11 +150,14 @@ exports.getPosts = function(req, res, next) {
       });
     });
   }
+
   else {
+
     User.populate(me, { path: "posts" , model: "Post"}, function (err, user) {
       res.send({posts: user.posts}).end();
     });
   }
+
 };
 
 //removePost removes a single post from a user's posts array, and
@@ -250,17 +254,15 @@ exports.removePlace = function(req, res, next) {
   });
 };
 
-//updateFriendsOrder finds a user's document, then calls
-//populateUserAndFriendList, passing references to the
-//user's document and req.body.friendsOrder
+//updateFriendsOrder calls populateUserAndFriendList, passing references to 
+//the user's document and req.body.friendsOrder
 exports.updateFriendsOrder = function (req, res, next) {
   populateUserAndFriendList(res, req.user, null, req.body.friendsOrder);
 };
 
-//addFriend finds the current user's document, then finds the document of
-//the friend being added (in order to find that friend's id), and adds an 
-//object to the user's friends array. It then saves the updated user document, 
-//and calls populateUserAndFriendList, passing the reference to the 
+//addFriend finds the document of the friend being added (in order to find that friend's id),
+//and adds an object to the current user's friends array. It then saves the updated user 
+//document, and calls populateUserAndFriendList, passing the reference to the 
 //updatedUser document
 exports.addFriend = function (req, res, next) {
   User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
@@ -276,10 +278,8 @@ exports.addFriend = function (req, res, next) {
   });
 };
 
-//sideBarInfo finds the current user's document, then finds all
-//users' documents, and passes references to the current user's
-//document and an array of all users' documents to
-//populateUserAndFriendList
+//sideBarInfo finds all users' documents, and passes references to the current user's
+//document and an array of all users' documents to populateUserAndFriendList
 exports.sideBarInfo = function(req, res, next) {
   User.find({}, '-salt -hashedPassword', function (err, users) {
     if (err) return next(err);
@@ -289,11 +289,10 @@ exports.sideBarInfo = function(req, res, next) {
 };
 
 //removeFriend finds the document of the friend being removed (in order
-//to find their id), then finds the current user's document, and iterates
-//through their array of friend objects, creating a new array of
-//friend objects (newFriendsArr) that does not include the removed friend. 
-//It then assigns the user's friends field to newFriendsArr and calls 
-//populateUserAndFriendList, passing a reference to the updatedUser document
+//to find their id), then iterates through the current user's array of friend 
+//objects, creating a new array of friend objects (newFriendsArr) that does not 
+//include the removed friend. It then assigns the user's friends field to newFriendsArr 
+//and calls populateUserAndFriendList, passing a reference to the updatedUser document
 exports.removeFriend = function (req, res, next) {
   var friendName = req.body.friendName;
   User.findOne({name: friendName},  '-salt -hashedPassword', function (err, friend) {
