@@ -34,7 +34,7 @@ angular.module('travelPhotosApp')
      return arr;
      };
 
-    this.addLocation = function(longitude, latitude) {
+    this.addLocation = function(longitude, latitude, instagramLink) {
 
       ctrl.addedPlace = false;
 
@@ -46,7 +46,7 @@ angular.module('travelPhotosApp')
       };
 
       placeService.addPlace(place, $http, ctrl, 
-                       googleMapsService, $scope, false);
+                       googleMapsService, false, instagramLink);
 
      };
 }); 

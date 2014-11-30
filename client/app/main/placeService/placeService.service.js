@@ -11,8 +11,14 @@ angular.module('travelPhotosApp')
       //saved by the current user. The googleMapsService.initialize method is
       //then called in order to add markers to the map
         addPlace : function(place, $http, ctrl, 
-                     googleMapsService, $scope, initializeMap) {
-              $http.post("api/users/place", place) 
+                     googleMapsService, initializeMap,
+                     instagramLink) { 
+              //instagramLink is only passed as an argument when a place is added
+              //by clicking on button below a friend's post
+              $http.post("api/users/place", 
+                    {placeObj: place,
+                     link: instagramLink
+                    }) 
                 .success(function(data) {
                   ctrl.myPlacesList = data;
                   if (initializeMap) googleMapsService.initialize(ctrl);

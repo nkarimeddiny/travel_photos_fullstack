@@ -218,10 +218,11 @@ exports.removePost = function(req, res, next) {
 //populates the places array, and returns the populated array to the user
 exports.addPlace = function(req, res, next) {
   Place.create({user: req.user._id, 
-                location: req.body.location,
-                text: req.body.text,
-                latitude: req.body.latitude,
-                longitude: req.body.longitude
+                location: req.body.placeObj.location,
+                text: req.body.placeObj.text,
+                latitude: req.body.placeObj.latitude,
+                longitude: req.body.placeObj.longitude,
+                instagramLink: req.body.link
                 }, 
     function(err, place) {
       if (err) return next(err);

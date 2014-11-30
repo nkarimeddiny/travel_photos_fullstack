@@ -28,7 +28,7 @@ angular.module('travelPhotosApp')
               $scope.$apply();
         
               placeService.addPlace(place, $http, ctrl,
-                                googleMapsService, $scope, true);
+                                googleMapsService, true);
           }
          
           else {

@@ -9,7 +9,8 @@ var PlaceSchema = new Schema({
    location: String,
    text: String,
    latitude : String,
-   longitude : String
+   longitude : String,
+   instagramLink: String
 });
 
 module.exports = mongoose.model('Place', PlaceSchema);
