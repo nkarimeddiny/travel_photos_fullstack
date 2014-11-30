@@ -7,6 +7,7 @@ angular.module('travelPhotosApp')
     var ctrl = this;
     
     this.errorOccurred = false;
+    this.addedPlace = false;
 
     this.userPosts = [];
     postingService.retrieveFriendPosts($http, ctrl, 
@@ -34,6 +35,8 @@ angular.module('travelPhotosApp')
      };
 
     this.addLocation = function(longitude, latitude) {
+
+      ctrl.addedPlace = false;
 
       var place = {
           location: "visited by " + $stateParams.friendName,

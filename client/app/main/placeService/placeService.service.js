@@ -16,6 +16,7 @@ angular.module('travelPhotosApp')
                 .success(function(data) {
                   ctrl.myPlacesList = data;
                   if (initializeMap) googleMapsService.initialize(ctrl);
+                  ctrl.addedPlace = true;
               })
                 .error(function(data) {
                   ctrl.errorOccurred = true;
