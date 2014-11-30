@@ -21,6 +21,8 @@
       </div>
     </div>
 
+    <h2 ng-show="main.errorOccurred" class="text-warning">An error occurred. Please try again.</h2>
+
     <form class="placeForm" name="placeForm" ng-submit="main.addPlace()" novalidate>
       <label for="placeInput">Enter a Place-to-Go (country, city, specific museum, national park, etc.)</label><br/>
       <span class="text-warning" ng-show="main.placeInputError">Please enter a place<br/></span>

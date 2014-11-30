@@ -12,10 +12,13 @@ angular.module('travelPhotosApp')
       //then called in order to add markers to the map
         addPlace : function(place, $http, ctrl, googleMapsService, $scope) {
               $http.post("api/users/place", place) 
-                  .success(function(data) {
-                      ctrl.myPlacesList = data;
-                      googleMapsService.initialize(ctrl);
-              });
+                .success(function(data) {
+                  ctrl.myPlacesList = data;
+                  googleMapsService.initialize(ctrl);
+              })
+                .error(function(data) {
+                  ctrl.errorOccurred = true;
+              })
        },
 
        //retrievePlaces method is called by main controller, and sends a 
@@ -26,10 +29,13 @@ angular.module('travelPhotosApp')
        //add markers to the map 
         retrievePlaces : function($http, ctrl, googleMapsService, $rootScope) {
               $http.get("api/users/places") 
-                  .success(function(data) {
-                      ctrl.myPlacesList = data.placesToGo;
-                      googleMapsService.initialize(ctrl);
-              });
+                .success(function(data) {
+                  ctrl.myPlacesList = data.placesToGo;
+                  googleMapsService.initialize(ctrl);
+              })
+                 .error(function(data) {
+                    ctrl.errorOccurred = true;
+              })
        },
 
        //removePlace method is called by main controller, and takes an id 
@@ -39,9 +45,12 @@ angular.module('travelPhotosApp')
        //saved by the current user
         removePlace : function(placeId, $http, ctrl, googleMapsService) {
               $http.post("api/users/removePlace", {placeId : placeId}) 
-                  .success(function(data) {
-                      document.location.reload();
-              });
+                .success(function(data) {
+                  document.location.reload();
+              })
+                .error(function(data) {
+                  ctrl.errorOccurred = true;
+              })
        }
     };
   });

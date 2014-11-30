@@ -7,6 +7,8 @@ var app = angular.module('travelPhotosApp');
                                googleGeolocationService, placeService) {
     var ctrl = this;
 
+    this.errorOccurred = false;
+
     this.myPlacesList = [];
 
     placeService.retrievePlaces($http, ctrl, googleMapsService);
