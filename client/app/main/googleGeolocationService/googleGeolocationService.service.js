@@ -24,8 +24,6 @@ angular.module('travelPhotosApp')
                 latitude : results[0].geometry.location.lat(),
                 longitude : results[0].geometry.location.lng()
               };
-
-              $scope.$apply();
         
               placeService.addPlace(place, $http, ctrl,
                                 googleMapsService, true);
