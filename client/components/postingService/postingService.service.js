@@ -18,10 +18,13 @@ angular.module('travelPhotosApp')
                        {imageLink: imageLink, 
                         instagramLink: instagramLink, 
                         imageId: imageId, caption: caption})
-                 .success( function(data) {
-                    ctrl.userPosts = data;
-                    ctrl.displayNum++;
-                  });
+               .success( function(data) {
+                  ctrl.userPosts = data;
+                  ctrl.displayNum++;
+               })
+               .error(function(data) {
+                  ctrl.errorOccurred = true;
+               });
         },
 
         //retrieveMyPosts is called by myPosts controller,
@@ -41,20 +44,26 @@ angular.module('travelPhotosApp')
                     ctrl.lowResImageIds[post.imageId] = "hello";
                   });
                   ctrl.displayNum = Math.min(3, ctrl.userPosts.length);
-              });
-      },
+                })
+                .error(function(data) {
+                  ctrl.errorOccurred = true;
+                });
+        },
 
         //retrieveFriendPosts is called by friendPosts controller, 
         //and retrieves a friend's posts. The callback function 
         //assigns userPosts to data.posts, which is an array 
         //containing an object for each of the user's posts.
         retrieveFriendPosts : 
-            function($http, ctrl, friendName) {
-               $http.get("api/users/posts/" + friendName)
-                  .success( function(data) {
-                    ctrl.userPosts = data.posts;
-                    ctrl.displayNum = Math.min(3, ctrl.userPosts.length);
-                 });
+          function($http, ctrl, friendName) {
+             $http.get("api/users/posts/" + friendName)
+                .success( function(data) {
+                  ctrl.userPosts = data.posts;
+                  ctrl.displayNum = Math.min(3, ctrl.userPosts.length);
+                })
+                .error(function(data) {
+                  ctrl.errorOccurred = true;
+                });
         },
 
         //removePost is called by myPosts controller. It takes
@@ -74,6 +83,9 @@ angular.module('travelPhotosApp')
                     ctrl.lowResImageIds[post.imageId] = "hello";
                   });
                   ctrl.displayNum--;
+               })
+                .error(function(data) {
+                  ctrl.errorOccurred = true;
                });
         }
     };

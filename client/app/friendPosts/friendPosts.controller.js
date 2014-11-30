@@ -5,6 +5,9 @@ angular.module('travelPhotosApp')
   	  function ($scope, $stateParams, postingService,
                 $http) {
         var ctrl = this;
+        
+        this.errorOccurred = false;
+
         this.userPosts = [];
         postingService.retrieveFriendPosts($http, ctrl, 
           $stateParams.friendName);

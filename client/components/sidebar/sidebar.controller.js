@@ -5,6 +5,9 @@ var app = angular.module('travelPhotosApp');
 app.controller('FriendslistCtrl', 
   function ($scope, $state, $http, friendsListService, $rootScope) {
    var ctrl = this;
+
+   this.errorOccurred = false;
+
    this.myFriendsList = [];
    this.signedUpUsers = [];
    this.friendsOrderObject = {};

@@ -8,7 +8,9 @@
       {{fpCtrl.friendName}}
 
 
-	 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
+	<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="friendsPosts"> <!-- this is displayed when looking at a friend's posts-->
+
+    <h2 ng-show="fpCtrl.errorOccurred" class="text-warning">An error occurred. Please try again.</h2>
 
 	  <div class="photoContainer postedPhotos" ng-init="i = 0">
 	       <h3>Posted on Travel Photos from Instagram:</h3>

@@ -7,6 +7,8 @@
   <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="myPosts"> <!-- this is displayed when looking at your own posts,
   and also has the entry form for making new posts -->
     
+    <h2 ng-show="mpCtrl.errorOccurred" class="text-warning">An error occurred. Please try again.</h2>
+
     <div id="retrieveInstagramPhotos" class="photoContainer">
       <button class="btn btn-primary" ng-show="mpCtrl.isInstagramUser && !mpCtrl.alreadyAccessedInstagram" ng-click="mpCtrl.accessInstagram()">View 10 most recent Instagram photos</button>
       <button class="text-info" ng-show="mpCtrl.alreadyAccessedInstagram && !mpCtrl.noMoreImages" ng-click="mpCtrl.accessInstagram(mpCtrl.next_max_id)"><em>Show more images</em></button>

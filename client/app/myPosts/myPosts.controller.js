@@ -5,6 +5,9 @@ angular.module('travelPhotosApp')
     function (Auth, $scope, $http, 
               postingService) {
     var ctrl = this;
+
+    this.errorOccurred = false;
+
     this.userPosts = [];
     this.lowResImageIds = {};  //lowResImageIds is used to 
     //determine whether or not an image retrieved from Instagram

@@ -15,9 +15,12 @@ angular.module('travelPhotosApp')
           $http.post("api/users/friend", {
               friend: friend
            })
-             .success( function(data) {
-                ctrl.myFriendsList = data.userFriends; 
-           }); 
+            .success( function(data) {
+              ctrl.myFriendsList = data.userFriends;
+           })
+            .error(function(data) {
+              ctrl.errorOccurred = true;
+           });
       },
 
       //removeFriend method is called by sidebar controller
@@ -33,6 +36,9 @@ angular.module('travelPhotosApp')
            })
              .success( function(data) {
                 ctrl.myFriendsList = data.userFriends;
+           })
+             .error(function(data) {
+                ctrl.errorOccurred = true;
            }); 
       },
 
@@ -51,9 +57,12 @@ angular.module('travelPhotosApp')
           });
          $http.post("api/users/updateFriendsOrder", 
                     {friendsOrder : ctrl.friendsOrderObject})
-             .success( function(data) {
-                 ctrl.myFriendsList = data.userFriends; 
-         });
+            .success( function(data) {
+                ctrl.myFriendsList = data.userFriends; 
+            })
+            .error(function(data) {
+                ctrl.errorOccurred = true;
+            });
       },
 
       //initializeSidebar method is called by sidebar controller
@@ -69,15 +78,17 @@ angular.module('travelPhotosApp')
       initializeSidebar: function(friendSearch, ctrl, $http) {
            $http.get("api/users/sideBarInfo")
              .success( function(data) {
-                  ctrl.myFriendsList = data.userFriends; 
-                  ctrl.signedUpUsers = data.users;
-
-                  friendSearch.autocomplete({
-                    minLength: 2,
-                    source: ctrl.signedUpUsers,
-                    position: { my: "left top", at: "left bottom" },
-                    appendTo: ".ui-widget"
-                  });
+                ctrl.myFriendsList = data.userFriends; 
+                ctrl.signedUpUsers = data.users;
+                friendSearch.autocomplete({
+                  minLength: 2,
+                  source: ctrl.signedUpUsers,
+                  position: { my: "left top", at: "left bottom" },
+                  appendTo: ".ui-widget"
+                });
+            })
+             .error(function(data) {
+                ctrl.errorOccurred = true;
             });
       }
     };
