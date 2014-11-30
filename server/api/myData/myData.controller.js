@@ -189,22 +189,24 @@ exports.removePost = function(req, res, next) {
       Post.remove({_id : postId}, function(err, numberRemoved) {
         if (err) return next(err);
         if (!numberRemoved) return res.status(500).send("error");
-        User.populate(user, { path: 'posts' , model: "Post"}, 
-          function (err, user) {
+        User.populate(user, { path: 'posts' , model: "Post"}, populateCallback);
+        
+        function populateCallback(err, user) {
+           if (err) return next(err);
+           if (!user) return res.status(500).send("error");
+           if (user.posts.length > 0) {
+             user.lastTimePosted = user.posts[user.posts.length - 1].date;
+           }
+           else {
+             user.lastTimePosted = null;
+           }
+           user.save(function(err, updatedUser) {
              if (err) return next(err);
-             if (!user) return res.status(500).send("error");
-             if (user.posts.length > 0) {
-               user.lastTimePosted = user.posts[user.posts.length - 1].date;
-             }
-             else {
-               user.lastTimePosted = null;
-             }
-             user.save(function(err, updatedUser) {
-               if (err) return next(err);
-               if (!updatedUser) return res.status(500).send("error");
-               res.status(200).send(user.posts).end();
-             });
-        });
+             if (!updatedUser) return res.status(500).send("error");
+             res.status(200).send(user.posts).end();
+           });
+        };
+
       });
   });    
 };
