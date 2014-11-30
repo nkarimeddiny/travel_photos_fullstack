@@ -9,7 +9,8 @@
 	<div class="imageDiv">
 	  <a ng-href="{{fpCtrl.userPosts[i].instagramLink}}"><img ng-src="{{fpCtrl.userPosts[i].imageLink}}"/></a>
 	  <div class="geoTagButton">
-    	  <button  ng-show="fpCtrl.userPosts[i].longitude && fpCtrl.userPosts[i].latitude">
+    	  <button  ng-show="fpCtrl.userPosts[i].longitude && fpCtrl.userPosts[i].latitude"
+    	  ng-click="fpCtrl.addLocation(fpCtrl.userPosts[i].longitude, fpCtrl.userPosts[i].latitude)">
 	    	Add location to Places-to-Go
     	  </button>
       </div>

@@ -10,11 +10,12 @@ angular.module('travelPhotosApp')
       //data, which is an array of objects for each place-to-go that has been
       //saved by the current user. The googleMapsService.initialize method is
       //then called in order to add markers to the map
-        addPlace : function(place, $http, ctrl, googleMapsService, $scope) {
+        addPlace : function(place, $http, ctrl, 
+                     googleMapsService, $scope, initializeMap) {
               $http.post("api/users/place", place) 
                 .success(function(data) {
                   ctrl.myPlacesList = data;
-                  googleMapsService.initialize(ctrl);
+                  if (initializeMap) googleMapsService.initialize(ctrl);
               })
                 .error(function(data) {
                   ctrl.errorOccurred = true;
