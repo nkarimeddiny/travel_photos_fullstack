@@ -1,5 +1,5 @@
    <h5>{{image.caption}}</h5>
    <div class="onePhotoBox">
-     <a ng-href="{{image.instagramLink}}"> <img ng-src="{{image.thumbnailLink}}"/> </a>
+     <a ng-href="{{image.instagramLink}}" target="_blank"> <img ng-src="{{image.thumbnailLink}}"/> </a>
    </div>
    <button ng-click="mpCtrl.addPost(image.lowresLink, image.caption, image.instagramLink, image.id, image.longitude, image.latitude); hideThumbnail = true">Post to Travel Photos</button>

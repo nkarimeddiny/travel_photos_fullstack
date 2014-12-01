@@ -7,7 +7,7 @@
 	  <h5 class="caption">Posted: {{fpCtrl.userPosts[i].date | date}}</h5>
 	</div>
 	<div class="imageDiv">
-	  <a ng-href="{{fpCtrl.userPosts[i].instagramLink}}"><img ng-src="{{fpCtrl.userPosts[i].imageLink}}"/></a>
+	  <a ng-href="{{fpCtrl.userPosts[i].instagramLink}}" target="_blank"><img ng-src="{{fpCtrl.userPosts[i].imageLink}}"/></a>
 	  <div class="geoTagButton">
     	  <button  ng-show="fpCtrl.userPosts[i].longitude && fpCtrl.userPosts[i].latitude"
     	  ng-click="fpCtrl.addLocation(fpCtrl.userPosts[i].longitude, fpCtrl.userPosts[i].latitude, fpCtrl.userPosts[i].instagramLink)">

@@ -3,7 +3,7 @@
   have absolute positioning -->
   <div class="placesToGoInnerContainer ">
     <span>{{place.date | date}}</span> <br/>
-    <a ng-if="place.instagramLink" ng-href="{{place.instagramLink}}">
+    <a ng-if="place.instagramLink" ng-href="{{place.instagramLink}}" target="_blank">
       <span class="place">{{place.location}}</span>
     </a> 
     <span ng-if="!place.instagramLink" class="place">{{place.location}}</span> 
