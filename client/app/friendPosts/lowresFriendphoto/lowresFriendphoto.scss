@@ -1,4 +1,9 @@
 
+.geoTagButton {
+	margin-left: auto;
+	margin-right: auto;
+}
+
 
 @media (min-width: 768px) {
 	.geoTagButton {
@@ -9,8 +14,12 @@
 @media (max-width: 767px) {
 	.geoTagButton {
 		width: 306px;
-		margin-left: auto;
-		margin-right: auto;
+    }
+}
+
+@media (max-width: 340px) {
+	.geoTagButton {
+		width: 280px;
     }
 }
 
