@@ -31,6 +31,8 @@ app.controller('FriendslistCtrl',
 
     var friendSearch = $("#friendSearch");
     
+    //timeout is so initializeSidebar is called after retrieveFriendPosts,
+    //and will access updated info for showing or not showing the green dot
     $timeout(friendsListService.initializeSidebar(friendSearch, 
       ctrl, $http), 0);
 
