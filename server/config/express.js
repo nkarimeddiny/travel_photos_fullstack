@@ -42,6 +42,10 @@ module.exports = function(app) {
     app.use(express.static(path.join(config.root, 'public')));
     app.set('appPath', config.root + '/public');
     app.use(morgan('dev'));
+    app.use(function(err, req, res, next) {
+      console.log('ERROR', err);
+      res.status(500).send("error");
+    })
   }
 
   if ('development' === env || 'test' === env) {
