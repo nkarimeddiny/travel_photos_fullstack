@@ -2,3 +2,13 @@
 .onePhotoBox {
   float: left;
 }
+
+@media (max-width: 320px)  {
+
+thumbnail-photo button {
+  -webkit-appearance: none;
+  height: 60px;
+  background-color: white;
+}
+
+}
