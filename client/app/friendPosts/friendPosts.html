@@ -4,7 +4,6 @@
 
    <div ng-include="'components/sidebar/sidebar.html'"></div>
 
-   <div ng-controller = "FriendpostsCtrl as fpCtrl">
       {{fpCtrl.friendName}}
 
 
@@ -30,4 +29,3 @@
 	  <button ng-show="fpCtrl.userPosts.length > fpCtrl.displayNum" class="btn btn-primary" ng-click="fpCtrl.increaseDisplayNum()">See more photos</button>
 		   
 	 </div> <!-- end friendsPosts -->
-  </div> <!-- end FriendsPostsCtrl -->

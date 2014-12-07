@@ -3,7 +3,8 @@
 var app = angular.module('travelPhotosApp');
 
 app.controller('FriendslistCtrl', 
-  function ($scope, $state, $http, friendsListService, $rootScope) {
+  function ($scope, $state, $http, 
+            $timeout, friendsListService, $rootScope) {
    var ctrl = this;
 
    this.errorOccurred = false;
@@ -30,7 +31,8 @@ app.controller('FriendslistCtrl',
 
     var friendSearch = $("#friendSearch");
     
-    friendsListService.initializeSidebar(friendSearch, ctrl, $http);
+    $timeout(friendsListService.initializeSidebar(friendSearch, 
+      ctrl, $http), 0);
 
 
 /////////////////////////////////////////////
