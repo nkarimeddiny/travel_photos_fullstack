@@ -8,7 +8,7 @@ Details on how the app works:
 When user accesses the main page:
 
 
-1.) The main controller calls a method that retrieves the user's list of places-to-go. The request's success callback then calls a method for displaying a Google map, with markers for each of the user's places-to-go.
+1.) The main controller calls a method that retrieves the user's list of places-to-go, and then a method is called for displaying a Google map, with markers for each of the user's places-to-go.
 
 2.) The sidebar controller calls a method to retrieve a list of people the user follows, along with data about whether or not each person has any new posts. If a user has a new post, a green dot is displayed next to their name. 
 
@@ -16,7 +16,7 @@ When user accesses the main page:
 After navigating to My Posts:
 
 
-1.) The myPosts controller calls a method that retrieves the user's posts. In the callback, an object called lowResImageIds is populated with the id of each post. A maximum of 3 images is shown at first. This is because ctrl.displayNum is set to 3, or less, in postingService.retrieveMyPosts and the html file uses ctrl.displayNum to show only that number of images.
+1.) The myPosts controller calls a method that retrieves the user's posts, and then an object called lowResImageIds is populated with the id of each post. A maximum of 3 images is shown at first. This is because ctrl.displayNum is set to 3, or less, in postingService.retrieveMyPosts and the html file uses ctrl.displayNum to show only that number of images.
 
 2.) If the user signed in with Instagram, they will see a button that allows them to see images from their Instagram account. Each time they click the button, 10 images will be retrieved, but if an image's id is contained in lowResImageIds, then it will not be shown.
 
@@ -28,7 +28,7 @@ After clicking on a friend's name to see their photos:
 
 1.) The friendPosts controller calls a method that retrieves the friend's posts. The same logic used to limit the number of posts shown on the My Posts page is used here. 
 
-2.) The sidebar controller initializes the sidebar. Note that the method that initializes the sidebar is wrapped in a $timeout to ensure that it is called after the method that retrieves a friend posts, so that the green dot indicating if a friend has new posts will go away when you look at that friend's photos.
+2.) The sidebar controller initializes the sidebar. Note that the method that initializes the sidebar is wrapped in a $timeout to ensure that it is called after the method that retrieves a friend's posts, so that the green dot indicating if a friend has new posts will go away when you look at that friend's photos.
 
 
 Two ways of adding a place-to-go:
