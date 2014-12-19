@@ -46,7 +46,7 @@ angular.module('travelPhotosApp')
                 .success( function(data) {
                   ctrl.userPosts = data.posts;
                   data.posts.forEach(function(post){
-                    ctrl.lowResImageIds[post.imageId] = "hello";
+                    ctrl.lowResImageIds[post.imageId] = true;
                   });
                   ctrl.displayNum = Math.min(3, ctrl.userPosts.length);
                 })
