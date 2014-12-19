@@ -2,8 +2,8 @@
 
 angular.module('travelPhotosApp')
   .controller('MypostsCtrl', 
-    function (Auth, $scope, $http, 
-              postingService) {
+    function (Auth, $scope, $http, postingService,
+              accessInstagramService) {
     var ctrl = this;
 
     this.errorOccurred = false;
@@ -23,8 +23,6 @@ angular.module('travelPhotosApp')
     //to determine whether or not to show a message to the user that
     //all of their Instagram images have been retrieved
     this.next_max_id; //for retrieving more Instagram photos
-
-    postingService.retrieveMyPosts($http, ctrl);
 
     this.displayNum; //set in postingService
     this.increaseDisplayNum = function() {
@@ -48,6 +46,10 @@ angular.module('travelPhotosApp')
 
     var currentUser = Auth.getCurrentUser();
     this.isInstagramUser = (currentUser.provider === 'instagram');
+    
+    if (this.isInstagramUser) {
+      postingService.retrieveMyPosts($http, ctrl);
+    }
 
     this.addPost = function(imageLink, caption, 
                             instagramLink, imageId, 
@@ -92,21 +94,15 @@ angular.module('travelPhotosApp')
     };
 
     this.accessInstagram = function(next_max_id) {
-        if (!next_max_id) {
-          $http.get("api/users/accessInstagram")
-            .success(function(data) {
-                prepThumbnailImgs(data);
-            });
-        }
-        else {
-          $http.get("api/users/accessInstagram/" + next_max_id)
-            .success(function(data) {
-                prepThumbnailImgs(data);
-            });
-
-        } 
+      var getInstagramPhotos = accessInstagramService.get(next_max_id)
+        .success(function(data) {
+          prepThumbnailImgs(data);
+        })
+        .error(function(error) {
+          ctrl.errorOccurred = true; 
+        })
     };
-
+    
 });
 
 
