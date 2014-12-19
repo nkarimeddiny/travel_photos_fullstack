@@ -76,6 +76,7 @@ angular.module('travelPhotosApp')
       //of people who have signed up for the app, and initializes
       //the autocomplete functionality for friendSearch
       initializeSidebar: function(friendSearch, ctrl, $http) {
+        return function() {
            $http.get("api/users/sideBarInfo")
              .success( function(data) {
                 ctrl.myFriendsList = data.userFriends; 
@@ -90,6 +91,7 @@ angular.module('travelPhotosApp')
              .error(function(data) {
                 ctrl.errorOccurred = true;
             });
+        }
       }
     };
   });
