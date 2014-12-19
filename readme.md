@@ -18,7 +18,7 @@ After navigating to My Posts:
 
 1.) The myPosts controller calls a method that retrieves the user's posts, and then an object called lowResImageIds is populated with the id of each post. A maximum of 3 images is shown at first. This is because ctrl.displayNum is set to 3, or less, in postingService.retrieveMyPosts and the html file uses ctrl.displayNum to show only that number of images.
 
-2.) If the user signed in with Instagram, they will see a button that allows them to see images from their Instagram account. Each time they click the button, 10 images will be retrieved, but if an image's id is contained in lowResImageIds, then it will not be shown.
+2.) If the user signed in with Instagram, they will see a button that allows them to retrieve images from their Instagram account. Each time they click the button, 10 images will be retrieved, but if an image's id is contained in lowResImageIds, then it will not be shown.
 
 3.) The sidebar controller initializes the sidebar.
 
