@@ -96,7 +96,6 @@ angular.module('travelPhotosApp')
     this.accessInstagram = function(next_max_id) {
       var getInstagramPhotos = accessInstagramService.get(next_max_id)
         .success(function(data) {
-          console.log("data: ", data);
           prepThumbnailImgs(data);
         })
         .error(function(error) {

@@ -4,8 +4,8 @@ angular.module('travelPhotosApp')
   .factory('placeService', function () {
 
     return {
-      //addPlace method is called by googleGeolocationService, and takes a 
-      //place object, which has info about a place-to-go. It sends the
+      //addPlace method is called by googleGeolocationService and placeService, 
+      //and takes a place object, which has info about a place-to-go. It sends the
       //place object to the server, then assigns myPlacesList to the returned
       //data, which is an array of objects for each place-to-go that has been
       //saved by the current user. The googleMapsService.initialize method is
