@@ -39,4 +39,7 @@ Two ways of adding a place-to-go:
 2.) If a friend has a geotagged post, you can click on the button below the post and the geolocation associated with that post is sent to the database.
 
 
+Note about API endpoints:
 
+
+All API calls from the client go to api/users, but routes that I created are listed in api/myData/myRouter.js. The router.all("/*", myRouter) statement in api/users/index.js connects these two files. 
