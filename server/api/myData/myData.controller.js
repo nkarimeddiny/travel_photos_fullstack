@@ -13,12 +13,13 @@ var jwt = require('jsonwebtoken');
 //their instagram id number
 exports.getInstagramPhotos = function(req, res, next) {
     var user = req.user;
-    var photos = user.instagramCall(req.params.nextMaxId);
-
-    console.log("PHOTOS: ", photos);
-
-    if (photos === "error") {return res.status(500).send("error");}
-    else {res.status(200).send(photos)}
+    var photos = user.instagramCall(req.params.nextMaxId)
+      .then(function(photos) {
+        res.status(200).send(photos);
+      })
+      .then(function(error) {
+        res.status(500).send("error");
+      });
 };
 
 

@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'instagram', 'google'];
 var request = require('request');
+var q = require("q");
 
 var User;
 
@@ -256,7 +257,7 @@ UserSchema.methods.updateLastTimeChecked = function(user) {
 
 
 UserSchema.methods.instagramCall = function(nextMaxId) {
-  
+  var deferred = q.defer();
   if (nextMaxId) {
     var url = "https://api.instagram.com/v1/users/" + this.instagram.data.id + 
             "/media/recent/?access_token=" + this.accessToken + "&max_id=" + 
@@ -268,14 +269,11 @@ UserSchema.methods.instagramCall = function(nextMaxId) {
   }
 
   request.get(url, function(err, response, body) {
-    if (err) {
-      return "error";
-    }
-    else {
-      console.log("body: ", body)
-      return body;
-    }
-  });
+    if (err) { deferred.reject("error"); }
+    else { deferred.resolve(body); };
+    });
+
+  return deferred.promise;
 
 };
 
