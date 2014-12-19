@@ -6,7 +6,6 @@ var Place = require('../place/place.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
-var request = require('request');
 
 //getInstagramPhotos makes an api call to Instagram for a user who has already authorized
 //the travelPhotos app to access their photos. Whenever a user signs into travelPhotos
@@ -14,95 +13,14 @@ var request = require('request');
 //their instagram id number
 exports.getInstagramPhotos = function(req, res, next) {
     var user = req.user;
-    if (req.params.nextMaxId) {
-      var url = "https://api.instagram.com/v1/users/" + user.instagram.data.id + 
-                 "/media/recent/?access_token=" + user.accessToken + "&max_id=" + req.params.nextMaxId;
-    }
-    else {
-      var url = "https://api.instagram.com/v1/users/" + user.instagram.data.id + 
-                 "/media/recent/?access_token=" + user.accessToken + "&count=10";
-    } 
-    request.get(url, function(err, response, body) {
-        if (err) {
-          res.status(500).send("error");
-        }
-        else {
-          res.status(200).send(body);
-        }
-    });
+    var photos = user.instagramCall(req.params.nextMaxId);
+
+    console.log("PHOTOS: ", photos);
+
+    if (photos === "error") {return res.status(500).send("error");}
+    else {res.status(200).send(photos)}
 };
 
-//populateUserAndFriendList is a helper function called by 4 of the user.controller
-//functions. It populates a user's array of friends, then iterates through the array
-//and compares the last time each friend posted against the last time the user checked
-//their posts, to determine if the friend has one or more unchecked posts. While
-//iterating, it also builds the friendList array, with friends in the correct order.
-//If populateUserAndFriendList was called by updateFriendsOrder, before building the 
-//friendList array it will first adjust each friend's orderNumber according to user
-//input. A new friendList array is then created using the filter method, with any 
-//null elements filtered out. Depending on where the populateUserAndFriendList function
-//was called from, friendList may be sent back to the client at this point, but if called
-//from updateFriendsOrder, the updated user document must first be saved. If called from
-//sideBarInfo, a list of all signed-up users is generated.
-var populateUserAndFriendList = function(res, updatedUser, users, newFriendsOrder) {
-      
-      User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, 
-          
-          function (err, updatedUser) {
-            if (err) return next(err);
-            if (!updatedUser) return res.status(500).send("error");
-          
-            var friendList = [];
-            updatedUser.friends.forEach(function(aFriend){
-      
-              if (newFriendsOrder) {
-                aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
-              }
-      
-              var uncheckedPost = false;  
-      
-              if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
-                uncheckedPost = true;
-              }
-
-              //friends are properly ordered by adding them to the friendList
-              //array at the index corresponding to their orderNumber. 
-              //If one or more friends have been removed since the last time
-              //updateFriendsOrder was called, there will be one or more indices
-              //in the friendList array which are not assigned to an element,
-              //and will therefore be null
-              friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
-                                               uncheckedPost: uncheckedPost};
-            });
-            
-            friendList = friendList.filter(function(el){
-              return el !== null;
-            }); 
-            
-            if (users) {
-              var userList = [];
-            
-              users.forEach(function(aUser){
-                userList.push(aUser.name);
-              });
-            
-              res.status(200).send({"username": updatedUser.name, userFriends: friendList, 
-                        "users": userList}).end();
-            }
-            
-            else if (newFriendsOrder) {          
-              updatedUser.save(function(err, user){
-                if (err) return next(err);
-                if (!user) return res.status(500).send("error");
-                res.status(200).send({userFriends: friendList});
-              });          
-            }
-            
-            else {
-              res.status(200).send({userFriends: friendList});
-            }
-      });
-};
 
 //addPost creates a new Post document, then adds the id of the new post
 //to the current user's posts array. The user's lastTimePosted is also
@@ -118,16 +36,19 @@ exports.addPost = function(req, res, next) {
     function(err, post) {
       if (err) return next(err);
       if (!post) return res.status(500).send("error");
+
       req.user.posts.push(post._id);
       req.user.lastTimePosted = Date.now();
+
       req.user.save(function(err, user) {
         if (err) return next(err);
         if (!user) return res.status(500).send("error");
+
         User.populate(user, { path: 'posts' , model: "Post"},
           function (err, user) {
             if (err) return next(err);
             if (!user) return res.status(500).send("error");
-            res.status(200).send(user.posts).end();
+            res.status(200).send(user.posts);
           });
       });
     })
@@ -147,21 +68,18 @@ exports.getPosts = function(req, res, next) {
     User.findOne({name: req.params.friendName}, '-salt -hashedPassword', function(err, user) {
       if (err) return next(err);
       if (!user) return res.status(500).send("error");
+
       User.populate(user, { path: "posts" , model: "Post"}, function (err, user) {
-         if (err) return next(err);
-         if (!user) return res.status(500).send("error");
-         //if retrieving a friend's posts, also retrieve current user's document, 
-         //iterate through friends' id's, find the friend, and update lastTimeChecked   
-          me.friends.forEach(function(aFriend) {
-            if (String(aFriend.friend) === String(user._id)) {
-              aFriend.lastTimeChecked = Date.now();
-            }
-          });
-          me.save(function(err, updatedUser) {
-              if (err) return next(err);
-              if (!updatedUser) return res.status(500).send("error");
-              res.status(200).send({posts: user.posts}).end();
-          });
+        if (err) return next(err);
+        if (!user) return res.status(500).send("error");
+
+        me = me.updateLastTimeChecked(user);
+
+        me.save(function(err, updatedUser) {
+          if (err) return next(err);
+          if (!updatedUser) return res.status(500).send("error");
+          res.status(200).send({posts: user.posts}).end();
+        });
       });
     });
   }
@@ -173,6 +91,7 @@ exports.getPosts = function(req, res, next) {
       if (!user) return res.status(500).send("error");
       res.status(200).send({posts: user.posts}).end();
     });
+
   }
 
 };
@@ -184,32 +103,32 @@ exports.getPosts = function(req, res, next) {
 //of their posts
 exports.removePost = function(req, res, next) {
   var postId = req.body.postId;
-    req.user.posts.remove(postId);
-    req.user.save(function(err, user) {
-      if (err) return next(err);
-      if (!user) return res.status(500).send("error");
-      Post.remove({_id : postId}, function(err, numberRemoved) {
-        if (err) return next(err);
-        if (!numberRemoved) return res.status(500).send("error");
-        User.populate(user, { path: 'posts' , model: "Post"}, populateCallback);
-        
-        function populateCallback(err, user) {
-           if (err) return next(err);
-           if (!user) return res.status(500).send("error");
-           if (user.posts.length > 0) {
-             user.lastTimePosted = user.posts[user.posts.length - 1].date;
-           }
-           else {
-             user.lastTimePosted = null;
-           }
-           user.save(function(err, updatedUser) {
-             if (err) return next(err);
-             if (!updatedUser) return res.status(500).send("error");
-             res.status(200).send(user.posts).end();
-           });
-        };
+  req.user.posts.remove(postId);
 
-      });
+  req.user.save(function(err, user) {
+    if (err) return next(err);
+    if (!user) return res.status(500).send("error");
+    
+    Post.remove({_id : postId}, function(err, numberRemoved) {
+      if (err) return next(err);
+      if (!numberRemoved) return res.status(500).send("error");
+      
+      User.populate(user, { path: 'posts' , model: "Post"}, populateCallback);
+      
+      function populateCallback(err, user) {
+         if (err) return next(err);
+         if (!user) return res.status(500).send("error");
+         
+         user.lastTimePosted = user.changeLastTimePosted();
+
+         user.save(function(err, updatedUser) {
+           if (err) return next(err);
+           if (!updatedUser) return res.status(500).send("error");
+           res.status(200).send(user.posts).end();
+         });
+      };
+
+    });
   });    
 };
 
@@ -228,9 +147,11 @@ exports.addPlace = function(req, res, next) {
       if (err) return next(err);
       if (!place) return res.status(500).send("error");
       req.user.places.push(place._id);
+      
       req.user.save(function(err, user) {
         if (err) return next(err);
         if (!user) return res.status(500).send("error");
+        
         User.populate(user, { path: 'places' , model: "Place"}, 
           function (err, user) {
             if (err) return next(err);
@@ -257,13 +178,17 @@ exports.getPlaces = function(req, res, next) {
 //populated places array to the user 
 exports.removePlace = function(req, res, next) {
   var placeId = req.body.placeId;
+
   req.user.places.remove(placeId);
+
   req.user.save(function(err, user) {
     if (err) return next(err);
     if (!user) return res.status(500).send("error");
+  
     Place.remove({_id : placeId}, function(err, numberRemoved) {
       if (err) return next(err);
       if (!numberRemoved) return res.status(500).send("error");
+  
       User.populate(user, { path: 'places' , model: "Place"}, 
         function (err, user) {
           if (err) return next(err);
@@ -274,58 +199,106 @@ exports.removePlace = function(req, res, next) {
   });
 };
 
-//updateFriendsOrder calls populateUserAndFriendList, passing references to 
-//the user's document and req.body.friendsOrder
 exports.updateFriendsOrder = function (req, res, next) {
-  populateUserAndFriendList(res, req.user, null, req.body.friendsOrder);
+
+  User.populate(req.user, { path: 'friends.friend' , model: "User"}, 
+      
+    function (err, updatedUser) {
+      if (err) return next(err);
+      if (!updatedUser) return res.status(500).send("error");
+
+      var friendList = updatedUser.makeFriendList(req.body.friendsOrder);
+            
+      updatedUser.save(function(err, user){
+        if (err) return next(err);
+        if (!user) return res.status(500).send("error");
+        res.status(200).send({userFriends: friendList});
+      });          
+        
+  });
+
 };
 
-//addFriend finds the document of the friend being added (in order to find that friend's id),
-//and adds an object to the current user's friends array. It then saves the updated user 
-//document, and calls populateUserAndFriendList, passing the reference to the 
-//updatedUser document
+
 exports.addFriend = function (req, res, next) {
+
+  var user = req.user;
+
   User.findOne({name: req.body.friend},  '-salt -hashedPassword', function (err, friend) {
     if (err) return next(err);
     if (!friend) return res.status(500).send("error");
-    var len = req.user.friends.length;
-    req.user.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
-    req.user.save(function(err, updatedUser){
+
+    user.friends = user.updateFriendsArr(friend);
+
+    user.save(function(err, updatedUser){
       if (err) return next(err);
       if (!updatedUser) return res.status(500).send("error");
-      populateUserAndFriendList(res, updatedUser, null, null);
-    });
-  });
-};
 
-//sideBarInfo finds all users' documents, and passes references to the current user's
-//document and an array of all users' documents to populateUserAndFriendList
+      User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, 
+          
+        function (err, updatedUser) {
+          if (err) return next(err);
+          if (!updatedUser) return res.status(500).send("error");
+                      
+          var friendList = updatedUser.makeFriendList();
+                    
+          res.status(200).send({userFriends: friendList});
+        
+        });
+
+  });
+ });
+}  
+
 exports.sideBarInfo = function(req, res, next) {
   User.find({}, '-salt -hashedPassword', function (err, users) {
     if (err) return next(err);
     if (!users) return res.status(500).send("error");
-    populateUserAndFriendList(res, req.user, users, null);
+
+      User.populate(req.user, { path: 'friends.friend' , model: "User"}, 
+      
+        function (err, updatedUser) {
+          if (err) return next(err);
+          if (!updatedUser) return res.status(500).send("error");
+          
+          var friendList = updatedUser.makeFriendList();
+          
+          var userList = User.makeUserList(users);
+
+          res.status(200).send({"username": updatedUser.name, userFriends: friendList, 
+                      "users": userList}).end();
+       });
   });
 };
 
 //removeFriend finds the document of the friend being removed (in order
 //to find their id), then iterates through the current user's array of friend 
 //objects, creating a new array of friend objects (newFriendsArr) that does not 
-//include the removed friend. It then assigns the user's friends field to newFriendsArr 
-//and calls populateUserAndFriendList, passing a reference to the updatedUser document
+//include the removed friend
 exports.removeFriend = function (req, res, next) {
   var friendName = req.body.friendName;
+  var user = req.user;
+
   User.findOne({name: friendName},  '-salt -hashedPassword', function (err, friend) {
     if (err) return next(err);
     if (!friend) return res.status(500).send("error");
-    var newFriendsArr = req.user.friends.filter(function(aFriend) {
-      return String(aFriend.friend) !== String(friend._id);
-    });
-    req.user.friends = newFriendsArr;
-    req.user.save(function(err, updatedUser) {
+
+    user.friends = user.makeNewFriendsArr(friend);
+    
+    user.save(function(err, updatedUser) {
       if (err) return next(err);
       if (!updatedUser) return res.status(500).send("error");
-      populateUserAndFriendList(res, updatedUser, null, null);
-    });
+
+      User.populate(updatedUser, { path: 'friends.friend' , model: "User"}, 
+          
+        function (err, updatedUser) {
+          if (err) return next(err);
+          if (!updatedUser) return res.status(500).send("error");
+          
+          var friendList = updatedUser.makeFriendList();
+          
+          res.status(200).send({userFriends: friendList});
+        });
   });
-};
+ });
+}

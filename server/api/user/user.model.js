@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'instagram', 'google'];
+var request = require('request');
 
 var User;
 
@@ -170,6 +171,123 @@ UserSchema.methods = {
     var salt = new Buffer(this.salt, 'base64');
     return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
   }
+};
+
+
+//makeFriendList iterates through the array of a user's friends and compares the 
+//last time each friend posted against the last time the user checked
+//their posts, to determine if the friend has one or more unchecked posts. While
+//iterating, it also builds the friendList array, with friends in the correct order.
+//If populateUserAndFriendList was called by updateFriendsOrder, before building the 
+//friendList array it will first adjust each friend's orderNumber according to user
+//input. 
+UserSchema.methods.makeFriendList = function(newFriendsOrder) {
+  var friendList = [];
+  this.friends.forEach(function(aFriend){
+
+    if (newFriendsOrder) {
+      aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
+    }
+
+    var uncheckedPost = false;  
+
+    if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
+      uncheckedPost = true;
+    }
+
+    //friends are properly ordered by adding them to the friendList
+    //array at the index corresponding to their orderNumber. 
+    //If one or more friends have been removed since the last time
+    //updateFriendsOrder was called, there will be one or more indices
+    //in the friendList array which are not assigned to an element,
+    //and will therefore be null
+    friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
+                                     uncheckedPost: uncheckedPost};
+
+  });
+    
+    friendList = friendList.filter(function(el){
+      return el !== null;
+    }); 
+  
+  return friendList;
+}
+
+UserSchema.methods.makeNewFriendsArr = function(friend) {
+
+  return this.friends.filter(function(aFriend) {
+    return String(aFriend.friend) !== String(friend._id);
+  });
+
+}
+
+UserSchema.methods.updateFriendsArr = function(friend) {
+
+  var len = this.friends.length;
+  this.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
+  
+  return this.friends;
+}
+
+UserSchema.methods.changeLastTimePosted = function() {
+
+  if (this.posts.length > 0) {
+    this.lastTimePosted = this.posts[this.posts.length - 1].date;
+  }
+  else {
+    this.lastTimePosted = null;
+  }
+
+  return this.lastTimePosted;
+
+}
+
+UserSchema.methods.updateLastTimeChecked = function(user) {
+  
+  this.friends.forEach(function(aFriend) {
+    if (String(aFriend.friend) === String(user._id)) {
+      aFriend.lastTimeChecked = Date.now();
+    }
+  });
+
+  return this;
+
+}
+
+
+UserSchema.methods.instagramCall = function(nextMaxId) {
+  
+  if (nextMaxId) {
+    var url = "https://api.instagram.com/v1/users/" + this.instagram.data.id + 
+            "/media/recent/?access_token=" + this.accessToken + "&max_id=" + 
+            nextMaxId;
+  }
+  else {
+    var url = "https://api.instagram.com/v1/users/" + this.instagram.data.id + 
+              "/media/recent/?access_token=" + this.accessToken + "&count=10"; 
+  }
+
+  request.get(url, function(err, response, body) {
+    if (err) {
+      return "error";
+    }
+    else {
+      console.log("body: ", body)
+      return body;
+    }
+  });
+
+};
+
+UserSchema.statics.makeUserList = function(users) {
+
+  var userList = [];
+            
+  users.forEach(function(aUser){
+    userList.push(aUser.name);
+  });
+
+  return userList;
 };
 
 module.exports = mongoose.model('User', UserSchema);
