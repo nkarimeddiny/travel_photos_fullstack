@@ -243,10 +243,10 @@ UserSchema.methods.changeLastTimePosted = function() {
 
 }
 
-UserSchema.methods.updateLastTimeChecked = function(user) {
+UserSchema.methods.updateLastTimeChecked = function(friend) {
   
   this.friends.forEach(function(friendObj) {
-    if (String(friendObj.friend) === String(user._id)) {
+    if (String(friendObj.friend) === String(friend._id)) {
       friendObj.lastTimeChecked = Date.now();
     }
   });
