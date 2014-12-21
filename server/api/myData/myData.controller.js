@@ -74,7 +74,7 @@ exports.getPosts = function(req, res, next) {
         if (err) return next(err);
         if (!user) return res.status(500).send("error");
 
-        me = me.updateLastTimeChecked(user);
+        me.updateLastTimeChecked(user);
 
         me.save(function(err, updatedUser) {
           if (err) return next(err);
@@ -120,7 +120,7 @@ exports.removePost = function(req, res, next) {
          if (err) return next(err);
          if (!user) return res.status(500).send("error");
          
-         user.lastTimePosted = user.changeLastTimePosted();
+         user.changeLastTimePosted();
 
          user.save(function(err, updatedUser) {
            if (err) return next(err);
@@ -229,7 +229,7 @@ exports.addFriend = function (req, res, next) {
     if (err) return next(err);
     if (!friend) return res.status(500).send("error");
 
-    user.friends = user.updateFriendsArr(friend);
+    user.updateFriendsArr(friend);
 
     user.save(function(err, updatedUser){
       if (err) return next(err);

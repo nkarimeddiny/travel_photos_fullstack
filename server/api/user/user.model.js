@@ -214,20 +214,19 @@ UserSchema.methods.makeFriendList = function(newFriendsOrder) {
   return friendList;
 }
 
+UserSchema.methods.updateFriendsArr = function(friend) {
+
+  var len = this.friends.length;
+  this.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
+  
+}
+
 UserSchema.methods.makeNewFriendsArr = function(friend) {
 
   return this.friends.filter(function(friendObj) {
     return String(friendObj.friend) !== String(friend._id);
   });
 
-}
-
-UserSchema.methods.updateFriendsArr = function(friend) {
-
-  var len = this.friends.length;
-  this.friends.push({friend: friend._id, orderNumber: len,lastTimeChecked: ""});
-  
-  return this.friends;
 }
 
 UserSchema.methods.changeLastTimePosted = function() {
@@ -239,8 +238,6 @@ UserSchema.methods.changeLastTimePosted = function() {
     this.lastTimePosted = null;
   }
 
-  return this.lastTimePosted;
-
 }
 
 UserSchema.methods.updateLastTimeChecked = function(friend) {
@@ -250,8 +247,6 @@ UserSchema.methods.updateLastTimeChecked = function(friend) {
       friendObj.lastTimeChecked = Date.now();
     }
   });
-
-  return this;
 
 }
 
