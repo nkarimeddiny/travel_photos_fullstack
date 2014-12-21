@@ -184,15 +184,15 @@ UserSchema.methods = {
 //input. 
 UserSchema.methods.makeFriendList = function(newFriendsOrder) {
   var friendList = [];
-  this.friends.forEach(function(aFriend){
+  this.friends.forEach(function(friendObj){
 
     if (newFriendsOrder) {
-      aFriend.orderNumber = newFriendsOrder[aFriend.friend.name];
+      friendObj.orderNumber = newFriendsOrder[friendObj.friend.name];
     }
 
     var uncheckedPost = false;  
 
-    if (aFriend.friend.lastTimePosted > aFriend.lastTimeChecked) {
+    if (friendObj.friend.lastTimePosted > friendObj.lastTimeChecked) {
       uncheckedPost = true;
     }
 
@@ -202,7 +202,7 @@ UserSchema.methods.makeFriendList = function(newFriendsOrder) {
     //updateFriendsOrder was called, there will be one or more indices
     //in the friendList array which are not assigned to an element,
     //and will therefore be null
-    friendList[aFriend.orderNumber] = {name: aFriend.friend.name, 
+    friendList[friendObj.orderNumber] = {name: friendObj.friend.name, 
                                      uncheckedPost: uncheckedPost};
 
   });
@@ -216,8 +216,8 @@ UserSchema.methods.makeFriendList = function(newFriendsOrder) {
 
 UserSchema.methods.makeNewFriendsArr = function(friend) {
 
-  return this.friends.filter(function(aFriend) {
-    return String(aFriend.friend) !== String(friend._id);
+  return this.friends.filter(function(friendObj) {
+    return String(friendObj.friend) !== String(friend._id);
   });
 
 }
@@ -245,9 +245,9 @@ UserSchema.methods.changeLastTimePosted = function() {
 
 UserSchema.methods.updateLastTimeChecked = function(user) {
   
-  this.friends.forEach(function(aFriend) {
-    if (String(aFriend.friend) === String(user._id)) {
-      aFriend.lastTimeChecked = Date.now();
+  this.friends.forEach(function(friendObj) {
+    if (String(friendObj.friend) === String(user._id)) {
+      friendObj.lastTimeChecked = Date.now();
     }
   });
 
