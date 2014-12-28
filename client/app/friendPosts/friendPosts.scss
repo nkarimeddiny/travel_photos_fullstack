@@ -5,13 +5,11 @@
     clear: both
   }
 
+  /* applies to every 4th photo */
   lowres-friendphoto:nth-child(3n + 1) {
     @extend .clear1;
   }
 }
-
-
-
 
 
 @media (min-width: 900px) and (max-width: 1329px) {
@@ -19,15 +17,11 @@
     clear: both;
   }
 
-  /* default is that every third photo
-  should have clearfix class */
-  lowres-friendphoto:nth-child(2n+1) {
+  /* applies to every 3rd photo */
+  lowres-friendphoto:nth-child(2n + 1) {
       @extend .clear2;
   }
 }
-
-
-
 
 
 .photo {

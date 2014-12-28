@@ -5,10 +5,12 @@
     clear: both
   }
 
+  /* applies to every 4th photo */
   lowres-photo:nth-child(3n + 1) {
     @extend .aclear;
   }
 
+  /* applies to every 7th photo */
   thumbnail-photo:nth-child(6n + 1) {
     @extend .aclear;
   }
@@ -19,12 +21,12 @@
     clear: both;
   }
 
-  /* default is that every third photo
-  should have clearfix class */
+  /* applies to every 3rd photo */
   lowres-photo:nth-child(2n + 1) {
       @extend .bclear;
   }
 
+  /* applies to every 4th photo */
   thumbnail-photo:nth-child(3n + 1) {
       @extend .bclear;
   }
@@ -35,6 +37,7 @@
     clear: both;
   }
 
+  /* applies to every 3rd photo */
   thumbnail-photo:nth-child(2n + 1) {
       @extend .cclear;
   }
