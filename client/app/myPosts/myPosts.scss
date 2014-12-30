@@ -5,12 +5,12 @@
     clear: both
   }
 
-  /* applies to every 4th photo */
+  /* applies to photos 1,4,7... */
   lowres-photo:nth-child(3n + 1) {
     @extend .aclear;
   }
 
-  /* applies to every 7th photo */
+  /* applies to photos 1,7,13... */
   thumbnail-photo:nth-child(6n + 1) {
     @extend .aclear;
   }
@@ -21,12 +21,12 @@
     clear: both;
   }
 
-  /* applies to every 3rd photo */
+  /* applies to odd photos */
   lowres-photo:nth-child(2n + 1) {
       @extend .bclear;
   }
 
-  /* applies to every 4th photo */
+  /* applies to photos 1,4,7... */
   thumbnail-photo:nth-child(3n + 1) {
       @extend .bclear;
   }
@@ -37,7 +37,7 @@
     clear: both;
   }
 
-  /* applies to every 3rd photo */
+  /* applies to odd photos */
   thumbnail-photo:nth-child(2n + 1) {
       @extend .cclear;
   }

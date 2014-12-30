@@ -5,7 +5,7 @@
     clear: both
   }
 
-  /* applies to every 4th photo */
+  /* applies to photos 1,4,7... */
   lowres-friendphoto:nth-child(3n + 1) {
     @extend .clear1;
   }
@@ -17,7 +17,7 @@
     clear: both;
   }
 
-  /* applies to every 3rd photo */
+  /* applies to odd photos */
   lowres-friendphoto:nth-child(2n + 1) {
       @extend .clear2;
   }
