@@ -2,7 +2,7 @@
 
 angular.module('travelPhotosApp')
   .controller('MypostsCtrl', 
-    function (Auth, $scope, $http, postingService,
+    function (Auth, postingService,
               accessInstagramService) {
     var ctrl = this;
 
@@ -48,7 +48,7 @@ angular.module('travelPhotosApp')
     this.isInstagramUser = (currentUser.provider === 'instagram');
     
     if (this.isInstagramUser) {
-      postingService.retrieveMyPosts($http, ctrl);
+      postingService.retrieveMyPosts(ctrl);
     }
 
     this.addPost = function(imageLink, caption, 
@@ -56,11 +56,11 @@ angular.module('travelPhotosApp')
                             longitude, latitude) {
        postingService.addPost(imageLink, caption, instagramLink, 
                               imageId, longitude, latitude,
-                              ctrl, $http);
+                              ctrl);
     };
 
     this.removePost = function(postId) {
-       postingService.removePost($http, ctrl, postId);
+       postingService.removePost(ctrl, postId);
     };
 
     var prepThumbnailImgs = function(data) {

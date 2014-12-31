@@ -2,15 +2,15 @@
 
 angular.module('travelPhotosApp')
   .controller('FriendpostsCtrl', 
-	function ($scope, $stateParams, postingService,
-              placeService, googleMapsService, $http) {
+	function ($stateParams, postingService,
+              placeService, googleMapsService) {
     var ctrl = this;
     
     this.errorOccurred = false;
     this.addedPlace = false;
 
     this.userPosts = [];
-    postingService.retrieveFriendPosts($http, ctrl, 
+    postingService.retrieveFriendPosts(ctrl, 
       $stateParams.friendName);
 
     this.displayNum; //set in postingService
@@ -45,7 +45,7 @@ angular.module('travelPhotosApp')
           longitude: longitude
       };
 
-      placeService.addPlace(place, $http, ctrl, 
+      placeService.addPlace(place, ctrl, 
                        googleMapsService, false, instagramLink);
 
      };

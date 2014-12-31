@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('travelPhotosApp')
-  .factory("googleGeolocationService", function() {
+  .factory("googleGeolocationService", function($http) {
 
       var geocoder = new google.maps.Geocoder();
 
@@ -13,8 +13,7 @@ angular.module('travelPhotosApp')
         //and latitude at the address. A place object is then created, and
         //the postingService.addPlace method is called in order to save this 
         //object
-        geolocate : function(placeForm, ctrl, $scope, googleMapsService,
-                            $http, placeService) {
+        geolocate : function(placeForm, ctrl, $scope, googleMapsService, placeService) {
           geocoder.geocode({ 'address': placeForm.address.value }, 
             function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
@@ -25,8 +24,7 @@ angular.module('travelPhotosApp')
                 longitude : results[0].geometry.location.lng()
               };
         
-              placeService.addPlace(place, $http, ctrl,
-                                googleMapsService, true);
+              placeService.addPlace(place, ctrl, googleMapsService, true);
           }
          
           else {

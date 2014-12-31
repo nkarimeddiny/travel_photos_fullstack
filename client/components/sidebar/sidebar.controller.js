@@ -3,8 +3,7 @@
 var app = angular.module('travelPhotosApp');
 
 app.controller('FriendslistCtrl', 
-  function ($scope, $state, $http, 
-            $timeout, friendsListService, $rootScope) {
+  function ($timeout, friendsListService) {
    var ctrl = this;
 
    this.errorOccurred = false;
@@ -14,7 +13,7 @@ app.controller('FriendslistCtrl',
    this.friendsOrderObject = {};
 
    this.removeFriend = function(friendName) {
-      friendsListService.removeFriend(friendName, ctrl, $http);
+      friendsListService.removeFriend(friendName, ctrl);
    }
 
    this.addFriend = friendsListService.addFriend;
@@ -24,7 +23,7 @@ app.controller('FriendslistCtrl',
    this.sortableOptions = {
       'ui-floating': true,
       stop: function( event, ui ) {
-        friendsListService.updateFriendsOrder(ctrl, $http);
+        friendsListService.updateFriendsOrder(ctrl);
       } 
    };
 ///////////////////////////////////////////////////////   
@@ -34,7 +33,7 @@ app.controller('FriendslistCtrl',
     //timeout is so initializeSidebar is called after retrieveFriendPosts,
     //and will access updated info for showing or not showing the green dot
     $timeout(friendsListService.initializeSidebar(friendSearch, 
-      ctrl, $http), 0)
+      ctrl), 0)
 
 
 /////////////////////////////////////////////
@@ -42,7 +41,7 @@ app.controller('FriendslistCtrl',
 //name, and the addFriend method is called:
 
     $(".ui-widget").on("click", ".ui-menu-item", function(event){
-      ctrl.addFriend($(event.target).text(), ctrl, $http);
+      ctrl.addFriend($(event.target).text(), ctrl);
     });
 
 /////////////////////////////////////////////    

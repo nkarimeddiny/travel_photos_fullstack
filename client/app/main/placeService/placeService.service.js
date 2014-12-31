@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('travelPhotosApp')
-  .factory('placeService', function () {
+  .factory('placeService', function ($http) {
 
     return {
       //addPlace method is called by googleGeolocationService and placeService, 
@@ -10,9 +10,8 @@ angular.module('travelPhotosApp')
       //data, which is an array of objects for each place-to-go that has been
       //saved by the current user. The googleMapsService.initialize method is
       //then called in order to add markers to the map
-        addPlace : function(place, $http, ctrl, 
-                     googleMapsService, initializeMap,
-                     instagramLink) { 
+        addPlace : function(place, ctrl, googleMapsService, 
+                            initializeMap, instagramLink) { 
               //instagramLink is only passed as an argument when a place is added
               //by clicking on button below a friend's post
               $http.post("api/users/place", 
@@ -35,7 +34,7 @@ angular.module('travelPhotosApp')
        //objects for each place-to-go that has been saved by the current user.
        //The googleMapsService.initialize method is then called in order to 
        //add markers to the map 
-        retrievePlaces : function($http, ctrl, googleMapsService, $rootScope) {
+        retrievePlaces : function(ctrl, googleMapsService, $rootScope) {
               $http.get("api/users/places") 
                 .success(function(data) {
                   ctrl.myPlacesList = data.placesToGo;
@@ -51,7 +50,7 @@ angular.module('travelPhotosApp')
        //deletes the place-to-go, then assigns myPlacesList to the returned
        //data, which is an array of objects for each place-to-go that has been
        //saved by the current user
-        removePlace : function(placeId, $http, ctrl, googleMapsService) {
+        removePlace : function(placeId, ctrl, googleMapsService) {
               $http.post("api/users/removePlace", {placeId : placeId}) 
                 .success(function(data) {
                   document.location.reload();

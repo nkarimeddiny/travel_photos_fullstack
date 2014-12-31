@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('travelPhotosApp')
-  .factory("postingService", function() {
+  .factory("postingService", function($http) {
       return {
 
 
@@ -14,7 +14,7 @@ angular.module('travelPhotosApp')
         //the user's posts.
         addPost : function(imageLink, caption, instagramLink,
                            imageId, longitude, latitude, 
-                           ctrl, $http) {
+                           ctrl) {
             $http.post("/api/users/post", 
                        {imageLink: imageLink, 
                         instagramLink: instagramLink, 
@@ -41,7 +41,7 @@ angular.module('travelPhotosApp')
         //thumbnail photos are retrieved from Instagram, photos
         //that have already been posted will not be displayed
         retrieveMyPosts : 
-          function($http, ctrl) {
+          function(ctrl) {
              $http.get("api/users/posts/")
                 .success( function(data) {
                   ctrl.userPosts = data.posts;
@@ -60,7 +60,7 @@ angular.module('travelPhotosApp')
         //assigns userPosts to data.posts, which is an array 
         //containing an object for each of the user's posts.
         retrieveFriendPosts : 
-          function($http, ctrl, friendName) {
+          function(ctrl, friendName) {
              $http.get("api/users/posts/" + friendName)
                 .success( function(data) {
                   ctrl.userPosts = data.posts;
@@ -79,7 +79,7 @@ angular.module('travelPhotosApp')
         //object, so that if the user removes a post and then
         //retrives Instagram thumbnails, they will see the
         //thumbnail for the picture they just removed
-        removePost : function($http, ctrl, postId) {
+        removePost : function(ctrl, postId) {
              $http.post("api/users/removePost", {postId: postId})
                .success( function(data) {
                   ctrl.userPosts = data;

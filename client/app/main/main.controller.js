@@ -3,7 +3,7 @@
 
 var app = angular.module('travelPhotosApp');
   
-  app.controller('MainCtrl', function ($scope, $http, googleMapsService, 
+  app.controller('MainCtrl', function ($scope, googleMapsService, 
                                googleGeolocationService, placeService) {
     var ctrl = this;
 
@@ -11,10 +11,10 @@ var app = angular.module('travelPhotosApp');
 
     this.myPlacesList = [];
 
-    placeService.retrievePlaces($http, ctrl, googleMapsService);
+    placeService.retrievePlaces(ctrl, googleMapsService);
 
     this.removePlace = function(placeId) {
-      placeService.removePlace(placeId, $http, ctrl, googleMapsService);
+      placeService.removePlace(placeId, ctrl, googleMapsService);
     }
 
 /////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ var app = angular.module('travelPhotosApp');
         //use address to get geolocation, by ajax,
         // then in callback save the data
         googleGeolocationService.geolocate(placeForm, ctrl, 
-          $scope, googleMapsService, $http, placeService);
+          $scope, googleMapsService, placeService);
       }
     }; 
 //////////////////////////////////////////////////////////////////// 
