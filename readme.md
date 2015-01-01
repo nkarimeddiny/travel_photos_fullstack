@@ -1,6 +1,6 @@
 Travel Photos is designed for travel-photo enthusiasts. When you log on, you see a list of people you follow, with a green dot next to their name if they've posted any photos that you haven't seen yet. You can be selective about whose photos you choose to look at, instead of logging on and seeing a feed filled with all different types of photos from everyone you've chosen to follow. You can also re-arrange your list of friends, so your favorite photographers are most prominent. The main page displays a Google map, with markers for places-to-go that you've saved. To post photos, just sign in with Instagram, and you can access photos that you've posted to your account, then post them to Travel Photos. 
 
-I built Travel Photos while a student at Fullstack Academy in NYC, using AngularJS, Node.js/Express, and Mongoose/MongoDB. The app is hosted at nk-travel-photos.herokuapp.com.
+I built Travel Photos while a student at Fullstack Academy in NYC, using AngularJS, Node.js/Express, and Mongoose/MongoDB. The app is hosted at nk-travel-photos.herokuapp.com, and a demo video is available at vimeo.com/115205312
 
 Details on how the app works:
 
