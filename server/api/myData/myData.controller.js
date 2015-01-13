@@ -16,10 +16,10 @@ exports.getInstagramPhotos = function(req, res, next) {
     var photos = user.instagramCall(req.params.nextMaxId)
       .then(function(photos) {
         res.status(200).send(photos);
-      })
-      .then(function(error) {
+        }, function(error) {
         res.status(500).send("error");
-      });
+        } 
+      );
 };
 
 
